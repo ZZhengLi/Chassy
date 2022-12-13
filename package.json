@@ -1,7 +1,8 @@
 {
   "engines": {
     "node": "18.12.1",
-    "yarn": "1.22.10"
+    "yarn": "1.22.10",
+    "npm": "8.19.2"
   },
   "name": "chassy-main",
   "version": "0.1.0",
