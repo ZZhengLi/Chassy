@@ -1,4 +1,8 @@
 {
+  "engines": {
+    "node": "18.12.1",
+    "yarn": "1.22.10"
+  },
   "name": "chassy-main",
   "version": "0.1.0",
   "private": true,
@@ -18,12 +22,14 @@
     "autoprefixer": "^10.4.13",
     "next": "13.0.6",
     "postcss": "^8.4.20",
+    "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-icons": "^4.7.1",
     "react-router-dom": "^6.4.5",
     "tailwindcss": "^3.2.4",
     "typescript": "4.9.4"
   },
+   
   "devDependencies": {
     "@tailwindcss/typography": "^0.5.8"
   }
