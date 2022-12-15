@@ -61,7 +61,7 @@ const BottomNav = (props) => {
         {activeTabs === "AddCar" ? (
           <div>
             <RiAddFill
-              size="35"
+              size="40"
               color="#F9F5EC"
               onClick={() => setActiveTabs("AddCar")}
             />

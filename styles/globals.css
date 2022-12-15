@@ -1,6 +1,6 @@
-@import 'tailwindcss/base';
-@import 'tailwindcss/components';
-@import 'tailwindcss/utilities';
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
 
 html,
 body {
@@ -24,9 +24,8 @@ a {
     color-scheme: light;
   }
   body {
-    color: white;
-    background: #F9F5EC;
-;
+    /* color: white; */
+    /* background: #f9f5ec; */
   }
 }
 
@@ -55,5 +54,3 @@ a {
   justify-content: center;
   align-items: center;
 }
-
-

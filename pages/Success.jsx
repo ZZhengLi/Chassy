@@ -1,5 +1,5 @@
 import React from "react";
-import Successful from "../img/Success.png";
+import Successful from "../img/success.png";
 import Image from "next/image";
 import BottomNav from "./BottomNav";
 import { useRouter } from "next/navigation";

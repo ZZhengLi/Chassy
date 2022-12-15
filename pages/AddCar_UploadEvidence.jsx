@@ -33,11 +33,11 @@ export default function AddCar_UploadEvidence_Before() {
     <>
       {/* <AppBar /> */}
       <div class = "align-content: center flex flex-col space-y-4">
-        <Image src={Step2} width={100} class = "mx-auto max-w-lg h-auto" />
+        <Image src={Step2} width={300} class = "mx-auto max-w-lg h-auto" />
       </div>
       <div class="text-center font-prompt text-[14px]">
-        <Image src={Car} width={100} class="max-w-full h-auto rounded-lg text-center font-prompt text-[14px]"/>
-        <p class = "font-prompt text-[14px] ml-5">
+        <Image src={Car} width={250} class="max-w-full h-auto rounded-lg text-center font-prompt text-[18px]"/>
+        <p class = "font-prompt text-[18px] ml-5">
           Take a picture of the car to keep as evidence in case of a problem?
         </p>
       </div>

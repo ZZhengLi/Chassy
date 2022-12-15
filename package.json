@@ -9,8 +9,12 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@emotion/react": "^11.10.5",
+    "@emotion/styled": "^11.10.5",
     "@headlessui/react": "^1.7.5",
     "@heroicons/react": "^2.0.13",
+    "@mui/icons-material": "^5.11.0",
+    "@mui/material": "^5.11.0",
     "@react-navigation/bottom-tabs": "^6.5.0",
     "@types/node": "18.11.13",
     "@types/react": "18.0.26",
