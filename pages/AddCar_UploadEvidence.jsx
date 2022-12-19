@@ -32,19 +32,19 @@ export default function AddCar_UploadEvidence_Before() {
   return (
     <>
       {/* <AppBar /> */}
-      <div class = "align-content: center flex flex-col space-y-4">
-        <Image src={Step2} width={100} class = "mx-auto max-w-lg h-auto" />
+      <div class = "align-content: center flex flex-col space-y-4 p-6">
+        <Image src={Step2} width={350} className = "mx-auto max-w-lg h-auto" />
       </div>
-      <div class="text-center font-prompt text-[14px]">
-        <Image src={Car} width={100} class="max-w-full h-auto rounded-lg text-center font-prompt text-[14px]"/>
-        <p class = "font-prompt text-[14px] ml-5">
+      <div class="text-left font-prompt text-[18px] p-6 flex flex-nowrap">
+        <Image src={Car} width={200} class="max-w-full h-auto rounded-lg text-center font-prompt text-[18px]"/>
+        <p class = "font-prompt text-[18px] ml-5 text-left">
           Take a picture of the car to keep as evidence in case of a problem?
         </p>
       </div>
 
       {/* <div className="h-screen flex justify-center items-center bg-gray-300 px-2"> */}
-        <div className="p-3 md:w-1/2 w-[360px] bg-white rounded-md">
-          <span className="flex justify-center items-center text-[12px] mb-1 text-red-500">
+        <div className="p-3 md:w-1/2 w-[400px] bg-white rounded-md align-content: center">
+          <span className="flex justify-center items-center text-[18px] mb-1 text-red-500">
             {message}
           </span>
           <div className="h-32 w-full relative border-2 items-center rounded-md cursor-pointer bg-gray-300 border-gray-400 border-dotted">
@@ -58,7 +58,7 @@ export default function AddCar_UploadEvidence_Before() {
             <div className="h-full w-full bg-gray-200 absolute z-1 flex justify-center items-center top-0">
               <div className="flex flex-col">
                 <i className="mdi mdi-folder-open text-[30px] text-gray-400 text-center"></i>
-                <span className="text-[12px]">{`Drag and Drop a file`}</span>
+                <span className="text-[18px]">{`Drag and Drop a file`}</span>
               </div>
             </div>
           </div>
@@ -83,8 +83,8 @@ export default function AddCar_UploadEvidence_Before() {
         </div>
       {/* </div> */}
       <div class = "flex items-center justify-center">
-        <button class="bg-[#789BF3] hover:bg-[#789BF3] text-white font-bold py-2 px-4 rounded items-center">Back</button>
-        <button class="bg-[#789BF3] hover:bg-[#789BF3] text-white font-bold py-2 px-4 rounded items-center" onClick={() => router.push("/Success")}>Next</button>
+        <button class="bg-[#789BF3] text-[#789BF3] text-slate-400 hover:bg-[#789BF3] bg-opacity-10 font-bold text-blue  rounded items-center py-4 px-8">Back</button>
+        <button class="bg-[#789BF3] hover:bg-[#789BF3] text-white font-bold py-4 px-8 rounded items-center" onClick={() => router.push("/Success")}>Next</button>
       </div>
       <div>
         <BottomNav name="AddCar" />

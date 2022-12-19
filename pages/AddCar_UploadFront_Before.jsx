@@ -32,33 +32,33 @@ export default function AddCar_UploadFront_Before() {
   return (
     <>
       {/* <AppBar /> */}
-      <div className="align-content: center flex flex-col space-y-4">
+      <div className="align-content: center flex flex-col space-y-4 p-6">
         <Image
           src={Step2}
-          width={250}
+          width={350}
           alt="step2"
           className="mx-auto max-w-lg h-auto"
         />
       </div>
-      <div className="text-center font-prompt text-[14px]">
+      <div className="text-center font-prompt text-[18px] p-6 flex flex-nowrap">
         <Image
           src={Car}
-          width={150}
-          className="max-w-full h-auto rounded-lg text-center font-prompt text-[14px]"
+          width={200}
+          className="max-w-full h-auto rounded-lg text-center font-prompt text-[18px]"
           alt="car"
         />
-        <p className="font-prompt text-[14px] ml-5">
+        <p className="font-prompt text-[18px] ml-5 text-left">
           Upload a picture of the front of the car to clearly see the license
           plate.
         </p>
       </div>
 
       {/* <div className="h-screen flex justify-center items-center bg-gray-300 px-2"> */}
-      <div className="p-3 md:w-1/2 w-[360px] bg-white rounded-md">
-        <span className="flex justify-center items-center text-[12px] mb-1 text-red-500">
+      <div className="p-3 md:w-1/2 w-[400px] bg-white rounded-md align-content: center">
+        <span className="flex justify-center items-center text-[18px] mb-1 text-red-500">
           {message}
         </span>
-        <div className="h-32 w-full relative border-2 items-center rounded-md cursor-pointer bg-[#F9F5EC] border-gray-400 border-dotted">
+        <div className="h-40 w-full relative border-2 items-center rounded-md cursor-pointer bg-[#F9F5EC] border-gray-400 border-dotted">
           <input
             type="file"
             onChange={handleFile}
@@ -69,7 +69,7 @@ export default function AddCar_UploadFront_Before() {
           <div className="h-full w-full bg-gray-200 absolute z-1 flex justify-center items-center top-0">
             <div className="flex flex-col">
               <i className="mdi mdi-folder-open text-[30px] text-gray-400 text-center"></i>
-              <span className="text-[12px]">{`Drag and Drop a file`}</span>
+              <span className="text-[18px] font-prompt">{`Drag and Drop a file`}</span>
             </div>
           </div>
         </div>
@@ -96,13 +96,13 @@ export default function AddCar_UploadFront_Before() {
       {/* </div> */}
       <div className="flex items-center justify-center ">
         <button
-          className="bg-[#789BF3] text-[#789BF3] text-slate-400 hover:bg-[#789BF3] bg-opacity-10 font-bold text-blue py-2 px-4 rounded items-center"
+          className="bg-[#789BF3] text-[#789BF3] text-slate-400 hover:bg-[#789BF3] bg-opacity-10 font-bold text-blue  rounded items-center py-4 px-8"
           onClick={() => router.push("/AddCar_Qr")}
         >
           Back
         </button>
         <button
-          className="bg-[#789BF3] hover:bg-[#789BF3] text-white font-bold py-2 px-4 rounded items-center"
+          className="bg-[#789BF3] hover:bg-[#789BF3] text-white font-bold rounded items-center py-4 px-8"
           onClick={() => router.push("/AddCar_UploadFront_After")}
         >
           Next

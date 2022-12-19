@@ -10,16 +10,16 @@ export default function AddCar_Qr() {
   const router = useRouter();
   return (
     <div className="flex flex-col space-y-4">
-      <div className="align-content: center">
+      <div className="align-content: center p-8">
         <Image
           src={Step1}
-          width={250}
+          width={350}
           alt="step1"
           className="mx-auto max-w-lg h-auto"
         />
       </div>
       <div className="flex flex-col space-y-4">
-        <p className="text-center font-prompt text-[14px]">
+        <p className="text-center font-prompt text-[18px]">
           Customers can register via Line to receive notification of receiving
           the car.
         </p>
@@ -37,17 +37,17 @@ export default function AddCar_Qr() {
           className="object-scale-down h-5 w-5 mx-auto max-w-lg h-auto"
         />
       </div>
-      <div className="flex flex-col space-y-4">
+      <div className="flex flex-col space-y-4 p-4">
         <Image
           src={Qr}
-          width={200}
+          width={250}
           alt="qr"
           className="mx-auto max-w-lg h-auto"
         />
       </div>
       <div className="flex items-center justify-center">
         <button
-          className="bg-[#789BF3] hover:bg-[#789BF3] text-white font-bold py-2 px-4 rounded items-center"
+          className="bg-[#789BF3] hover:bg-[#789BF3] text-white font-bold py-4 px-8 rounded items-center text-[18px]"
           onClick={() => router.push("/AddCar_UploadFront_Before")}
         >
           Next

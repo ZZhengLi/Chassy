@@ -54,3 +54,21 @@ a {
   justify-content: center;
   align-items: center;
 }
+
+/* body
+p-0 m-0
+
+a 
+no-underline
+
+*
+box-border
+
+.img
+w-24
+
+.bottomNav
+w-full h-24 fixed bottom-0 bg-orange-400 flex justify-center items-center
+
+.bnTab
+w-3/12 h-full flex justify-center items-center */

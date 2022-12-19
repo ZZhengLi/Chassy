@@ -56,27 +56,30 @@ const BottomNav = (props) => {
             <p>Shop</p>
           </div>
         )}
-      </div>
-      <div className="bnTab">
-        {activeTabs === "AddCar" ? (
-          <div>
-            <RiAddFill
-              size="35"
-              color="#F9F5EC"
-              onClick={() => setActiveTabs("AddCar")}
-            />
-            <p>AddCar</p>
-          </div>
-        ) : (
-          <div onClick={() => router.push("/AddCar_Qr")}>
-            <RiAddFill
-              size="35"
-              color="#484542"
-              onClick={() => setActiveTabs("AddCar")}
-            />
-            <p>AddCar</p>
-          </div>
-        )}
+      </div >
+      <div className="flex justify-center items-center">
+        <button className="w-20 h-20 rounded-full absolute -top-8 relative center bg-[#FA8F54] text-white border-solid border-8 border-white justify-center items-center">
+          {activeTabs === "AddCar" ? (
+            <div className="flex justify-center items-center">
+              <RiAddFill 
+                size="35"
+                color="#F9F5EC" 
+                onClick={() => setActiveTabs("AddCar")}
+              />
+            </div>
+              
+          ) : (
+           
+                <div className="flex justify-center items-center" onClick={() => router.push("/AddCar_Qr")}>
+                  <RiAddFill
+                    size="35"
+                    color="#484542" 
+                    onClick={() => setActiveTabs("AddCar")}
+                  />
+                </div>
+  
+          )}
+          </button>
       </div>
       <div className="bnTab">
         {activeTabs === "Staff" ? (

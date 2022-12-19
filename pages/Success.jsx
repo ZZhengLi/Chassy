@@ -9,13 +9,14 @@ export default function Success() {
   return (
     <div>
       <div>
-        <Image src={Successful} width={100} alt="success" />
+        <Image src={Successful} width={400} alt="success" 
+          className="mx-auto max-w-lg h-auto align-content: center p-16 "/>
       </div>
       <div>
-        <p>successfully added the car</p>
+        <p className="text-center font-prompt text-[22px]">successfully added the car</p>
       </div>
       <div>
-        <p onClick={() => router.push("/Home")}>go to main page</p>
+        <p className="text-center text-[#789BF3] font-prompt text-[22px]" onClick={() => router.push("/Home")}>go to main page</p>
       </div>
       <div>
         <BottomNav />
