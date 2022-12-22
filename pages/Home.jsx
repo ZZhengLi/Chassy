@@ -7,96 +7,137 @@ import CheckBoxOutlinedIcon from '@mui/icons-material/CheckBoxOutlined';
 import ArrowForwardIosOutlinedIcon from '@mui/icons-material/ArrowForwardIosOutlined';
 import Data from './HomeData.json'
 import PaymentsIcon from '@mui/icons-material/Payments';
+import {
+  FaRegCalendarAlt,
+  FaCar,
+  FaMoneyBill,
+  FaChevronRight,
+  FaUserCircle,
+} from 'react-icons/fa';
+import { IoAddCircle } from 'react-icons/io5';
+import { FiCheckSquare } from 'react-icons/fi';
+
+
 
 const Home = () => {
   return (
-    <div>
-      <AppBar />
-      <h1 className="text-3xl font-bold text-[#484542] mx-5">Home</h1>
-      <div className="flex ...">
-        <img src="https://thumbs.dreamstime.com/b/shop-building-colorful-isolated-white-33822015.jpg" class="object-cover h-10 w-10 rounded-full ml-5" />
+    <div className="bg-[#F9F5EC]">
+      {/* <AppBar /> */}
+      <h1 className="text-3xl font-bold text-[#484542] mx-5 pt-10 pb-2">Home</h1>
+      <div className="flex ... pt-3">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRjdTTqi1gRWv1XKq1eG2sJs94GAXbk1DScNA&usqp=CAU" className="object-cover h-10 w-10 rounded-full ml-5" />
 
-        <button id="dropdownDefault" data-dropdown-toggle="dropdown" className="text-black focus:outline-none font-medium rounded-lg text-sm px-4 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">Shop Name <svg class="ml-2 w-4 h-4" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg></button>
-
-        <div id="dropdown" class="hidden z-10 w-44 bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700">
-          <ul class="py-1 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDefault">
-            <li>
-              <a href="#" class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Dashboard</a>
-            </li>
-            <li>
-              <a href="#" class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Settings</a>
-            </li>
-            <li>
-              <a href="#" class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Earnings</a>
-            </li>
-            <li>
-              <a href="#" class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Sign out</a>
-            </li>
-          </ul>
-        </div>
-
+        
+        <select  className="bg-transparent text-lg font-medium ml-2 text-dark">
+          <option selected>Chassy</option>
+          <option value="US">United States</option>
+          <option value="CA">Canada</option>
+          <option value="FR">France</option>
+          <option value="DE">Germany</option>
+        </select>
       </div>
 
-      <div className="grid grid-cols-2  place-items-center">
-        <div class="max-w-sm rounded shadow-lg px-5 py-5 rounded-[10px]">
-          <div className="px-10"><DirectionsCarIcon sx={{ color: "#FA8F54" }}/></div>
-          <p className="font-sans text-lg text-gray-900 text-center">1,000 cars</p>
+      <div className='flex-row flex items-center w-full md:px-0 px-6 pt-3'>
+        <p className='text-sm font-normal text-center text-dark'>
+          Date 19-12-2022
+        </p>
+        <FaRegCalendarAlt className='w-4 h-4 ml-2 text-dark' />
+      </div>
+
+
+      <div className='flex flex-row justify-between w-full md:px-0 px-6 py-5'>
+        <div className='h-20 items-center justify-center flex-col flex bg-white min-w-[160px] md:min-w-[410px] md:h-[92px] rounded-[10px] text-primary'>
+          <FaCar className='w-9 h-9' color="#FA8F54" />
+          <p className='text-lg'>
+            {new Intl.NumberFormat().format(100)} Car
+          </p>
+
         </div>
-        <div className="max-w-sm rounded overflow-hidden shadow-lg px-5 py-5 mr-5 rounded-[10px]">
-          <div className="px-10"><PaymentsIcon sx={{ color: "#7FD1AE" }}/></div>
-          <p className="font-sans text-lg text-gray-900 text-center">500,000 Baht</p>
+        <div className='h-20 items-center justify-center flex-col flex bg-white min-w-[160px] md:min-w-[410px] md:h-[92px] rounded-[10px] text-green'>
+          <FaMoneyBill className='w-9 h-9' color="#7FD1AE" />
+          <p className='text-lg'>
+            {new Intl.NumberFormat().format(50000)} Baht
+          </p>
         </div>
       </div>
 
-      <div className="max-w-sm rounded shadow-lg rounded-[20px]">
+      <div className="flex justify-center items-center md:w-full w-full">
 
-        <div className="flex flex-row mx-5 my-6">
-          <p className="font-sans text-lg text-gray-900 text-center">Add Car</p>
-          <button className="px-2"><AddCircleIcon sx={{ color: "#FA8F54" }} /></button>
-          <button><SearchIcon sx={{ color: "#484542" }} /></button>
-        </div>
+        <div className='bg-white rounded-t-[20px] my-5 pb-28 md:pb-0 md:h-screen md:min-w-[840px] min-w-full'>
+          <div className='py-5 w-full'>
+            <div className="flex-row flex justify-between px-6">
+              <div className="flex-row flex items-center text-dark">
+                <p className="font-sans text-lg text-gray-900 text-center">Add Car</p>
+                <button className="px-2"><AddCircleIcon sx={{ color: "#FA8F54" }} /></button>
+              </div>
+              <div className='mr-5 items-center text-dark'>
+                <form action='' className='relative mx-auto w-max'>
+                  <div className='relative flex flex-row items-center'>
+                    <div className='absolute pl-3'>
+                      <SearchIcon sx={{ color: "#484542" }} />
+                    </div>
+                    <input
+                      type='search'
+                      className='peer cursor-pointer relative z-10 h-12 w-12 rounded-full bg-transparent pl-12 outline-none focus:w-full focus:cursor-text focus:border focus:border-dark focus:pl-16 focus:pr-4'
+                    />
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
 
-        <div className="overflow-y-auto h-80">
+          <div className="overflow-y-auto h-80">
+            {
+              Data.cars.map(car => {
+                return (
+                  <>
+                    <div className='pb-[10px] items-center justify-center flex flex-col '>
+                      <div className='w-full h-20 bg-primary/20 items-center rounded-lg flex justify-start'>
+                        <div className='px-4 flex flex-row justify-between items-center w-full'>
+                          <div className='flex flex-row w-full items-center'>
+                            <div className={car.status === "in-process" ? "flex px-5 py-3 rounded-[10px] bg-[#F9F5EC] items-center w-full" : "flex px-5 py-3 rounded-[10px] bg-[#7FD1AE33] items-center w-full"}>
+                              {car.status === "in-process" ?
+                                <button className="bg-white shadow-lg py-1 px-1 rounded-[5px]">
+                                  <FiCheckSquare className='w-10 h-10' color="#FA8F54" />
+                                </button> :
+                                <FiCheckSquare className='w-10 h-10' color="#7FD1AE" />
 
-          {
-            Data.cars.map(car => {
-              return (
-                <>
-                  <div className={car.status === "in-process" ? "flex max-w-sm shadow-lg rounded-[10px] bg-[#F9F5EC] mx-5 items-center" : "flex max-w-sm shadow-lg rounded-[10px] bg-[#7FD1AE33] mx-5 items-center"}>
-                    {car.status === "in-process" ?
-                      <button className="bg-white shadow-lg py-1 px-1 rounded-[5px]">
-                        <CheckBoxOutlinedIcon sx={{ color: "#FA8F54" }} />
-                      </button> :
-                      <CheckBoxOutlinedIcon sx={{ color: "#7FD1AE" }} />
-                    }
+                              }
 
-                    <div className="grid">
-                      <p>{car.license_plate}</p>
-                      <div className="flex">
-                        <p>{car.services.map(service => {
-                          return (
-                            <>
-                              {service.service_name},
-                            </>
-                          )
-                        })}</p>
-                        <p>{car.total_price}฿</p>
+                              <div className="px-4 w-full text-dark">
+                                <p className='font-medium text-lg'>{car.license_plate}</p>
+                                <div className="flex flex-row justify-between font-normal text-base">
+                                  <p className='truncate md:w-full w-20'>{car.services.map(service => {
+                                    return (
+                                      <>
+                                        {service.service_name},
+                                      </>
+                                    )
+                                  })}</p>
+                                  <p>{new Intl.NumberFormat().format(car.total_price)}฿</p>
+                                </div>
+                              </div>
+
+                              <div className="px-4">
+                                <FaUserCircle className='w-10 h-10 text-dark' />
+                              </div>
+                              <ArrowForwardIosOutlinedIcon sx={{ color: "#484542" }} className="w-6 h-6" />
+
+                            </div>
+                          </div>
+                        </div>
                       </div>
                     </div>
-                    <img src={car.staff_picture_url} class="object-cover h-10 w-10 rounded-full ml-5" />
-                    <ArrowForwardIosOutlinedIcon sx={{ color: "#484542" }} />
-                  </div>
-
-                </>
-              )
-            })
-          }
-
+                  </>
+                )
+              })
+            }
+          </div>
         </div>
       </div>
 
-
       <BottomNav name="Home" />
+
     </div>
   );
 };
