@@ -2,7 +2,6 @@ import React from "react";
 import BottomNav from "./BottomNav";
 import Step2 from "../img/step2.png";
 import Image from "next/image";
-import AppBar from "./AppBar";
 import Car from "../img/car.png";
 import { useRouter } from "next/navigation";
 import { MdOutlineArrowBack } from "react-icons/md";
@@ -34,10 +33,13 @@ export default function AddCar_UploadFront_Before() {
     <div className="bg-[#F9F5EC]">
       {/* <AppBar /> */}
       <div className="flex flex-row p-5">
-        <MdOutlineArrowBack className="h-9 w-10 mt-8" onClick={() => router.back()}/>
+        <MdOutlineArrowBack
+          className="h-9 w-10 mt-8"
+          onClick={() => router.back()}
+        />
         <h1 className="text-3xl font-bold text-[#484542] ml-5 mt-8">Add Car</h1>
       </div>
-      <div className='bg-white rounded-t-[20px] my-2 pb-28 md:pb-0 md:h-screen md:min-w-[840px] min-w-full'>
+      <div className="bg-white rounded-t-[20px] my-2 pb-28 md:pb-0 md:h-screen md:min-w-[840px] min-w-full">
         <div className="align-content: center flex flex-col space-y-4 p-6">
           <Image
             src={Step2}
@@ -103,7 +105,7 @@ export default function AddCar_UploadFront_Before() {
         <div className="flex items-center justify-center ">
           <button
             className="bg-[#789BF3] text-[#789BF3] text-slate-400 hover:bg-[#789BF3] bg-opacity-10 font-bold text-blue  rounded items-center py-4 px-8"
-            onClick={() => router.push("/AddCar_Qr")}
+            onClick={() => router.back()}
           >
             Back
           </button>
