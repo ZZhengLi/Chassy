@@ -14,13 +14,13 @@ import { FiCheckSquare } from "react-icons/fi";
 const Home = () => {
   return (
     <div className="bg-[#F9F5EC]">
-      <h1 className="text-3xl font-bold text-[#484542] mx-5 pt-10 pb-2">
+      <h1 className="text-3xl font-bold text-[#484542] px-6 pt-10 pb-2">
         Home
       </h1>
       <div className="flex ... pt-3">
         <img
           src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRjdTTqi1gRWv1XKq1eG2sJs94GAXbk1DScNA&usqp=CAU"
-          className="object-cover h-10 w-10 rounded-full ml-5"
+          className="object-cover h-10 w-10 rounded-full ml-6"
         />
 
         <select className="bg-transparent text-lg font-medium ml-2 text-dark">
@@ -32,14 +32,14 @@ const Home = () => {
         </select>
       </div>
 
-      <div className="flex-row flex items-center w-full md:px-0 px-6 pt-3">
+      <div className="flex-row flex items-center w-full px-6 pt-3">
         <p className="text-sm font-normal text-center text-dark">
           Date 19-12-2022
         </p>
         <FaRegCalendarAlt className="w-4 h-4 ml-2 text-dark" />
       </div>
 
-      <div className="flex flex-row justify-between w-full md:px-0 px-6 py-5">
+      <div className="flex flex-row justify-between w-full px-6 py-5">
         <div className="h-20 items-center justify-center flex-col flex bg-white min-w-[160px] md:min-w-[410px] md:h-[92px] rounded-[10px] text-primary">
           <FaCar className="w-9 h-9" color="#FA8F54" />
           <p className="text-lg">{new Intl.NumberFormat().format(100)} Car</p>
@@ -53,7 +53,7 @@ const Home = () => {
       </div>
 
       <div className="flex justify-center items-center md:w-full w-full">
-        <div className="bg-white rounded-t-[20px] my-5 pb-28 md:pb-0 md:h-screen md:min-w-[840px] min-w-full">
+        <div className="bg-white rounded-t-[20px] my-5 pb-28 md:pb-0 md:h-screen min-w-full">
           <div className="py-5 w-full">
             <div className="flex-row flex justify-between px-6">
               <div className="flex-row flex items-center text-dark">
@@ -96,7 +96,7 @@ const Home = () => {
                             }
                           >
                             {car.status === "in-process" ? (
-                              <button className="bg-white shadow-lg py-1 px-1 rounded-[5px]">
+                              <button className="bg-white shadow-lg rounded-[5px]">
                                 <FiCheckSquare
                                   className="w-10 h-10"
                                   color="#FA8F54"

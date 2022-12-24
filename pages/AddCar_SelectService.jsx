@@ -50,7 +50,7 @@ export default function AddCar_SelectService() {
         </div>
 
         <div className="flex flex-row px-5">
-          <p className="">Choose a service item</p>
+          <p className="font-semibold text-lg text-[#484542]">Choose a service item</p>
         </div>
 
         {Services.services.map((ser) => {
@@ -65,28 +65,28 @@ export default function AddCar_SelectService() {
                         aria-controls="panel1a-content"
                         id="panel1a-header"
                       >
-                        <Typography>{cat} Service</Typography>
+                        <Typography className="font-semibold text-lg text-[#484542]">{cat} Service</Typography>
                       </AccordionSummary>
 
                       <AccordionDetails>
                         {ser.services.map((service) => {
                           return (
-                            <div class="flex items-center mb-4">
-                              <input
-                                id="default-checkbox"
-                                type="checkbox"
-                                value=""
-                                class="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                              />
-                              <label
-                                for="default-checkbox"
-                                class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                              >
-                                {service}
-                              </label>
-                              <div className="justify-items-end">
-                                <p>{new Intl.NumberFormat().format(900)}฿</p>
+                            <div class="flex flex-row items-center justify-between mb-4 bg-[#F9F5EC] p-3 rounded-[10px] font-semibold">
+                              <div className="flex flex-row items-center">
+                                <input
+                                  type="checkbox"     
+                                  className="w-7 h-7 bg-red-100 border-red-300 text-red-500 focus:ring-red-200"
+                                />
+                                <label   
+                                  className="ml-2 text-lg text-[#484542]"
+                                >
+                                  {service}
+                                </label>
                               </div>
+                              <div className="relative text-lg flex flex-row items-center">
+                                <p>{new Intl.NumberFormat().format(900)} Baht</p>
+                              </div>
+
                             </div>
                           );
                         })}
