@@ -5,6 +5,7 @@ import Image from "next/image";
 import Car from "../img/car.png";
 import { useRouter } from "next/navigation";
 import { MdOutlineArrowBack } from "react-icons/md";
+import Steppers from "./Steppers";
 
 export default function AddCar_UploadEvidence_Before() {
   const router = useRouter();
@@ -40,21 +41,27 @@ export default function AddCar_UploadEvidence_Before() {
       </div>
       {/* <AppBar /> */}
       <div className="bg-white rounded-t-[20px] my-2 pb-28 md:pb-0 md:h-screen md:min-w-[840px] min-w-full">
-        <div class="align-content: center flex flex-col space-y-4 p-6">
+        <div className="align-content: center flex flex-col space-y-4 p-6">
           <Image src={Step3} width={350} className="mx-auto max-w-lg h-auto" />
         </div>
-        <div class="text-left font-prompt text-[18px] p-6 flex flex-nowrap">
+        <div>
+            <Steppers/>
+          </div>
+        <div className="flex items-center justify-center">
+        <div className="text-left font-prompt text-[18px] p-6 flex flex-nowrap">
           <Image
             src={Car}
             width={200}
-            class="max-w-full h-auto rounded-lg text-center font-prompt text-[18px]"
+            className="max-w-full h-auto rounded-lg text-center font-prompt text-[18px]"
           />
-          <p class="font-prompt text-[18px] ml-5 text-left">
+          <p className="font-prompt text-[18px] ml-5 text-left">
             Take a picture of the car to keep as evidence in case of a problem?
           </p>
+          </div>
         </div>
 
         {/* <div className="h-screen flex justify-center items-center bg-gray-300 px-2"> */}
+        <div className="flex items-center justify-center">
         <div className="p-3 md:w-1/2 w-[400px] bg-white rounded-md align-content: center">
           <span className="flex justify-center items-center text-[18px] mb-1 text-red-500">
             {message}
@@ -92,17 +99,18 @@ export default function AddCar_UploadEvidence_Before() {
               );
             })}
           </div>
+          </div>
         </div>
         {/* </div> */}
-        <div class="flex items-center justify-center">
+        <div className="flex items-center justify-center">
           <button
-            class="bg-[#789BF3] text-[#789BF3] text-slate-400 hover:bg-[#789BF3] bg-opacity-10 font-bold text-blue  rounded items-center py-4 px-8"
+            className="bg-[#789BF3] text-[#789BF3] text-slate-400 hover:bg-[#789BF3] bg-opacity-10 font-bold text-blue  rounded items-center py-4 px-8"
             onClick={() => router.back()}
           >
             Back
           </button>
           <button
-            class="bg-[#789BF3] hover:bg-[#789BF3] text-white font-bold py-4 px-8 rounded items-center"
+            className="bg-[#789BF3] hover:bg-[#789BF3] text-white font-bold py-4 px-8 rounded items-center"
             onClick={() => router.push("/AddCar_SelectService")}
           >
             Next

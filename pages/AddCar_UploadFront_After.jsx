@@ -5,6 +5,10 @@ import Car from "../img/car.png";
 import { useRouter } from "next/navigation";
 import { MdOutlineArrowBack } from "react-icons/md";
 import { useState } from "react";
+import Steppers from "./Steppers";
+import {
+  FiEdit,
+} from "react-icons/ri";
 
 export default function AddCar_UploadFront_After() {
   const router = useRouter();
@@ -32,6 +36,10 @@ export default function AddCar_UploadFront_After() {
               className="mx-auto max-w-lg h-auto"
             />
           </div>
+          <div>
+            <Steppers/>
+          </div>
+          <div className="flex items-center justify-center">
           <div className="align-content: center p-4">
             <Image
               src={Car}
@@ -40,7 +48,9 @@ export default function AddCar_UploadFront_After() {
               className="max-w-full h-auto rounded-lg ml-6"
             />
           </div>
+          </div>
           <div>
+          
             <div className="flex flex-nowrap p-1">
               <p className="font-prompt text-[18px] pl-6">
                 Registration number:
@@ -53,10 +63,12 @@ export default function AddCar_UploadFront_After() {
                 className="font-prompt text-[18px]"
                 onChange={(e) => setRegNum(e.target.value)}
               ></input>
+              
               <p className="text-right font-prompt text-[18px] pl-6">
-                <i className="fas fa-cat">icon</i>
+                <i className="material-symbols-outlined">edit_square</i>
                 Edit
               </p>
+              
             </div>
 
             <div className="flex flex-nowrap p-1">
@@ -92,6 +104,7 @@ export default function AddCar_UploadFront_After() {
                 onChange={(e) => setColor(e.target.value)}
               ></input>
             </div>
+            
           </div>
 
           <div className="text-center font-prompt text-[18px] p-6">

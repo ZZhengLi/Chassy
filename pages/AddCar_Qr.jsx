@@ -5,6 +5,7 @@ import Step1 from "../img/step1.png";
 import DownArrow from "../img/downArrow.png";
 import Qr from "../img/qr.png";
 import { useRouter } from "next/navigation";
+import Steppers from "./Steppers";
 
 
 export default function AddCar_Qr() {
@@ -12,6 +13,9 @@ export default function AddCar_Qr() {
   return (
     <div className="bg-[#F9F5EC]">
       <div className="flex flex-row p-5">
+      <div>
+            <Steppers/>
+          </div>
         
         <h1 className="text-3xl font-bold text-[#484542] ml-6 mt-8">Add Car</h1>
       </div>

@@ -7,6 +7,7 @@ import {
   RiUser2Line,
   RiAddFill,
   RiSettings3Line,
+  FiEdit,
 } from "react-icons/ri";
 
 const BottomNav = (props) => {
@@ -58,7 +59,7 @@ const BottomNav = (props) => {
         )}
       </div>
       <div className="flex justify-center items-center">
-        <button className="w-20 h-20 rounded-full absolute -top-8 relative center bg-[#FA8F54] text-white border-solid border-8 border-white justify-center items-center">
+        <button className="w-20 h-20 rounded-full absolute -top-12 relative center bg-[#FA8F54] text-white border-solid border-8 border-white justify-center items-center">
           {activeTabs === "AddCar" ? (
             <div className="flex justify-center items-center">
               <RiAddFill

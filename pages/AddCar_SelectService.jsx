@@ -4,6 +4,7 @@ import Step4 from "../img/step4.png";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { MdOutlineArrowBack } from "react-icons/md";
+import Steppers from "./Steppers";
 
 //accordian
 import Accordion from "@mui/material/Accordion";
@@ -47,6 +48,9 @@ export default function AddCar_SelectService() {
               className="mx-auto max-w-lg h-auto"
             />
           </div>
+          <div>
+            <Steppers/>
+          </div>
         </div>
 
         <div className="flex flex-row px-5">
@@ -71,7 +75,7 @@ export default function AddCar_SelectService() {
                       <AccordionDetails>
                         {ser.services.map((service) => {
                           return (
-                            <div class="flex flex-row items-center justify-between mb-4 bg-[#F9F5EC] p-3 rounded-[10px] font-semibold">
+                            <div className="flex flex-row items-center justify-between mb-4 bg-[#F9F5EC] p-3 rounded-[10px] font-semibold">
                               <div className="flex flex-row items-center">
                                 <input
                                   type="checkbox"     
@@ -98,15 +102,15 @@ export default function AddCar_SelectService() {
             </>
           );
         })}
-        <div class="flex items-center justify-center pt-20">
+        <div className="flex items-center justify-center pt-20">
           <button
-            class="bg-[#789BF3] text-[#789BF3] text-slate-400 hover:bg-[#789BF3] bg-opacity-10 font-bold text-blue  rounded items-center py-4 px-8"
+            className="bg-[#789BF3] text-[#789BF3] text-slate-400 hover:bg-[#789BF3] bg-opacity-10 font-bold text-blue  rounded items-center py-4 px-8"
             onClick={() => router.back()}
           >
             Back
           </button>
           <button
-            class="bg-[#789BF3] hover:bg-[#789BF3] text-white font-bold py-4 px-8 rounded items-center"
+            className="bg-[#789BF3] hover:bg-[#789BF3] text-white font-bold py-4 px-8 rounded items-center"
             onClick={() => router.push("/Success")}
           >
             Next

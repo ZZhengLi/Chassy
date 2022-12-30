@@ -5,6 +5,7 @@ import Image from "next/image";
 import Car from "../img/car.png";
 import { useRouter } from "next/navigation";
 import { MdOutlineArrowBack } from "react-icons/md";
+import Steppers from "./Steppers";
 
 export default function AddCar_UploadFront_Before() {
   const router = useRouter();
@@ -48,6 +49,10 @@ export default function AddCar_UploadFront_Before() {
             className="mx-auto max-w-lg h-auto"
           />
         </div>
+        <div>
+            <Steppers/>
+          </div>
+        <div className="flex items-center justify-center">
         <div className="text-center font-prompt text-[18px] p-6 flex flex-nowrap">
           <Image
             src={Car}
@@ -60,8 +65,10 @@ export default function AddCar_UploadFront_Before() {
             plate.
           </p>
         </div>
+        </div>
 
         {/* <div className="h-screen flex justify-center items-center bg-gray-300 px-2"> */}
+        <div className="flex items-center justify-center">
         <div className="p-3 md:w-1/2 w-[400px] bg-white rounded-md align-content: center">
           <span className="flex justify-center items-center text-[18px] mb-1 text-red-500">
             {message}
@@ -98,6 +105,8 @@ export default function AddCar_UploadFront_Before() {
                 </div>
               );
             })}
+          
+          </div>
           </div>
         </div>
 
