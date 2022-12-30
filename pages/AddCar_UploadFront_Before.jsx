@@ -5,9 +5,19 @@ import Image from "next/image";
 import Car from "../img/car.png";
 import { useRouter } from "next/navigation";
 import { MdOutlineArrowBack } from "react-icons/md";
-import Steppers from "./Steppers";
+// import Steppers from "./Steppers";
+
+import Box from '@mui/material/Box';
+import Stepper from '@mui/material/Stepper';
+import Step from '@mui/material/Step';
+import StepLabel from '@mui/material/StepLabel';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
+
+const steps = ['1', '2', '3', '4'];
 
 export default function AddCar_UploadFront_Before() {
+  const [activeStep, setActiveStep] = React.useState(0);
   const router = useRouter();
   const { useState } = React;
   const [files, setFile] = useState([]);
@@ -50,7 +60,47 @@ export default function AddCar_UploadFront_Before() {
           />
         </div>
         <div>
-            <Steppers/>
+      
+    <Box sx={{ width: '100%' }}>
+      <Stepper activeStep='1'>
+        {steps.map((label, index) => {
+          const stepProps = {};
+          const labelProps = {};
+          // if (isStepSkipped(index)) {
+          //   stepProps.completed = false;
+          // }
+          return (
+            <Step key={label} {...stepProps}>
+              <StepLabel {...labelProps}>{label}</StepLabel>
+            </Step>
+          );
+        })}
+      </Stepper>
+      {activeStep === steps.length ? (
+        <React.Fragment>
+        </React.Fragment>
+      ) : (
+        <React.Fragment>
+          {/* <Typography sx={{ mt: 2, mb: 1 }}>Step {activeStep + 1}</Typography> */}
+          <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
+            {/* <Button
+              color="inherit"
+              disabled={activeStep === 0}
+              onClick={handleBack}
+              sx={{ mr: 1 }}
+            >
+              Back
+            </Button> */}
+            <Box sx={{ flex: '1 1 auto' }} />
+
+            {/* <Button onClick={handleNext}>
+              {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
+            </Button> */}
+          </Box>
+        </React.Fragment>
+      )}
+    </Box>
+  
           </div>
         <div className="flex items-center justify-center">
         <div className="text-center font-prompt text-[18px] p-6 flex flex-nowrap">

@@ -5,9 +5,19 @@ import Image from "next/image";
 import Car from "../img/car.png";
 import { useRouter } from "next/navigation";
 import { MdOutlineArrowBack } from "react-icons/md";
-import Steppers from "./Steppers";
+// import Steppers from "./Steppers";
+
+import Box from '@mui/material/Box';
+import Stepper from '@mui/material/Stepper';
+import Step from '@mui/material/Step';
+import StepLabel from '@mui/material/StepLabel';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
+
+const steps = ['1', '2', '3', '4'];
 
 export default function AddCar_UploadEvidence_Before() {
+  const [activeStep, setActiveStep] = React.useState(0);
   const router = useRouter();
   const { useState } = React;
   const [files, setFile] = useState([]);
@@ -45,7 +55,34 @@ export default function AddCar_UploadEvidence_Before() {
           <Image src={Step3} width={350} className="mx-auto max-w-lg h-auto" />
         </div>
         <div>
-            <Steppers/>
+      
+    <Box sx={{ width: '100%' }}>
+      <Stepper activeStep='2'>
+        {steps.map((label, index) => {
+          const stepProps = {};
+          const labelProps = {};
+          // if (isStepSkipped(index)) {
+          //   stepProps.completed = false;
+          // }
+          return (
+            <Step key={label} {...stepProps}>
+              <StepLabel {...labelProps}>{label}</StepLabel>
+            </Step>
+          );
+        })}
+      </Stepper>
+      {activeStep === steps.length ? (
+        <React.Fragment>
+        </React.Fragment>
+      ) : (
+        <React.Fragment>
+          <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
+            <Box sx={{ flex: '1 1 auto' }} />
+          </Box>
+        </React.Fragment>
+      )}
+    </Box>
+  
           </div>
         <div className="flex items-center justify-center">
         <div className="text-left font-prompt text-[18px] p-6 flex flex-nowrap">
