@@ -6,18 +6,16 @@ import { useRouter } from "next/navigation";
 import { MdOutlineArrowBack } from "react-icons/md";
 import { useState } from "react";
 import React from "react";
-import {
-  FiEdit,
-} from "react-icons/ri";
+import { FiEdit } from "react-icons/ri";
 
-import Box from '@mui/material/Box';
-import Stepper from '@mui/material/Stepper';
-import Step from '@mui/material/Step';
-import StepLabel from '@mui/material/StepLabel';
-import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
+import Box from "@mui/material/Box";
+import Stepper from "@mui/material/Stepper";
+import Step from "@mui/material/Step";
+import StepLabel from "@mui/material/StepLabel";
+import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
 
-const steps = ['1', '2', '3', '4'];
+const steps = ["1", "2", "3", "4"];
 
 export default function AddCar_UploadFront_After() {
   const [activeStep, setActiveStep] = React.useState(0);
@@ -38,56 +36,44 @@ export default function AddCar_UploadFront_After() {
 
       <div className="bg-white rounded-t-[20px] my-2 pb-28 md:pb-0 md:h-screen md:min-w-[840px] min-w-full">
         <div className="flex flex-col space-y-4">
-          <div className="align-content: center p-6">
-            <Image
-              src={Step2}
-              width={350}
-              alt="step2"
-              className="mx-auto max-w-lg h-auto"
-            />
-          </div>
           <div>
-      
-    <Box sx={{ width: '100%' }}>
-      <Stepper activeStep='1'>
-        {steps.map((label, index) => {
-          const stepProps = {};
-          const labelProps = {};
-          // if (isStepSkipped(index)) {
-          //   stepProps.completed = false;
-          // }
-          return (
-            <Step key={label} {...stepProps}>
-              <StepLabel {...labelProps}>{label}</StepLabel>
-            </Step>
-          );
-        })}
-      </Stepper>
-      {activeStep === steps.length ? (
-        <React.Fragment>
-        </React.Fragment>
-      ) : (
-        <React.Fragment>
-          <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
-            <Box sx={{ flex: '1 1 auto' }} />
-          </Box>
-        </React.Fragment>
-      )}
-    </Box>
-  
+            <Box sx={{ width: "100%" }}>
+              <Stepper activeStep="1">
+                {steps.map((label, index) => {
+                  const stepProps = {};
+                  const labelProps = {};
+                  // if (isStepSkipped(index)) {
+                  //   stepProps.completed = false;
+                  // }
+                  return (
+                    <Step key={label} {...stepProps}>
+                      <StepLabel {...labelProps}>{label}</StepLabel>
+                    </Step>
+                  );
+                })}
+              </Stepper>
+              {activeStep === steps.length ? (
+                <React.Fragment></React.Fragment>
+              ) : (
+                <React.Fragment>
+                  <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
+                    <Box sx={{ flex: "1 1 auto" }} />
+                  </Box>
+                </React.Fragment>
+              )}
+            </Box>
           </div>
           <div className="flex items-center justify-center">
-          <div className="align-content: center p-4">
-            <Image
-              src={Car}
-              width={280}
-              alt="car"
-              className="max-w-full h-auto rounded-lg ml-6"
-            />
-          </div>
+            <div className="align-content: center p-4">
+              <Image
+                src={Car}
+                width={280}
+                alt="car"
+                className="max-w-full h-auto rounded-lg ml-6"
+              />
+            </div>
           </div>
           <div>
-          
             <div className="flex flex-nowrap p-1">
               <p className="font-prompt text-[18px] pl-6">
                 Registration number:
@@ -100,12 +86,11 @@ export default function AddCar_UploadFront_After() {
                 className="font-prompt text-[18px]"
                 onChange={(e) => setRegNum(e.target.value)}
               ></input>
-              
+
               <p className="text-right font-prompt text-[18px] pl-6">
                 <i className="material-symbols-outlined">edit_square</i>
                 Edit
               </p>
-              
             </div>
 
             <div className="flex flex-nowrap p-1">
@@ -141,7 +126,6 @@ export default function AddCar_UploadFront_After() {
                 onChange={(e) => setColor(e.target.value)}
               ></input>
             </div>
-            
           </div>
 
           <div className="text-center font-prompt text-[18px] p-6">
