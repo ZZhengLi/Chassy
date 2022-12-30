@@ -4,7 +4,7 @@ import Step4 from "../img/step4.png";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { MdOutlineArrowBack } from "react-icons/md";
-import Steppers from "./Steppers";
+// import Steppers from "./Steppers";
 
 //accordian
 import Accordion from "@mui/material/Accordion";
@@ -14,7 +14,18 @@ import Typography from "@mui/material/Typography";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Services from "./Services.json";
 
+import Box from '@mui/material/Box';
+import Stepper from '@mui/material/Stepper';
+import Step from '@mui/material/Step';
+import StepLabel from '@mui/material/StepLabel';
+import Button from '@mui/material/Button';
+
+
+const steps = ['1', '2', '3', '4'];
+
 export default function AddCar_SelectService() {
+  const [activeStep, setActiveStep] = React.useState(0);
+  const [doneStep, setDoneStep] = React.useState(0);
   const router = useRouter();
   const [personName, setPersonName] = React.useState([]);
 
@@ -48,8 +59,22 @@ export default function AddCar_SelectService() {
               className="mx-auto max-w-lg h-auto"
             />
           </div>
+
           <div>
-            <Steppers/>
+    <Box  sx={{ width: '70%' }}>
+      <Stepper  activeStep='3' doneStep='4'>
+        {steps.map((label, index) => {
+          const stepProps = {};
+          const labelProps = {};
+          return (
+            <Step key={label} {...stepProps}>
+              <StepLabel  {...labelProps}>{label}</StepLabel>
+            </Step>
+          );
+        })}
+      </Stepper>
+    </Box>
+  
           </div>
         </div>
 
