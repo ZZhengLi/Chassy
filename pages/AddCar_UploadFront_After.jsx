@@ -4,6 +4,9 @@ import BottomNav from "./BottomNav";
 import Car from "../img/car.png";
 import { useRouter } from "next/navigation";
 import { MdOutlineArrowBack } from "react-icons/md";
+import {
+  FaRegEdit
+} from "react-icons/fa";
 import { useState } from "react";
 import React from "react";
 import {
@@ -47,101 +50,106 @@ export default function AddCar_UploadFront_After() {
             />
           </div>
           <div>
-      
-    <Box sx={{ width: '100%' }}>
-      <Stepper activeStep='1'>
-        {steps.map((label, index) => {
-          const stepProps = {};
-          const labelProps = {};
-          // if (isStepSkipped(index)) {
-          //   stepProps.completed = false;
-          // }
-          return (
-            <Step key={label} {...stepProps}>
-              <StepLabel {...labelProps}>{label}</StepLabel>
-            </Step>
-          );
-        })}
-      </Stepper>
-      {activeStep === steps.length ? (
-        <React.Fragment>
-        </React.Fragment>
-      ) : (
-        <React.Fragment>
-          <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
-            <Box sx={{ flex: '1 1 auto' }} />
-          </Box>
-        </React.Fragment>
-      )}
-    </Box>
-  
+
+            <Box sx={{ width: '100%' }}>
+              <Stepper activeStep='1'>
+                {steps.map((label, index) => {
+                  const stepProps = {};
+                  const labelProps = {};
+                  // if (isStepSkipped(index)) {
+                  //   stepProps.completed = false;
+                  // }
+                  return (
+                    <Step key={label} {...stepProps}>
+                      <StepLabel {...labelProps}>{label}</StepLabel>
+                    </Step>
+                  );
+                })}
+              </Stepper>
+              {activeStep === steps.length ? (
+                <React.Fragment>
+                </React.Fragment>
+              ) : (
+                <React.Fragment>
+                  <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
+                    <Box sx={{ flex: '1 1 auto' }} />
+                  </Box>
+                </React.Fragment>
+              )}
+            </Box>
+
           </div>
           <div className="flex items-center justify-center">
-          <div className="align-content: center p-4">
-            <Image
-              src={Car}
-              width={280}
-              alt="car"
-              className="max-w-full h-auto rounded-lg ml-6"
-            />
-          </div>
+            <div className="align-content: center p-4">
+              <Image
+                src={Car}
+                width={280}
+                alt="car"
+                className="max-w-full h-auto rounded-lg ml-6"
+              />
+            </div>
           </div>
           <div>
-          
-            <div className="flex flex-nowrap p-1">
-              <p className="font-prompt text-[18px] pl-6">
-                Registration number:
-              </p>
-              <input
-                type="text"
-                id="regNum"
-                name="regNum"
-                value={regNum}
-                className="font-prompt text-[18px]"
-                onChange={(e) => setRegNum(e.target.value)}
-              ></input>
-              
-              <p className="text-right font-prompt text-[18px] pl-6">
-                <i className="material-symbols-outlined">edit_square</i>
-                Edit
-              </p>
-              
+
+            <div className="flex justify-between">
+              <div className="flex flex-row p-1">
+                <p className="font-prompt text-[18px] pl-6 mr-2">
+                  Registration number:
+                </p>
+                <div></div>
+                <input
+                  type="text"
+                  id="regNum"
+                  name="regNum"
+                  value={regNum}
+                  className="font-prompt text-[18px] font-bold"
+                  onChange={(e) => setRegNum(e.target.value)}
+                ></input>
+              </div>
+
+              <div className="flex flex-row items-center mr-5">
+                <p className="flex text-right font-prompt text-[18px] font-bold text-[#FA8F54]" >
+                  Edit
+                </p>
+                <FaRegEdit className="w-6 h-6 ml-2" color="#FA8F54" />
+              </div>
+
             </div>
 
             <div className="flex flex-nowrap p-1">
-              <p className="text-left font-prompt text-[18px] pl-6">Brand:</p>
+              <p className="text-left font-prompt text-[18px] pl-6 mr-2">Brand:</p>
               <input
                 type="text"
                 id="brand"
                 name="brand"
                 value={brand}
-                className="font-prompt text-[18px]"
+                className="font-prompt text-[18px] font-bold"
                 onChange={(e) => setRegNum(e.target.value)}
               ></input>
             </div>
             <div className="flex flex-nowrap p-1">
-              <p className="text-left font-prompt text-[18px] pl-6"> Model:</p>
+              <p className="text-left font-prompt text-[18px] pl-6 mr-2"> Model:</p>
               <input
                 type="text"
                 id="model"
                 name="model"
                 value={model}
-                className="font-prompt text-[18px] "
+                className="font-prompt text-[18px] font-bold"
                 onChange={(e) => setModel(e.target.value)}
               ></input>
             </div>
             <div className="flex flex-nowrap p-1">
-              <p className="text-left font-prompt text-[18px] pl-6">Color:</p>
+              <p className="text-left font-prompt text-[18px] pl-6 mr-2">Color:</p>
               <input
                 type="text"
                 id="color"
                 name="color"
                 value={color}
-                className="font-prompt text-[18px]"
+                className="font-prompt text-[18px] font-bold"
                 onChange={(e) => setColor(e.target.value)}
               ></input>
             </div>
-            
+
           </div>
 
           <div className="text-center font-prompt text-[18px] p-6">
