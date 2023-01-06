@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { MdOutlineArrowBack } from "react-icons/md";
 // import Steppers from "./Steppers";
 
+<<<<<<< HEAD
 import Box from "@mui/material/Box";
 import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
@@ -15,6 +16,16 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 
 const steps = ["1", "2", "3", "4"];
+=======
+import Box from '@mui/material/Box';
+import Stepper from '@mui/material/Stepper';
+import Step from '@mui/material/Step';
+import StepLabel from '@mui/material/StepLabel';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
+
+const steps = ['1', '2', '3', '4'];
+>>>>>>> 83b3db7e58bf9065a0f88fb9b992792430e22829
 
 export default function AddCar_UploadEvidence_Before() {
   const [activeStep, setActiveStep] = React.useState(0);
@@ -52,6 +63,7 @@ export default function AddCar_UploadEvidence_Before() {
       {/* <AppBar /> */}
       <div className="bg-white rounded-t-[20px] my-2 pb-28 md:pb-0 md:h-screen md:min-w-[840px] min-w-full">
         <div>
+<<<<<<< HEAD
           <Box sx={{ width: "100%" }}>
             <Stepper activeStep="2">
               {steps.map((label, index) => {
@@ -78,6 +90,37 @@ export default function AddCar_UploadEvidence_Before() {
             )}
           </Box>
         </div>
+=======
+      
+    <Box sx={{ width: '100%' }}>
+      <Stepper activeStep='2'>
+        {steps.map((label, index) => {
+          const stepProps = {};
+          const labelProps = {};
+          // if (isStepSkipped(index)) {
+          //   stepProps.completed = false;
+          // }
+          return (
+            <Step key={label} {...stepProps}>
+              <StepLabel {...labelProps}>{label}</StepLabel>
+            </Step>
+          );
+        })}
+      </Stepper>
+      {activeStep === steps.length ? (
+        <React.Fragment>
+        </React.Fragment>
+      ) : (
+        <React.Fragment>
+          <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
+            <Box sx={{ flex: '1 1 auto' }} />
+          </Box>
+        </React.Fragment>
+      )}
+    </Box>
+  
+          </div>
+>>>>>>> 83b3db7e58bf9065a0f88fb9b992792430e22829
         <div className="flex items-center justify-center">
           <div className="text-left font-prompt text-[18px] p-6 flex flex-nowrap">
             <Image

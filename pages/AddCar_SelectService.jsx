@@ -14,6 +14,7 @@ import Typography from "@mui/material/Typography";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Services from "./Services.json";
 
+<<<<<<< HEAD
 import Box from "@mui/material/Box";
 import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
@@ -21,6 +22,16 @@ import StepLabel from "@mui/material/StepLabel";
 import Button from "@mui/material/Button";
 
 const steps = ["1", "2", "3", "4"];
+=======
+import Box from '@mui/material/Box';
+import Stepper from '@mui/material/Stepper';
+import Step from '@mui/material/Step';
+import StepLabel from '@mui/material/StepLabel';
+import Button from '@mui/material/Button';
+
+
+const steps = ['1', '2', '3', '4'];
+>>>>>>> 83b3db7e58bf9065a0f88fb9b992792430e22829
 
 export default function AddCar_SelectService() {
   const [activeStep, setActiveStep] = React.useState(0);
@@ -50,6 +61,7 @@ export default function AddCar_SelectService() {
 
       <div className="bg-white rounded-t-[20px] my-5 pb-28 md:pb-0 md:h-screen md:min-w-[840px] min-w-full">
         <div className="flex flex-col space-y-4">
+<<<<<<< HEAD
           <div>
             <Box sx={{ width: "70%" }}>
               <Stepper activeStep="3" doneStep="4">
@@ -64,6 +76,32 @@ export default function AddCar_SelectService() {
                 })}
               </Stepper>
             </Box>
+=======
+          <div className="align-content: center p-8">
+            <Image
+              src={Step4}
+              width={350}
+              alt="step1"
+              className="mx-auto max-w-lg h-auto"
+            />
+          </div>
+
+          <div>
+    <Box  sx={{ width: '70%' }}>
+      <Stepper  activeStep='3' doneStep='4'>
+        {steps.map((label, index) => {
+          const stepProps = {};
+          const labelProps = {};
+          return (
+            <Step key={label} {...stepProps}>
+              <StepLabel  {...labelProps}>{label}</StepLabel>
+            </Step>
+          );
+        })}
+      </Stepper>
+    </Box>
+  
+>>>>>>> 83b3db7e58bf9065a0f88fb9b992792430e22829
           </div>
         </div>
 
