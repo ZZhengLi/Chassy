@@ -5,14 +5,8 @@ import Image from "next/image";
 import Car from "../img/car.png";
 import { useRouter } from "next/navigation";
 import { MdOutlineArrowBack } from "react-icons/md";
-// import Steppers from "./Steppers";
 
 import Box from '@mui/material/Box';
-// import Stepper from '@mui/material/Stepper';
-// import Step from '@mui/material/Step';
-// import StepLabel from '@mui/material/StepLabel';
-// import Button from '@mui/material/Button';
-// import Typography from '@mui/material/Typography';
 
 //New Stepper
 import Stepper from '@mui/material/Stepper';
@@ -135,60 +129,9 @@ export default function AddCar_UploadFront_Before() {
         <h1 className="text-3xl font-bold text-[#484542] ml-5 mt-8">Add Car</h1>
       </div>
       <div className="bg-white rounded-t-[20px] my-2 pb-28 md:pb-0 md:h-screen md:min-w-[840px] min-w-full">
-        <div className="align-content: center flex flex-col space-y-4 p-6">
-          <Image
-            src={Step2}
-            width={350}
-            alt="step2"
-            className="mx-auto max-w-lg h-auto"
-          />
-        </div>
-        <div>
-
-
-          <Box sx={{ width: '100%' }}>
-            <Stepper activeStep='1'>
-              {steps.map((label, index) => {
-                const stepProps = {};
-                const labelProps = {};
-                // if (isStepSkipped(index)) {
-                //   stepProps.completed = false;
-                // }
-                return (
-                  <Step key={label} {...stepProps}>
-                    <StepLabel {...labelProps} >{label}</StepLabel>
-                  </Step>
-                );
-              })}
-            </Stepper>
-            {activeStep === steps.length ? (
-              <React.Fragment>
-              </React.Fragment>
-            ) : (
-              <React.Fragment>
-                {/* <Typography sx={{ mt: 2, mb: 1 }}>Step {activeStep + 1}</Typography> */}
-                <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
-                  {/* <Button
-              color="inherit"
-              disabled={activeStep === 0}
-              onClick={handleBack}
-              sx={{ mr: 1 }}
-            >
-              Back
-            </Button> */}
-                  <Box sx={{ flex: '1 1 auto' }} />
-
-                  {/* <Button onClick={handleNext}>
-              {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
-            </Button> */}
-                </Box>
-              </React.Fragment>
-            )}
-          </Box>
-
-
+        <div className="align-content: center p-8 flex items-center justify-center">
           {/* New Stepper */}
-          <Stepper alternativeLabel activeStep={1} connector={<QontoConnector />}>
+          <Stepper sx={{ width: '80%' }} alternativeLabel activeStep={1} connector={<QontoConnector />}>
             {steps.map((label) => (
               <Step key={label}>
                 <StepLabel StepIconComponent={QontoStepIcon}>{label}</StepLabel>
@@ -218,7 +161,7 @@ export default function AddCar_UploadFront_Before() {
             <span className="flex justify-center items-center text-[18px] mb-1 text-red-500">
               {message}
             </span>
-            <div className="h-40 w-full relative border-2 items-center rounded-md cursor-pointer bg-[#F9F5EC] border-gray-400 border-dotted">
+            <div className="h-40 w-full relative border-2 items-center rounded-md cursor-pointer bg-[#F9F5EC]">
               <input
                 type="file"
                 onChange={handleFile}
@@ -226,10 +169,10 @@ export default function AddCar_UploadFront_Before() {
                 multiple={true}
                 name="files[]"
               />
-              <div className="h-full w-full bg-gray-200 absolute z-1 flex justify-center items-center top-0">
+              <div className="h-full w-full bg-[#FA8F54] bg-opacity-10 absolute z-1 flex justify-center items-center top-0">
                 <div className="flex flex-col">
                   <i className="mdi mdi-folder-open text-[30px] text-gray-400 text-center"></i>
-                  <span className="text-[18px] font-prompt">{`Drag and Drop a file`}</span>
+                  <span className="text-[18px] text-[#FA8F54] font-prompt">{`Drag and Drop a file`}</span>
                 </div>
               </div>
             </div>
@@ -258,7 +201,7 @@ export default function AddCar_UploadFront_Before() {
         {/* </div> */}
         <div className="flex items-center justify-center ">
           <button
-            className="bg-[#789BF3] text-[#789BF3] text-slate-400 hover:bg-[#789BF3] bg-opacity-10 font-bold text-blue  rounded items-center py-4 px-8"
+            className="bg-[#789BF3] text-[#789BF3] text-slate-400 hover:bg-[#789BF3] bg-opacity-10 text-opacity-100 font-bold text-blue  rounded items-center py-4 px-8"
             onClick={() => router.back()}
           >
             Back

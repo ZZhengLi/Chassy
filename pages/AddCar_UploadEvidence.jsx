@@ -8,11 +8,16 @@ import { MdOutlineArrowBack } from "react-icons/md";
 // import Steppers from "./Steppers";
 
 import Box from '@mui/material/Box';
+//New Stepper
 import Stepper from '@mui/material/Stepper';
+import PropTypes from 'prop-types';
+import { styled } from '@mui/material/styles';
+import Stack from '@mui/material/Stack';
 import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
-import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import AdjustIcon from '@mui/icons-material/Adjust';
+import StepConnector, { stepConnectorClasses } from '@mui/material/StepConnector';
 
 const steps = ['1', '2', '3', '4'];
 
@@ -40,6 +45,77 @@ export default function AddCar_UploadEvidence_Before() {
     setFile(files.filter((x) => x.name !== i));
   };
 
+  //New Stepper
+  const QontoConnector = styled(StepConnector)(({ theme }) => ({
+    [`&.${stepConnectorClasses.alternativeLabel}`]: {
+      top: 10,
+      left: 'calc(-50% + 16px)',
+      right: 'calc(50% + 16px)',
+    },
+    [`&.${stepConnectorClasses.active}`]: {
+      [`& .${stepConnectorClasses.line}`]: {
+        borderColor: '#7FD1AE99',
+      },
+    },
+    [`&.${stepConnectorClasses.completed}`]: {
+      [`& .${stepConnectorClasses.line}`]: {
+        borderColor: '#7FD1AE99',
+      },
+    },
+    [`& .${stepConnectorClasses.line}`]: {
+      borderColor: theme.palette.mode === 'dark' ? theme.palette.grey[800] : '#7FD1AE4D',
+      borderTopWidth: 3,
+      borderRadius: 1,
+    },
+  }));
+
+  const QontoStepIconRoot = styled('div')(({ theme, ownerState }) => ({
+    color: theme.palette.mode === 'dark' ? theme.palette.grey[700] : '#7FD1AE99',
+    display: 'flex',
+    height: 20,
+    alignItems: 'center',
+    ...(ownerState.active && {
+      color: '#7FD1AE',
+    }),
+    '& .QontoStepIcon-completedIcon': {
+      color: '#7FD1AE',
+      zIndex: 1,
+      fontSize: 36,
+    },
+    '& .QontoStepIcon-circle': {
+      color: 'currentColor',
+      fontSize: 36,
+    },
+  }));
+
+  function QontoStepIcon(props) {
+    const { active, completed, className } = props;
+
+    return (
+      <QontoStepIconRoot ownerState={{ active }} className={className}>
+        {completed ? (
+          <CheckCircleIcon className="QontoStepIcon-completedIcon" /> 
+        ) : (
+          <AdjustIcon  className="QontoStepIcon-circle"/>
+        )}
+      </QontoStepIconRoot>
+    );
+  }
+
+  QontoStepIcon.propTypes = {
+    /**
+     * Whether this step is active.
+     * @default false
+     */
+    active: PropTypes.bool,
+    className: PropTypes.string,
+    /**
+     * Mark the step as completed. Is passed to child components.
+     * @default false
+     */
+    completed: PropTypes.bool,
+  };
+
   return (
     <div className="bg-[#F9F5EC]">
       <div className="flex flex-row p-5">
@@ -51,37 +127,18 @@ export default function AddCar_UploadEvidence_Before() {
       </div>
       {/* <AppBar /> */}
       <div className="bg-white rounded-t-[20px] my-2 pb-28 md:pb-0 md:h-screen md:min-w-[840px] min-w-full">
-        <div className="align-content: center flex flex-col space-y-4 p-6">
-          <Image src={Step3} width={350} className="mx-auto max-w-lg h-auto" />
-        </div>
-        <div>
+       
+        <div className="align-content: center p-8  flex items-center justify-center">
       
-    <Box sx={{ width: '100%' }}>
-      <Stepper activeStep='2'>
-        {steps.map((label, index) => {
-          const stepProps = {};
-          const labelProps = {};
-          // if (isStepSkipped(index)) {
-          //   stepProps.completed = false;
-          // }
-          return (
-            <Step key={label} {...stepProps}>
-              <StepLabel {...labelProps}>{label}</StepLabel>
-            </Step>
-          );
-        })}
-      </Stepper>
-      {activeStep === steps.length ? (
-        <React.Fragment>
-        </React.Fragment>
-      ) : (
-        <React.Fragment>
-          <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
-            <Box sx={{ flex: '1 1 auto' }} />
-          </Box>
-        </React.Fragment>
-      )}
-    </Box>
+
+    {/* New Stepper */}
+          <Stepper sx={{ width: '80%' }} alternativeLabel activeStep={2} connector={<QontoConnector />}>
+            {steps.map((label) => (
+              <Step key={label}>
+                <StepLabel StepIconComponent={QontoStepIcon}>{label}</StepLabel>
+              </Step>
+            ))}
+          </Stepper>
   
           </div>
         <div className="flex items-center justify-center">
@@ -103,7 +160,7 @@ export default function AddCar_UploadEvidence_Before() {
           <span className="flex justify-center items-center text-[18px] mb-1 text-red-500">
             {message}
           </span>
-          <div className="h-32 w-full relative border-2 items-center rounded-md cursor-pointer bg-gray-300 border-gray-400 border-dotted">
+          <div className="h-32 w-full relative border-2 items-center rounded-md cursor-pointer bg-[#F9F5EC]">
             <input
               type="file"
               onChange={handleFile}
@@ -111,10 +168,10 @@ export default function AddCar_UploadEvidence_Before() {
               multiple={true}
               name="files[]"
             />
-            <div className="h-full w-full bg-gray-200 absolute z-1 flex justify-center items-center top-0">
+            <div className="h-full w-full bg-[#F9F5EC] bg-opacity-10 absolute z-1 flex justify-center items-center top-0">
               <div className="flex flex-col">
                 <i className="mdi mdi-folder-open text-[30px] text-gray-400 text-center"></i>
-                <span className="text-[18px]">{`Drag and Drop a file`}</span>
+                <span className="text-[18px] text-[#FA8F54]">{`Drag and Drop a file`}</span>
               </div>
             </div>
           </div>
