@@ -9,22 +9,9 @@ import {
 } from "react-icons/fa";
 import { useState } from "react";
 import React from "react";
-<<<<<<< HEAD
-import { FiEdit } from "react-icons/ri";
-
-import Box from "@mui/material/Box";
-import Stepper from "@mui/material/Stepper";
-import Step from "@mui/material/Step";
-import StepLabel from "@mui/material/StepLabel";
-import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
-
-const steps = ["1", "2", "3", "4"];
-=======
 import {
   FiEdit,
 } from "react-icons/ri";
->>>>>>> 83b3db7e58bf9065a0f88fb9b992792430e22829
 
 import Box from '@mui/material/Box';
 import Stepper from '@mui/material/Stepper';
@@ -54,15 +41,18 @@ export default function AddCar_UploadFront_After() {
 
       <div className="bg-white rounded-t-[20px] my-2 pb-28 md:pb-0 md:h-screen md:min-w-[840px] min-w-full">
         <div className="flex flex-col space-y-4">
+          <div className="align-content: center p-6">
+            <Image
+              src={Step2}
+              width={350}
+              alt="step2"
+              className="mx-auto max-w-lg h-auto"
+            />
+          </div>
           <div>
-<<<<<<< HEAD
-            <Box sx={{ width: "100%" }}>
-              <Stepper activeStep="1">
-=======
 
             <Box sx={{ width: '100%' }}>
               <Stepper activeStep='1'>
->>>>>>> 83b3db7e58bf9065a0f88fb9b992792430e22829
                 {steps.map((label, index) => {
                   const stepProps = {};
                   const labelProps = {};
@@ -77,28 +67,17 @@ export default function AddCar_UploadFront_After() {
                 })}
               </Stepper>
               {activeStep === steps.length ? (
-<<<<<<< HEAD
-                <React.Fragment></React.Fragment>
-              ) : (
-                <React.Fragment>
-                  <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
-                    <Box sx={{ flex: "1 1 auto" }} />
-=======
                 <React.Fragment>
                 </React.Fragment>
               ) : (
                 <React.Fragment>
                   <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
                     <Box sx={{ flex: '1 1 auto' }} />
->>>>>>> 83b3db7e58bf9065a0f88fb9b992792430e22829
                   </Box>
                 </React.Fragment>
               )}
             </Box>
-<<<<<<< HEAD
-=======
 
->>>>>>> 83b3db7e58bf9065a0f88fb9b992792430e22829
           </div>
           <div className="flex items-center justify-center">
             <div className="align-content: center p-4">
@@ -111,25 +90,6 @@ export default function AddCar_UploadFront_After() {
             </div>
           </div>
           <div>
-<<<<<<< HEAD
-            <div className="flex flex-nowrap p-1">
-              <p className="font-prompt text-[18px] pl-6">
-                Registration number:
-              </p>
-              <input
-                type="text"
-                id="regNum"
-                name="regNum"
-                value={regNum}
-                className="font-prompt text-[18px]"
-                onChange={(e) => setRegNum(e.target.value)}
-              ></input>
-
-              <p className="text-right font-prompt text-[18px] pl-6">
-                <i className="material-symbols-outlined">edit_square</i>
-                Edit
-              </p>
-=======
 
             <div className="flex justify-between">
               <div className="flex flex-row p-1">
@@ -154,7 +114,6 @@ export default function AddCar_UploadFront_After() {
                 <FaRegEdit className="w-6 h-6 ml-2" color="#FA8F54" />
               </div>
 
->>>>>>> 83b3db7e58bf9065a0f88fb9b992792430e22829
             </div>
 
             <div className="flex flex-nowrap p-1">
@@ -190,10 +149,7 @@ export default function AddCar_UploadFront_After() {
                 onChange={(e) => setColor(e.target.value)}
               ></input>
             </div>
-<<<<<<< HEAD
-=======
 
->>>>>>> 83b3db7e58bf9065a0f88fb9b992792430e22829
           </div>
 
           <div className="text-center font-prompt text-[18px] p-6">

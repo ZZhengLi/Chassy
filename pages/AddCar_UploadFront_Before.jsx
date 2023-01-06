@@ -7,16 +7,6 @@ import { useRouter } from "next/navigation";
 import { MdOutlineArrowBack } from "react-icons/md";
 // import Steppers from "./Steppers";
 
-<<<<<<< HEAD
-import Box from "@mui/material/Box";
-import Stepper from "@mui/material/Stepper";
-import Step from "@mui/material/Step";
-import StepLabel from "@mui/material/StepLabel";
-import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
-
-const steps = ["1", "2", "3", "4"];
-=======
 import Box from '@mui/material/Box';
 // import Stepper from '@mui/material/Stepper';
 // import Step from '@mui/material/Step';
@@ -37,7 +27,6 @@ import StepConnector, { stepConnectorClasses } from '@mui/material/StepConnector
 
 const steps = ['1', '2', '3', '4'];
 
->>>>>>> 83b3db7e58bf9065a0f88fb9b992792430e22829
 
 export default function AddCar_UploadFront_Before() {
   const [activeStep, setActiveStep] = React.useState(0);
@@ -146,16 +135,19 @@ export default function AddCar_UploadFront_Before() {
         <h1 className="text-3xl font-bold text-[#484542] ml-5 mt-8">Add Car</h1>
       </div>
       <div className="bg-white rounded-t-[20px] my-2 pb-28 md:pb-0 md:h-screen md:min-w-[840px] min-w-full">
+        <div className="align-content: center flex flex-col space-y-4 p-6">
+          <Image
+            src={Step2}
+            width={350}
+            alt="step2"
+            className="mx-auto max-w-lg h-auto"
+          />
+        </div>
         <div>
-<<<<<<< HEAD
-          <Box sx={{ width: "100%" }}>
-            <Stepper activeStep="1">
-=======
 
 
           <Box sx={{ width: '100%' }}>
             <Stepper activeStep='1'>
->>>>>>> 83b3db7e58bf9065a0f88fb9b992792430e22829
               {steps.map((label, index) => {
                 const stepProps = {};
                 const labelProps = {};
@@ -164,30 +156,18 @@ export default function AddCar_UploadFront_Before() {
                 // }
                 return (
                   <Step key={label} {...stepProps}>
-<<<<<<< HEAD
-                    <StepLabel {...labelProps}>{label}</StepLabel>
-=======
                     <StepLabel {...labelProps} >{label}</StepLabel>
->>>>>>> 83b3db7e58bf9065a0f88fb9b992792430e22829
                   </Step>
                 );
               })}
             </Stepper>
             {activeStep === steps.length ? (
-<<<<<<< HEAD
-              <React.Fragment></React.Fragment>
-            ) : (
-              <React.Fragment>
-                {/* <Typography sx={{ mt: 2, mb: 1 }}>Step {activeStep + 1}</Typography> */}
-                <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
-=======
               <React.Fragment>
               </React.Fragment>
             ) : (
               <React.Fragment>
                 {/* <Typography sx={{ mt: 2, mb: 1 }}>Step {activeStep + 1}</Typography> */}
                 <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
->>>>>>> 83b3db7e58bf9065a0f88fb9b992792430e22829
                   {/* <Button
               color="inherit"
               disabled={activeStep === 0}
@@ -196,11 +176,7 @@ export default function AddCar_UploadFront_Before() {
             >
               Back
             </Button> */}
-<<<<<<< HEAD
-                  <Box sx={{ flex: "1 1 auto" }} />
-=======
                   <Box sx={{ flex: '1 1 auto' }} />
->>>>>>> 83b3db7e58bf9065a0f88fb9b992792430e22829
 
                   {/* <Button onClick={handleNext}>
               {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
@@ -209,8 +185,6 @@ export default function AddCar_UploadFront_Before() {
               </React.Fragment>
             )}
           </Box>
-<<<<<<< HEAD
-=======
 
 
           {/* New Stepper */}
@@ -222,7 +196,6 @@ export default function AddCar_UploadFront_Before() {
             ))}
           </Stepper>
 
->>>>>>> 83b3db7e58bf9065a0f88fb9b992792430e22829
         </div>
         <div className="flex items-center justify-center">
           <div className="text-center font-prompt text-[18px] p-6 flex flex-nowrap">
@@ -233,13 +206,8 @@ export default function AddCar_UploadFront_Before() {
               alt="car"
             />
             <p className="font-prompt text-[18px] ml-5 text-left">
-<<<<<<< HEAD
-              Upload a picture of the front of the car to clearly see the
-              license plate.
-=======
               Upload a picture of the front of the car to clearly see the license
               plate.
->>>>>>> 83b3db7e58bf9065a0f88fb9b992792430e22829
             </p>
           </div>
         </div>
@@ -282,10 +250,7 @@ export default function AddCar_UploadFront_Before() {
                   </div>
                 );
               })}
-<<<<<<< HEAD
-=======
 
->>>>>>> 83b3db7e58bf9065a0f88fb9b992792430e22829
             </div>
           </div>
         </div>

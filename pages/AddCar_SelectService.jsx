@@ -14,15 +14,6 @@ import Typography from "@mui/material/Typography";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Services from "./Services.json";
 
-<<<<<<< HEAD
-import Box from "@mui/material/Box";
-import Stepper from "@mui/material/Stepper";
-import Step from "@mui/material/Step";
-import StepLabel from "@mui/material/StepLabel";
-import Button from "@mui/material/Button";
-
-const steps = ["1", "2", "3", "4"];
-=======
 import Box from '@mui/material/Box';
 import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
@@ -31,7 +22,6 @@ import Button from '@mui/material/Button';
 
 
 const steps = ['1', '2', '3', '4'];
->>>>>>> 83b3db7e58bf9065a0f88fb9b992792430e22829
 
 export default function AddCar_SelectService() {
   const [activeStep, setActiveStep] = React.useState(0);
@@ -61,22 +51,6 @@ export default function AddCar_SelectService() {
 
       <div className="bg-white rounded-t-[20px] my-5 pb-28 md:pb-0 md:h-screen md:min-w-[840px] min-w-full">
         <div className="flex flex-col space-y-4">
-<<<<<<< HEAD
-          <div>
-            <Box sx={{ width: "70%" }}>
-              <Stepper activeStep="3" doneStep="4">
-                {steps.map((label, index) => {
-                  const stepProps = {};
-                  const labelProps = {};
-                  return (
-                    <Step key={label} {...stepProps}>
-                      <StepLabel {...labelProps}>{label}</StepLabel>
-                    </Step>
-                  );
-                })}
-              </Stepper>
-            </Box>
-=======
           <div className="align-content: center p-8">
             <Image
               src={Step4}
@@ -101,14 +75,11 @@ export default function AddCar_SelectService() {
       </Stepper>
     </Box>
   
->>>>>>> 83b3db7e58bf9065a0f88fb9b992792430e22829
           </div>
         </div>
 
         <div className="flex flex-row px-5">
-          <p className="font-semibold text-lg text-[#484542]">
-            Choose a service item
-          </p>
+          <p className="font-semibold text-lg text-[#484542]">Choose a service item</p>
         </div>
 
         {Services.services.map((ser) => {
@@ -123,9 +94,7 @@ export default function AddCar_SelectService() {
                         aria-controls="panel1a-content"
                         id="panel1a-header"
                       >
-                        <Typography className="font-semibold text-lg text-[#484542]">
-                          {cat} Service
-                        </Typography>
+                        <Typography className="font-semibold text-lg text-[#484542]">{cat} Service</Typography>
                       </AccordionSummary>
 
                       <AccordionDetails>
@@ -134,18 +103,19 @@ export default function AddCar_SelectService() {
                             <div className="flex flex-row items-center justify-between mb-4 bg-[#F9F5EC] p-3 rounded-[10px] font-semibold">
                               <div className="flex flex-row items-center">
                                 <input
-                                  type="checkbox"
+                                  type="checkbox"     
                                   className="w-7 h-7 bg-red-100 border-red-300 text-red-500 focus:ring-red-200"
                                 />
-                                <label className="ml-2 text-lg text-[#484542]">
+                                <label   
+                                  className="ml-2 text-lg text-[#484542]"
+                                >
                                   {service}
                                 </label>
                               </div>
                               <div className="relative text-lg flex flex-row items-center">
-                                <p>
-                                  {new Intl.NumberFormat().format(900)} Baht
-                                </p>
+                                <p>{new Intl.NumberFormat().format(900)} Baht</p>
                               </div>
+
                             </div>
                           );
                         })}
