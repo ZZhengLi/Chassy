@@ -14,6 +14,7 @@
                 {
                     "_id": "630fab80c785d9044396050a",
                     "service_name": "ล้างรถ"
+                    
                 },
                 {
                     "_id": "631060551c06245c894615b4",
@@ -216,5 +217,23 @@
             "total_price": 900,
             "status": "completed"
         }
+    ],
+
+    "employees": [
+        {
+            "_id": "1",
+            "staff_picture_url": "https://cdn.thetealmango.com/wp-content/uploads/2021/08/Paul-Rudd.jpg",
+            "name": "เปา ปาร์ตี้",
+            "shop_name": "Washever"
+            
+        },
+        {
+            "_id": "2",
+            "staff_picture_url": "https://cdn.thetealmango.com/wp-content/uploads/2021/08/Paul-Rudd.jpg",
+            "name": "เปา ปาร์ตี้",
+            "shop_name": "Washever"
+            
+        }
     ]
+    
 }

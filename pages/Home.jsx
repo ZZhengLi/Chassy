@@ -1,104 +1,356 @@
 import BottomNav from "./BottomNav";
-import AppBar from "./AppBar"
-import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
-import AddCircleIcon from '@mui/icons-material/AddCircle';
-import SearchIcon from '@mui/icons-material/Search';
-import CheckBoxOutlinedIcon from '@mui/icons-material/CheckBoxOutlined';
-import ArrowForwardIosOutlinedIcon from '@mui/icons-material/ArrowForwardIosOutlined';
-import Data from './HomeData.json'
-import PaymentsIcon from '@mui/icons-material/Payments';
+import AddCircleIcon from "@mui/icons-material/AddCircle";
+import SearchIcon from "@mui/icons-material/Search";
+import ArrowForwardIosOutlinedIcon from "@mui/icons-material/ArrowForwardIosOutlined";
+import Data from "./HomeData.json";
+import {
+  FaRegCalendarAlt,
+  FaCar,
+  FaMoneyBill,
+  FaUserCircle,
+} from "react-icons/fa";
+import { FiCheckSquare } from "react-icons/fi";
+import router from "next/router";
+import Button from "@mui/material/Button";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+import React from "react";
+
+import dayjs, { Dayjs } from "dayjs";
+import TextField from "@mui/material/TextField";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+// import authMiddleware from '../components/middleWare'
+
+import {
+  dehydrate,
+  QueryClient,
+  useMutation,
+  useQueryClient,
+  useQuery,
+} from "@tanstack/react-query";
+import {
+  
+  getShops,
+  
+} from "../lib/user_helper";
+import {
+  getCarServices,
+  getCars,
+  createCar,
+  updateCar,
+  deleteCarById,
+} from "../lib/cartransaction_helper";
+
 
 const Home = () => {
+  const [open, setOpen] = React.useState(false);
+  const [date, setDate] = React.useState(new Date());
+  const [shop, setShop] = React.useState("");
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleConfirm = () => {
+    setOpen(false);
+    router.push({
+      pathname: "/EditCar_Img",
+      query: {
+        // imgId: imgId,
+      },
+    });
+  };
+
+  // function pushToNextPage(carId) {
+  //   router.push({
+  //     pathname: "/ReviewCustomer_CarDetail", //ReviewCustomer_CarDetail
+  //     query: {
+  //       // regNum: regNum,
+  //       // brand: brand,
+  //       // model: model,
+  //       // color: color,
+  //       // imgId: imgId,
+  //       // services: services
+  //       carId: carId ,
+
+  //     },
+  //   });
+  // }
+
+  const handleCardClick = (carId) => {
+    router.push({
+      pathname: "/ReviewCustomer_CarDetail",
+      query: { carId: carId },
+    });
+  };
+
+  const { data: shops } = useQuery({
+    queryKey: ["shops"],
+    queryFn: getShops,
+    refetchOnWindowFocus: false,
+  });
+  const handleChange = (event) => {
+    setShop(event.target.value);
+    {
+      register("shop");
+    }
+  };
+
+  const { data: services } = useQuery({
+    queryKey: ["services"],
+    queryFn: getCarServices,
+    refetchOnWindowFocus: false,
+
+  });
+  console.log("services it is", services)
+  const service_array = []
+
+  const {
+    isLoading,
+    isError,
+    error,
+    data: cars,
+  } = useQuery({
+    queryKey: ["cars"],
+    queryFn: getCars,
+    refetchOnWindowFocus: false,
+    select: (data) => {
+      console.log("data services  received: ", data);
+      if (data.length === 0) {
+        return []; // return an empty array instead of undefined
+      }
+      if (data.length > 0) {
+        const modifiedData = data.map((car) => {
+          if (car._id != null) {
+
+            if (car.services )
+            car.services.map((service) => {
+              services.map((s) =>  { 
+                //console.log('moment of truth', s._id, service)
+                if (service == s._id) {
+                  console.log('moment of truth', s._id)
+                  service_array.push([s.service_name, s.price, s._id])
+                  
+                  }}
+              )}
+              )
+            return {
+              ...car,
+            };
+          }
+        });
+        const filteredData = modifiedData.filter((item) => item);
+        return filteredData;
+      }
+    },
+  });
+
+  console.log("show me cars", cars);
+
+  if (isLoading) return "Loading";
+  if (isError) {
+    console.error(error);
+    return "Error";
+  }
+
   return (
-    <div>
-      <AppBar />
-      <h1 className="text-3xl font-bold text-[#484542] mx-5">Home</h1>
-      <div className="flex ...">
-        <img src="https://thumbs.dreamstime.com/b/shop-building-colorful-isolated-white-33822015.jpg" class="object-cover h-10 w-10 rounded-full ml-5" />
+    <div className="bg-[#F9F5EC]">
+      <h1 className="text-3xl font-bold text-[#484542] px-6 pt-10 pb-2">
+        หน้าแรก
+      </h1>
+      <div className="flex ... pt-3">
+        <img
+          src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRjdTTqi1gRWv1XKq1eG2sJs94GAXbk1DScNA&usqp=CAU"
+          className="object-cover h-10 w-10 rounded-full ml-6"
+        />
 
-        <button id="dropdownDefault" data-dropdown-toggle="dropdown" className="text-black focus:outline-none font-medium rounded-lg text-sm px-4 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">Shop Name <svg class="ml-2 w-4 h-4" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg></button>
-
-        <div id="dropdown" class="hidden z-10 w-44 bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700">
-          <ul class="py-1 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDefault">
-            <li>
-              <a href="#" class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Dashboard</a>
-            </li>
-            <li>
-              <a href="#" class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Settings</a>
-            </li>
-            <li>
-              <a href="#" class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Earnings</a>
-            </li>
-            <li>
-              <a href="#" class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Sign out</a>
-            </li>
-          </ul>
-        </div>
-
+        <select
+          className=" font-prompt bg-transparent text-lg font-medium ml-2 text-dark bg-[#F9F5EC]"
+          value={shop}
+          defaultValue={shop}
+          label="Shop Name"
+          onChange={handleChange}
+        >
+          {shops?.map((shop) => (
+            <option key={shop._id} value={shop.registered_name}>
+              {" "}
+              {shop.registered_name}
+            </option>
+          ))}
+        </select>
       </div>
 
-      <div className="grid grid-cols-2  place-items-center">
-        <div class="max-w-sm rounded shadow-lg px-5 py-5 rounded-[10px]">
-          <div className="px-10"><DirectionsCarIcon sx={{ color: "#FA8F54" }}/></div>
-          <p className="font-sans text-lg text-gray-900 text-center">1,000 cars</p>
+      <div className="flex-row flex items-center w-full px-6 pt-3">
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <DatePicker
+            value={date}
+            onChange={(newValue) => {
+              setDate(newValue);
+            }}
+            renderInput={(params) => <TextField {...params} />}
+          />
+        </LocalizationProvider>
+      </div>
+
+      <div className="flex flex-row justify-between w-full px-6 py-5">
+        <div className="h-20 items-center justify-center flex-col flex bg-white min-w-[160px] md:min-w-[410px] md:h-[92px] rounded-[10px] text-primary">
+          <FaCar className="w-9 h-9" color="#FA8F54" />
+          <p className="text-lg">{new Intl.NumberFormat().format(1000)} คัน</p>
         </div>
-        <div className="max-w-sm rounded overflow-hidden shadow-lg px-5 py-5 mr-5 rounded-[10px]">
-          <div className="px-10"><PaymentsIcon sx={{ color: "#7FD1AE" }}/></div>
-          <p className="font-sans text-lg text-gray-900 text-center">500,000 Baht</p>
+        <div className="h-20 items-center justify-center flex-col flex bg-white min-w-[160px] md:min-w-[410px] md:h-[92px] rounded-[10px] text-green">
+          <FaMoneyBill className="w-9 h-9" color="#7FD1AE" />
+          <p className="text-lg">{new Intl.NumberFormat().format(50000)} บาท</p>
         </div>
       </div>
 
-      <div className="max-w-sm rounded shadow-lg rounded-[20px]">
+      <div className="flex justify-center items-center md:w-full w-full">
+        <div className="bg-white rounded-t-[20px] my-5 pb-28 md:pb-0 md:h-screen min-w-full">
+          <div className="py-5 w-full">
+            <div className="flex-row flex justify-between px-6">
+              <div className="flex-row flex items-center text-dark">
+                <p className="font-sans text-lg text-gray-900 text-center">
+                  เพิ่มรถ
+                </p>
+                <button
+                  className="px-2"
+                  onClick={() => router.push("/AddCar_Qr")}
+                >
+                  <AddCircleIcon sx={{ color: "#FA8F54" }} />
+                </button>
+              </div>
+              <div className="mr-5 items-center text-dark">
+                <form action="" className="relative mx-auto w-max">
+                  <div className="relative flex flex-row items-center">
+                    <div className="absolute pl-3 z-10">
+                      <SearchIcon sx={{ color: "#FA8F54" }} />
+                    </div>
+                    <input
+                      type="search"
+                      className="peer cursor-pointer relative h-12 w-12 rounded-full bg-transparent pl-12 outline-none focus:w-full focus:cursor-text focus:border focus:border-dark focus:pl-16 focus:pr-4"
+                    />
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
 
-        <div className="flex flex-row mx-5 my-6">
-          <p className="font-sans text-lg text-gray-900 text-center">Add Car</p>
-          <button className="px-2"><AddCircleIcon sx={{ color: "#FA8F54" }} /></button>
-          <button><SearchIcon sx={{ color: "#484542" }} /></button>
-        </div>
-
-        <div className="overflow-y-auto h-80">
-
-          {
-            Data.cars.map(car => {
+          <div className="overflow-y-auto h-80">
+            {cars.map((car, index) => {
               return (
                 <>
-                  <div className={car.status === "in-process" ? "flex max-w-sm shadow-lg rounded-[10px] bg-[#F9F5EC] mx-5 items-center" : "flex max-w-sm shadow-lg rounded-[10px] bg-[#7FD1AE33] mx-5 items-center"}>
-                    {car.status === "in-process" ?
-                      <button className="bg-white shadow-lg py-1 px-1 rounded-[5px]">
-                        <CheckBoxOutlinedIcon sx={{ color: "#FA8F54" }} />
-                      </button> :
-                      <CheckBoxOutlinedIcon sx={{ color: "#7FD1AE" }} />
-                    }
+                  <div className="pb-[10px] items-center justify-center flex flex-col ">
+                    <div className="w-full h-20 items-center rounded-lg flex justify-start">
+                      <div className="px-4 flex flex-row justify-between items-center w-full">
+                        <div className="flex flex-row w-full items-center">
+                          <div
+                            className={
+                              car.status === "in-process"
+                                ? "flex px-5 py-3 rounded-[10px] bg-[#F9F5EC] items-center w-full"
+                                : "flex px-5 py-3 rounded-[10px] bg-[#7FD1AE33] items-center w-full"
+                            }
+                          >
+                            {car.status === "in-process" ? (
+                              <button
+                                className="bg-white shadow-lg rounded-[5px]"
+                                onClick={handleClickOpen}
+                              >
+                                <FiCheckSquare
+                                  className="w-10 h-10"
+                                  color="#FA8F54"
+                                />
+                              </button>
+                            ) : (
+                              <FiCheckSquare
+                                className="w-10 h-10"
+                                color="#7FD1AE"
+                              />
+                            )}
+                            <div className="px-4 w-full text-dark">
+                              <p className="font-medium text-lg">
+                                {car.car_id.license_plate}
+                              </p>
+                              <div className="flex flex-row justify-between font-normal text-base">
+                              
+                              <p className="truncate md:w-full w-20">
+                                
+                                {service_array.map((ser) => {
+                                  
+                                  return (
+                                    
+                                    <React.Fragment key={ser[0]}>
+                                    {ser[0]} ,
+                                    </React.Fragment>
+                                    );
+                                })}
+                              </p>
+                                
+                                <p>
+                                  {new Intl.NumberFormat().format(
+                                    car.total_price
+                                  )}
+                                  ฿
+                                </p>
+                              </div>
+                            </div>
 
-                    <div className="grid">
-                      <p>{car.license_plate}</p>
-                      <div className="flex">
-                        <p>{car.services.map(service => {
-                          return (
-                            <>
-                              {service.service_name},
-                            </>
-                          )
-                        })}</p>
-                        <p>{car.total_price}฿</p>
+                            <div className="px-4">
+                              <FaUserCircle className="w-10 h-10 text-dark" />
+                            </div>
+                            <ArrowForwardIosOutlinedIcon
+                              sx={{ color: "#484542" }}
+                              className="w-6 h-6"
+                              onClick={() => handleCardClick(car._id)}
+                            />
+                          </div>
+                        </div>
                       </div>
                     </div>
-                    <img src={car.staff_picture_url} class="object-cover h-10 w-10 rounded-full ml-5" />
-                    <ArrowForwardIosOutlinedIcon sx={{ color: "#484542" }} />
                   </div>
-
                 </>
-              )
-            })
-          }
-
+              );
+            })}
+          </div>
         </div>
       </div>
-
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">{"Alert"}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Are you sure
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Cancel</Button>
+          <Button onClick={handleConfirm} autoFocus>
+            Confirm
+          </Button>
+        </DialogActions>
+      </Dialog>
 
       <BottomNav name="Home" />
     </div>
   );
 };
 
+// export const getServerSideProps = authMiddleware(async () => {
+ 
+//   // return { props: { data } };
+// });
+
 export default Home;
+

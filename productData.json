@@ -1,0 +1,12 @@
+{
+  "_id": {
+    "$oid": "64156c3af672da64db0ff627"
+  },
+  "shop": {
+    "$oid": "630fa9aec785d90443960507"
+  },
+  "product_name": "oil",
+  "price": 500,
+  "brand": "Exxon",
+  "description": "oil description"
+}

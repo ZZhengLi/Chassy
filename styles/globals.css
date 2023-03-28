@@ -1,8 +1,11 @@
-@import "tailwindcss/base";
-@import "tailwindcss/components";
-@import "tailwindcss/utilities";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-html,
+* {
+  font-family: "Prompt";
+}
+/* html,
 body {
   padding: 0;
   margin: 0;
@@ -19,18 +22,17 @@ a {
   box-sizing: border-box;
 }
 
-@media (prefers-color-scheme: light) {
+@media (prefers-color-scheme: dark) {
   html {
-    color-scheme: light;
+    color-scheme: dark;
   }
   body {
-    /* color: white; */
-    /* background: #f9f5ec; */
+    color: white;
+    background: black;
   }
-}
+} */
 
 .img {
-  width: 100px;
   width: 100px;
 }
 
@@ -54,3 +56,21 @@ a {
   justify-content: center;
   align-items: center;
 }
+
+/* body
+p-0 m-0
+
+a 
+no-underline
+
+*
+box-border
+
+.img
+w-24
+
+.bottomNav
+w-full h-24 fixed bottom-0 bg-orange-400 flex justify-center items-center
+
+.bnTab
+w-3/12 h-full flex justify-center items-center */
