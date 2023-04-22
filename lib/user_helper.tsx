@@ -1,7 +1,6 @@
 import axios from "axios";
 import Car from "../db/models/car";
 import User from "../db/models/user";
-import CarOwner from "../db/models/user";
 import Shop from "../db/models/shop";
 
 const BASE_URL = "http://localhost:3000/";

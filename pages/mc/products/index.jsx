@@ -255,7 +255,7 @@ function IndexPage() {
     <div className="bg-[#F9F5EC] w-full h-screen">
       <AdminAppBar />
       <div className="flex flex-row my-5 mx-5 justify-between">
-        <div className="text-lg flex font-sans">
+        <div className="text-lg flex font-prompt">
           Products
           <div className="ml-2">
             <button onClick={handleOpen}>
@@ -274,11 +274,11 @@ function IndexPage() {
             >
               <Box sx={{ ...style, width: 500 }}>
                 {modalMode == ModalMode.Add ? (
-                  <h1 className="text-2xl font-bold font-sans my-5">
+                  <h1 className="text-2xl font-bold font-prompt my-5">
                     Create Product
                   </h1>
                 ) : (
-                  <h1 className="text-2xl font-bold font-sans my-5">
+                  <h1 className="text-2xl font-bold font-ptompt my-5">
                     Update Product
                   </h1>
                 )}
@@ -287,7 +287,7 @@ function IndexPage() {
                   <TextField
                     label="Product Name"
                     variant="outlined"
-                    className="w-full my-2"
+                    className="w-full my-2 font-prompt"
                     type="text"
                     placeholder="Product Name"
                     {...register("product_name", {
@@ -300,7 +300,7 @@ function IndexPage() {
                     id="outlined-basic"
                     label="Description"
                     variant="outlined"
-                    className="w-full my-2"
+                    className="w-full my-2 font-prompt"
                     {...register("description", { required: true, maxLength: 80 })}
                   />
 
@@ -308,7 +308,7 @@ function IndexPage() {
                     id="outlined-basic"
                     label="Brand"
                     variant="outlined"
-                    className="w-full my-2"
+                    className="w-full my-2 font-prompt"
                     {...register("brand", { required: true, maxLength: 80 })}
                   />
 
@@ -326,7 +326,7 @@ function IndexPage() {
                         required: true,
                         maxLength: 80,
                       })}
-                      className="w-full my-2"
+                      className="w-full my-2 font-prompt"
                       onChange={handleChange}
                     >
                       {shops?.map((shop) => (
@@ -341,7 +341,7 @@ function IndexPage() {
                     id="outlined-basic"
                     label="Price"
                     variant="outlined"
-                    className="w-full my-2"
+                    className="w-full my-2 font-prompt"
                     {...register("price", {
                       required: true,
                       maxLength: 100,
@@ -415,43 +415,43 @@ function IndexPage() {
             <TableRow>
               <StyledTableCell
                 align="center"
-                sx={{ fontSize: 16, fontWeight: 700 }}
+                sx={{ fontSize: 16, fontFamily: 'Prompt, sans-serif', fontWeight: 700 }}
               >
                 #
               </StyledTableCell>
               <StyledTableCell
                 align="left"
-                sx={{ fontSize: 16, fontWeight: 700 }}
+                sx={{ fontSize: 16, fontFamily: 'Prompt, sans-serif', fontWeight: 700 }}
               >
                 Product
               </StyledTableCell>
               <StyledTableCell
                 align="left"
-                sx={{ fontSize: 16, fontWeight: 700 }}
+                sx={{ fontSize: 16, fontFamily: 'Prompt, sans-serif', fontWeight: 700 }}
               >
                 Descrition
               </StyledTableCell>
               <StyledTableCell
                 align="left"
-                sx={{ fontSize: 16, fontWeight: 700 }}
+                sx={{ fontSize: 16, fontFamily: 'Prompt, sans-serif', fontWeight: 700 }}
               >
                 Brand
               </StyledTableCell>
               <StyledTableCell
                 align="left"
-                sx={{ fontSize: 16, fontWeight: 700 }}
+                sx={{ fontSize: 16, fontFamily: 'Prompt, sans-serif', fontWeight: 700 }}
               >
                 Shop
               </StyledTableCell>
               <StyledTableCell
                 align="left"
-                sx={{ fontSize: 16, fontWeight: 700 }}
+                sx={{ fontSize: 16, fontFamily: 'Prompt, sans-serif', fontWeight: 700 }}
               >
                 Price
               </StyledTableCell>
               <StyledTableCell
                 align="left"
-                sx={{ fontSize: 16, fontWeight: 700 }}
+                sx={{ fontSize: 16, fontFamily: 'Prompt, sans-serif', fontWeight: 700 }}
               ></StyledTableCell>
             </TableRow>
           </TableHead>
@@ -467,19 +467,19 @@ function IndexPage() {
                   <StyledTableCell align="center">
                     
                   </StyledTableCell>
-                  <StyledTableCell align="left">
+                  <StyledTableCell align="left" sx={{ fontSize: 16, fontFamily: 'Prompt, sans-serif' }}>
                     {product.product_name}
                   </StyledTableCell>
-                  <StyledTableCell align="left">
+                  <StyledTableCell align="left" sx={{ fontSize: 16, fontFamily: 'Prompt, sans-serif' }}>
                     {product.description}
                   </StyledTableCell>
-                  <StyledTableCell align="left">
+                  <StyledTableCell align="left" sx={{ fontSize: 16, fontFamily: 'Prompt, sans-serif'}}>
                     {product.brand}
                   </StyledTableCell>
-                  <StyledTableCell align="left">
+                  <StyledTableCell align="left" sx={{ fontSize: 16, fontFamily: 'Prompt, sans-serif' }}>
                     {product.shop.registered_name}
                   </StyledTableCell>
-                  <StyledTableCell align="left">
+                  <StyledTableCell align="left" sx={{ fontSize: 16, fontFamily: 'Prompt, sans-serif' }}>
                     {product.price}
                   </StyledTableCell>
                   <StyledTableCell align="left">

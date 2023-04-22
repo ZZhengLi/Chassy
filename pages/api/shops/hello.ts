@@ -33,6 +33,8 @@ export default async function handler(
             theShop.owner = shop.owner
             theShop.location = shop.location
             theShop.phone_number = shop.phone_number
+            theShop.remaining_cars = shop.remaining_cars
+            theShop.branch = shop.branch
             await theShop.save()
             console.debug(">>> Service Updated!")
             res.status(200).json(theShop)

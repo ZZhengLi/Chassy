@@ -46,10 +46,6 @@ export default function AddShop() {
   const [activeStep, setActiveStep] = React.useState(0);
   const [owner, setOwner] = React.useState("");
 
-  // const [firstName, setFirstName] = useState("");
-  // const [lastName, setLastName] = useState("");
-  // const [position, setPosition] = useState("");
-  // const [num, setNum] = useState("");
   //Upload image
   const [selectedImage, setSelectedImage] = useState(null);
   //New Stepper
@@ -105,11 +101,6 @@ export default function AddShop() {
     onSuccess: () => {
       console.log("Data Inserted");
       alert("Your new feature has been successfully added into the database");
-      // router.push({
-      //   // pathname: "/AddShop_AddMenu",
-      // })
-      // router.reload();
-      // Invalidate and refetch
       queryClient.invalidateQueries({ queryKey: ["shops"] });
     },
   });
@@ -138,40 +129,20 @@ export default function AddShop() {
   const onSubmit = (data) => {
     console.log("onSubmit", data.owner, data);
 
-      const theOwner = shops.find(
-        (o) => o.owner.first_name == data.owner 
-      );
-
-      router.push({
-        pathname: "./AddShop_AddMenu",
-        query: { registered_name: data.registered_name, owner: theOwner.owner._id, },
-      })
-
-      console.assert(theOwner != undefined);
-      console.log("chalo owner", theOwner.owner._id, data.registered_name);
-
-    addMutation.mutate({
-      name: data.name,
-      registered_name: data.registered_name,
-      location: data.location,
-      phone_number: data.phone_number,
-      owner: theOwner.owner._id,
-    });
-
     if (selectedImage != null) {
       router.push({
         pathname: "/AddShop_AddMenu",
         query: {
-          // name_En: name_En,
-          // name_Th: name_Th,
-          // branch: branch,
-          // ownerName: ownerName,
-          // address: address,
+          name: data.name,
+          registered_name: data.registered_name,
+          location: data.location,
+          branch: data.branch,
+          owner: data.owner,
           image: URL.createObjectURL(selectedImage),
         },
       });
     } else {
-      alert("Your didn't upload any image");
+      alert("Please upload a shop image");
     }
   };
   const {
@@ -206,7 +177,7 @@ export default function AddShop() {
     },
   });
 
-  console.log("show me shops", shops);
+  console.log("show me owners", owners);
 
   if (isLoading) return "Loading";
   if (isError) {
@@ -250,13 +221,13 @@ export default function AddShop() {
   const shownOwnerIds = [];
 
   return (
-    <div className="bg-[#F9F5EC]">
-      <div className="flex flex-row p-5">
+    <div className="bg-[#F9F5EC] w-full">
+      <div className="flex flex-row py-5 px-2">
         <MdOutlineArrowBack
           className="h-9 w-10 mt-8"
           onClick={() => router.back()}
         />
-        <h1 className="text-3xl font-bold text-[#484542] ml-5 mt-8">
+        <h1 className="text-3xl font-bold text-[#484542] ml-5 mt-8 font-prompt">
           เพิ่มร้าน
         </h1>
       </div>
@@ -285,7 +256,7 @@ export default function AddShop() {
                   src={
                     selectedImage
                       ? URL.createObjectURL(selectedImage)
-                      : "https://creazilla-store.fra1.digitaloceanspaces.com/icons/3233252/camera-icon-md.png"
+                      : "https://www.freeiconspng.com/thumbs/camera-icon/camera-icon-21.png"
                   }
                   alt="user image"
                   onChange={(event) => {
@@ -318,101 +289,90 @@ export default function AddShop() {
         </button>
       </div>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="p-2 px-4 ">ชื่อร้านภาษาอังกฤษ*</div>
+        <div className="p-2 px-4 font-prompt">ชื่อร้านภาษาอังกฤษ*</div>
         <div className="pb-6 px-4 flex items-center justify-center">
           <input
             type="text"
-            id="firstName"
-            name="firstName"
+            id="registered_name"
+            name="registered_name"
             placeholder="ชื่อจดทะเบียน"
             required
             className="w-full h-12 pl-4 border-2 rounded-lg border-[#D9D9D9] font-prompt text-[18px] font-bold"
-            onChange={(e) => setFirstName(e.target.value)}
+            // onChange={(e) => setFirstName(e.target.value)}
             {...register("registered_name", {})}
           ></input>
         </div>
 
-        <div className="p-2 px-4 break-words">ชื่อร้านภาษาไทย*</div>
-        <div className="pb-6 px-4  flex items-center justify-center">
+        <div className="p-2 px-4 break-words font-prompt">ชื่อร้านภาษาไทย*</div>
+        <div className="pb-6 px-4 flex items-center justify-center">
           <input
             type="text"
-            id="lastName"
-            name="lastName"
-            placeholder="   กรอกชื่อร้านภาษาไทย"
+            id="name"
+            name="name"
+            placeholder="กรอกชื่อร้านภาษาไทย"
             required
             className="w-full h-12 pl-4 border-2 rounded-lg border-[#D9D9D9] font-prompt text-[18px] font-bold"
-            onChange={(e) => setLastName(e.target.value)}
+            // onChange={(e) => setLastName(e.target.value)}
             {...register("name", {})}
           ></input>
         </div>
 
-        <div className="p-2 px-4 break-words">สาขา</div>
+        <div className="p-2 px-4 break-words font-prompt">สาขา</div>
         <div className="pb-6 px-4 flex flex-row w-full">
           <input
             type="text"
-            id="position"
-            name="position"
+            id="branch"
+            name="branch"
             placeholder="กรอกสาขา"
             //value={position}
             className="w-full h-12 border-2 pl-4 rounded-lg border-[#D9D9D9] font-prompt text-[18px] font-bold"
-            //onChange={(e) => setPosition(e.target.value)}
+            // onChange={(e) => setPosition(e.target.value)}
+            {...register("branch", {})}
           ></input>
         </div>
 
-        <div className="p-2 px-4 break-words">ชื่อเจ้าของร้าน</div>
+        <div className="p-2 px-4 break-words font-prompt">ชื่อเจ้าของร้าน</div>
         <div className="pb-6 px-4 flex flex-row w-full">
-        <FormControl fullWidth>
-          {/* <InputLabel id="demo-simple-select-label">กรอกชื่อเจ้าของร้าน</InputLabel> */}
-          <Select
-            // labelId="demo-simple-select-label"
-            id="demo-simple-select"
-            value={owner}
-            defaultValue={owner}
-            //label="Owner Name"
-            {...register("owner", {
-              required: true,
-              maxLength: 80,
-            })}
-            className="w-full h-12 border-2 pl-4 rounded-lg border-[#D9D9D9] font-prompt text-[18px] font-bold bg-white"
-            onChange={handleChange}
-          >
-            {owners?.map((owner) => {
-              if (
-                owner.owner_id === null ||
-                shownOwnerIds.includes(owner.owner_id)
-              ) {
-                // skip rendering MenuItem for this owner
-                return null;
-              } else {
-                // add owner_id to the array of shownOwnerIds
-                shownOwnerIds.push(owner.owner_id);
-                // render MenuItem for this owner
+          <FormControl fullWidth>
+            {/* <InputLabel id="demo-simple-select-label">กรอกชื่อเจ้าของร้าน</InputLabel> */}
+            <Select
+              // labelId="demo-simple-select-label"
+              id="owner"
+              value={owner}
+              defaultValue={owner}
+              //label="Owner Name"
+              {...register("owner", {
+                required: true,
+                maxLength: 80,
+              })}
+              className="w-full h-12 border-2 pl-4 rounded-lg border-[#D9D9D9] font-prompt text-[18px] font-bold bg-white"
+              onChange={handleChange}
+            >
+              {owners?.map((owner, key) => {
                 return (
-                  <MenuItem key={owner.owner_id} value={owner.first_name}>
+                  <MenuItem key={key} value={owner._id}>
                     {owner.first_name} {owner.last_name}
                   </MenuItem>
                 );
-              }
-            })}
-          </Select>
-        </FormControl>
+              })}
+            </Select>
+          </FormControl>
         </div>
 
-        <div className="p-2 px-4 break-words">ที่อยู่ร้าน*</div>
+        <div className="p-2 px-4 break-words font-prompt">ที่อยู่ร้าน*</div>
         <div className="px-4 flex flex-row  w-full">
           <input
             type="text"
-            id="num"
-            name="num"
+            id="location"
+            name="location"
             placeholder="กรอกที่อยู่ร้าน"
             required
             className="w-full h-12 pl-4 border-2 rounded-lg border-[#D9D9D9] font-prompt text-[18px] font-bold"
-            onChange={(e) => setNum(e.target.value)}
             {...register("location", {})}
           ></input>
         </div>
 
-        <div className="p-6 pr-2 text-[#FA8F54]">
+        <div className="p-6 pr-2 font-prompt text-[#FA8F54]">
           <input type="checkbox" required></input>
           ยินยอมให้เก็บข้อมูล
         </div>
@@ -420,8 +380,7 @@ export default function AddShop() {
         <div className="p-8 flex items-center justify-center">
           <button
             type="submit"
-            className="bg-[#789BF3] hover:bg-[#789BF3] text-white font-bold py-4 px-8 rounded items-center text-[18px]"
-            
+            className="bg-[#789BF3] hover:bg-[#789BF3] text-white font-prompt font-bold py-4 px-8 rounded items-center text-[18px]"
           >
             ยืนยัน
           </button>

@@ -108,12 +108,12 @@ export default function AddCar_UploadFront_Before() {
   return (
     <div className="bg-[#F9F5EC]">
       {/* <AppBar /> */}
-      <div className="flex flex-row p-5">
+      <div className="flex flex-row p-2">
         <MdOutlineArrowBack
           className="h-9 w-10 mt-8"
           onClick={() => router.back()}
         />
-        <h1 className="text-3xl font-bold text-[#484542] ml-5 mt-8">เพิ่มรถ</h1>
+        <h1 className="text-3xl font-prompt font-bold text-[#484542] ml-5 mt-8">เพิ่มรถ</h1>
       </div>
       <div className="bg-white rounded-t-[20px] my-2 pb-28 md:pb-0 md:h-screen md:min-w-[840px] min-w-full">
         <div className="align-content: center p-8 flex items-center justify-center">
@@ -161,7 +161,7 @@ export default function AddCar_UploadFront_Before() {
                 className="h-full w-full bg-green-200 opacity-0 z-10 absolute"
               />
               <div className="h-full w-full bg-[#FA8F54] bg-opacity-10 absolute z-1 flex justify-center items-center top-0">
-                <div className="flex flex-col">
+                <div className="flex flex-col items-center">
                   <i className="mdi mdi-folder-open text-[30px] text-gray-400 text-center"></i>
 
                   <TbCamera
@@ -195,15 +195,15 @@ export default function AddCar_UploadFront_Before() {
         </div>
 
         {/* </div> */}
-        <div className="flex items-center justify-center ">
+        <div className="flex items-center justify-center flex space-x-2">
           <button
-            className="bg-[#789BF3] text-[#789BF3] text-slate-400 hover:bg-[#789BF3] bg-opacity-10 text-opacity-100 font-bold text-blue  rounded items-center py-4 px-8"
+            className="bg-[#789BF3] font-prompt text-[#789BF3] text-slate-400 hover:bg-[#789BF3] bg-opacity-10 text-opacity-100 font-bold text-blue  rounded items-center py-4 px-8"
             onClick={() => router.back()}
           >
             ก่อนหน้า
           </button>
           <button
-            className="bg-[#789BF3] hover:bg-[#789BF3] text-white font-bold rounded items-center py-4 px-8"
+            className="bg-[#789BF3] hover:bg-[#789BF3] text-white font-bold font-prompt rounded items-center py-4 px-8"
             onClick={() =>
               image
                 ? router.push({

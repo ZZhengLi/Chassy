@@ -255,7 +255,7 @@ function IndexPage() {
     <div className="bg-[#F9F5EC] w-full h-screen">
       <AdminAppBar />
       <div className="flex flex-row my-5 mx-5 justify-between">
-        <div className="text-lg flex font-sans">
+        <div className="text-lg flex font-prompt">
           Revenue
           <div className="ml-2">
             <button onClick={handleOpen}>
@@ -274,11 +274,11 @@ function IndexPage() {
             >
               <Box sx={{ ...style, width: 500 }}>
                 {modalMode == ModalMode.Add ? (
-                  <h1 className="text-2xl font-bold font-sans my-5">
+                  <h1 className="text-2xl font-bold font-prompt my-5">
                     Create Service
                   </h1>
                 ) : (
-                  <h1 className="text-2xl font-bold font-sans my-5">
+                  <h1 className="text-2xl font-bold font-prompt my-5">
                     Update Service
                   </h1>
                 )}
@@ -287,7 +287,7 @@ function IndexPage() {
                   <TextField
                     label="Service Name"
                     variant="outlined"
-                    className="w-full my-2"
+                    className="w-full my-2 font-prompt"
                     type="text"
                     placeholder="Service Name"
                     {...register("service_name", {
@@ -300,7 +300,7 @@ function IndexPage() {
                     id="outlined-basic"
                     label="Category"
                     variant="outlined"
-                    className="w-full my-2"
+                    className="w-full my-2 font-prompt"
                     {...register("category", { required: true, maxLength: 80 })}
                   />
 
@@ -318,7 +318,7 @@ function IndexPage() {
                         required: true,
                         maxLength: 80,
                       })}
-                      className="w-full my-2"
+                      className="w-full my-2 font-prompt"
                       onChange={handleChange}
                     >
                       {shops?.map((shop) => (
@@ -333,7 +333,7 @@ function IndexPage() {
                     id="outlined-basic"
                     label="Price"
                     variant="outlined"
-                    className="w-full my-2"
+                    className="w-full my-2 font-prompt"
                     {...register("price", {
                       required: true,
                       maxLength: 100,
@@ -343,7 +343,7 @@ function IndexPage() {
 
                   <div className="flex justify-end mt-2">
                     <Button
-                      className="text-[#FA8F54] font-bold text-right"
+                      className="text-[#FA8F54] font-prompt font-bold text-right"
                       style={{ textTransform: "none" }}
                       size="large"
                       onClick={handleClose}
@@ -352,7 +352,7 @@ function IndexPage() {
                     </Button>
                     {modalMode == ModalMode.Add ? (
                       <Button
-                        className="text-white font-bold text-right"
+                        className="text-white font-prompt font-bold text-right"
                         type="submit"
                         size="large"
                         style={{
@@ -364,7 +364,7 @@ function IndexPage() {
                       </Button>
                     ) : (
                       <Button
-                        className="text-white font-bold text-right"
+                        className="text-white font-prompt font-bold text-right"
                         type="submit"
                         style={{
                           textTransform: "none",
@@ -407,32 +407,32 @@ function IndexPage() {
             <TableRow>
               <StyledTableCell
                 align="center"
-                sx={{ fontSize: 16, fontWeight: 700 }}
+                sx={{ fontSize: 16, fontFamily: 'Prompt, sans-serif', fontWeight: 700 }}
               >
                 #
               </StyledTableCell>
               <StyledTableCell
                 align="left"
-                sx={{ fontSize: 16, fontWeight: 700 }}
+                sx={{ fontSize: 16, fontFamily: 'Prompt, sans-serif', fontWeight: 700 }}
               >
                 Shop Name
               </StyledTableCell>
               <StyledTableCell
                 align="left"
-                sx={{ fontSize: 16, fontWeight: 700 }}
+                sx={{ fontSize: 16, fontFamily: 'Prompt, sans-serif', fontWeight: 700 }}
               >
                 Total Car
               </StyledTableCell>
               <StyledTableCell
                 align="left"
-                sx={{ fontSize: 16, fontWeight: 700 }}
+                sx={{ fontSize: 16, fontFamily: 'Prompt, sans-serif', fontWeight: 700 }}
               >
                 Total Revenue
               </StyledTableCell>
               
               <StyledTableCell
                 align="left"
-                sx={{ fontSize: 16, fontWeight: 700 }}
+                sx={{ fontSize: 16, fontFamily: 'Prompt, sans-serif', fontWeight: 700 }}
               ></StyledTableCell>
             </TableRow>
           </TableHead>
@@ -445,16 +445,16 @@ function IndexPage() {
               )
               .map((service) => (
                 <StyledTableRow key={service._id}>
-                  <StyledTableCell align="center">
+                  <StyledTableCell align="center" sx={{ fontSize: 16, fontFamily: 'Prompt, sans-serif' }}> 
                     {service.__v}
                   </StyledTableCell>
-                  <StyledTableCell align="left">
+                  <StyledTableCell align="left" sx={{ fontSize: 16, fontFamily: 'Prompt, sans-serif' }}>
                     {service.shop.registered_name}
                   </StyledTableCell>
-                  <StyledTableCell align="left">
+                  <StyledTableCell align="left" sx={{ fontSize: 16, fontFamily: 'Prompt, sans-serif' }}>
                     10
                   </StyledTableCell>
-                  <StyledTableCell align="left">
+                  <StyledTableCell align="left" sx={{ fontSize: 16, fontFamily: 'Prompt, sans-serif' }}>
                   25000
                   </StyledTableCell>
                   

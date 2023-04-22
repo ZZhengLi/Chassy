@@ -38,22 +38,28 @@ export default function EditCar_Img() {
   const [files, setFile] = useState([]);
   const [message, setMessage] = useState("");
 
-  const [regNum, setRegNum] = useState("");
-  const [brand, setBrand] = useState("");
-  const [model, setModel] = useState("");
-  const [color, setColor] = useState("");
+  // const [regNum, setRegNum] = useState("");
+  // const [brand, setBrand] = useState("");
+  // const [model, setModel] = useState("");
+  // const [color, setColor] = useState("");
   const [services, setServices] = useState([]);
   const [images, setImages] = useState([]);
   const [imgId, setImgId] = useState("");
   const [fileUploaded, setFileUploaded] = useState("");
+  const [car, setCar] = useState();
+
   useEffect(() => {
-    setRegNum(router.query.regNum);
-    setBrand(router.query.brand);
-    setModel(router.query.model);
-    setColor(router.query.color);
-    setImgId(router.query.imgId);
-    setServices(router.query.services);
+    setCar(JSON.parse(router.query.car));
+    setServices(JSON.parse(router.query.services));
   }, [router.query]);
+
+  useEffect(() => {
+    // setRegNum(car ? car.car_id.license_plate : "");
+    // setBrand(car ? car.car_id.brand : "");
+    // setModel(car ? car.car_id.model : "");
+    // setColor(car ? car.car_id.color : "");
+    setImgId(car ? car.imgId : "");
+  }, [car]);
 
   // *** GET FILES IN CONTAINER ***
   useEffect(() => {
@@ -186,14 +192,12 @@ export default function EditCar_Img() {
   };
 
   function pushToNextPage() {
+    console.log("services".services);
     router.push({
       pathname: "/EditCar_Info",
       query: {
-        regNum: regNum,
-        brand: brand,
-        model: model,
-        color: color,
-        services: services,
+        car: JSON.stringify(car),
+        services: JSON.stringify(services),
       },
     });
   }

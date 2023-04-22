@@ -1,12 +1,9 @@
 import React, { useState } from "react";
 import BottomNav from "./BottomNav";
-import router from "next/router";
 import { MdOutlineArrowBack } from "react-icons/md";
-import { FaRegEdit } from "react-icons/fa";
-import { FaRegTrashAlt } from "react-icons/fa";
 import Rating from "@mui/material/Rating";
 import { useRouter } from "next/router";
-import { useForm, SubmitHandler } from "react-hook-form";
+import { useForm } from "react-hook-form";
 
 import {
   dehydrate,
@@ -32,9 +29,6 @@ export default function ReviewCustomer() {
   const [date, setDate] = useState("16-07-2022 ");
   const [comment, setComment] = useState("");
   const [rating, setRating] = useState(0);
-
-  
-
 
   const router = useRouter();
   const { carId } = router.query;
@@ -64,33 +58,29 @@ export default function ReviewCustomer() {
     reset,
   } = useForm();
   const onSubmit = (data) => {
-    console.log("onSubmit", data, cars);
-    //router.push => (./Home)
-
-    //const cars = cars
-
-    console.log("Data to be updated", cars[0].car_id._id, cars[0].shop_id);
-    
-
-    updateMutation.mutate({
-      _id: cars[0]._id,
-      car_id: cars[0].car_id._id,
-      shop_id: cars[0].shop_id,
-      user_id: cars[0].user_id,
-      start_date: cars[0].start_date,
-      finish_date: '',
-      services: ['630fab80c785d9044396050a', '631060551c06245c894615b4', '631060771c06245c894615b7'],
-      total_price: cars[0].total_price,
-      rating_from_customer: '',
-      review_from_customer: '',
-      rating_from_shop: '',
-      review_from_shop: data.review_from_shop,
-      car_image: '',
-      evidence_image: [],
-      status: cars[0].status,
-      __v: 0,
-      
-    });
+    try {
+      updateMutation.mutate({
+        _id: cars[0]._id,
+        car_id: cars[0].car_id._id,
+        shop_id: cars[0].shop_id,
+        user_id: cars[0].user_id,
+        start_date: cars[0].start_date,
+        finish_date: "",
+        services: cars[0].services,
+        total_price: cars[0].total_price,
+        rating_from_customer: "",
+        review_from_customer: "",
+        rating_from_shop: rating,
+        review_from_shop: data.review_from_shop,
+        car_image: "",
+        evidence_image: [],
+        status: "completed",
+        __v: 0,
+      });
+      router.push("/Home");
+    } catch (error) {
+      alert(error);
+    }
   };
 
   const {
@@ -137,7 +127,7 @@ export default function ReviewCustomer() {
           className="h-9 w-10 mt-8"
           onClick={() => router.back()}
         />
-        <h1 className="text-3xl font-bold text-[#484542] ml-5 mt-8">
+        <h1 className="text-3xl font-prompt font-bold text-[#484542] ml-5 mt-8">
           รีวิวลูกค้า
         </h1>
       </div>
@@ -209,7 +199,9 @@ export default function ReviewCustomer() {
                   type="text"
                   id="date"
                   name="date"
-                  value={cars[0].start_date}
+                  value={new Date(cars[0].start_date).toLocaleDateString(
+                    "en-GB"
+                  )}
                   className="pl-2 font-prompt text-[18px] font-bold"
                   onChange={(e) => setDate(e.target.value)}
                 ></input>
@@ -219,7 +211,7 @@ export default function ReviewCustomer() {
             <div>
               <div className="flex flex-nowrap pb-2">
                 <p className="text-left font-prompt text-[18px]">ให้คะแนน:</p>
-                <div className="App">
+                <div className="App font-prompt">
                   <Rating
                     name="simple-controlled"
                     //value={rating}
@@ -228,25 +220,17 @@ export default function ReviewCustomer() {
                     onChange={(_event, newValue) => {
                       setRating(newValue);
                     }}
-                    {...register("rating_from_shop", {})}
                   />
                 </div>
               </div>
             </div>
             <div>
               <div className="pr-8">
-                <p className="text-left font-prompt text-[18px] pb-2">สถานะ:</p>
-                {/* <input
-                  type="text"
-                  id="comment"
-                  name="comment"
-                  placeholder="เขียนแสดงความคิดเห็น..."
-                  value={comment}
-                  className="font-prompt text-[18px] rounded-lg shadow-2xl font-bold h-44 w-full text-start placeholder:-translate-y-14 placeholder:translate-x-4"
-                  onChange={(e) => setComment(e.target.value)}
-                ></input> */}
+                <p className="text-left font-prompt text-[18px] pb-2">
+                  ความคิดเห็น:
+                </p>
                 <textarea
-                  className="peer block h-32 w-full shadow-2xl p-2  px-3 leading-[1.6] transition-all focus:placeholder:opacity-100 data-[te-input-state-active]:placeholder:opacity-100 dark:text-neutral-200 dark:placeholder:text-neutral-200"
+                  className="peer block h-32 w-full shadow-2xl p-2  px-3 leading-[1.6] transition-all focus:placeholder:opacity-100 data-[te-input-state-active]:placeholder:opacity-100 dark:text-neutral-200 font-prompt dark:placeholder:text-neutral-200"
                   placeholder="เขียนแสดงความคิดเห็น..."
                   {...register("review_from_shop", {})}
                 ></textarea>
@@ -255,7 +239,7 @@ export default function ReviewCustomer() {
           </div>
           <div className="p-6 flex items-center justify-center">
             <button
-              className="bg-[#789BF3] hover:bg-[#789BF3] border-2 rounded-lg text-white font-bold py-4 px-8 rounded items-center text-[18px]"
+              className="bg-[#789BF3] hover:bg-[#789BF3] border-2 rounded-lg text-white font-prompt font-bold py-4 px-8 rounded items-center text-[18px]"
               //onClick={() => handleOpenUpdate(cars)}
               type="submit"
             >

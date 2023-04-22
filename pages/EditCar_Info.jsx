@@ -26,14 +26,19 @@ export default function EditCar_Info() {
   const [model, setModel] = useState("Jazz");
   const [color, setColor] = useState("เหลือง");
   const [services, setServices] = useState([]);
+  const [car, setCar] = useState();
 
   useEffect(() => {
-    setRegNum(router.query.regNum);
-    setBrand(router.query.brand);
-    setModel(router.query.model);
-    setColor(router.query.color);
-    setServices(router.query.services);
+    setCar(JSON.parse(router.query.car));
+    setServices(JSON.parse(router.query.services));
   }, [router.query]);
+
+  useEffect(() => {
+    setRegNum(car ? car.car_id.license_plate : "");
+    setBrand(car ? car.car_id.brand : "");
+    setModel(car ? car.car_id.model : "");
+    setColor(car ? car.car_id.color : "");
+  }, [car]);
 
   //New Stepper
   const QontoConnector = styled(StepConnector)(({ theme }) => ({
@@ -113,7 +118,8 @@ export default function EditCar_Info() {
     router.push({
       pathname: "/EditCar_Service",
       query: {
-        services: services,
+        car: JSON.stringify(car),
+        services: JSON.stringify(services),
       },
     });
   };

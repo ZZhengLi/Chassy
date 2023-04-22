@@ -142,30 +142,30 @@ function IndexPage() {
     console.debug("onSubmit", data.owner, data);
 
     if (modalMode == ModalMode.Add) {
-      const theOwner = shops.find(
-        (o) => o.owner.first_name == data.owner 
-      );
-      console.assert(theOwner != undefined);
-      console.log("chalo owner", theOwner.owner_id);
+        const theOwner = owners.find(
+         (o) => o.first_name == data.owner
+       );
+       console.assert(theOwner != undefined);
+       console.log("chalo owner", theOwner.owner_id);
 
       addMutation.mutate({
         name: data.name,
         registered_name: data.registered_name,
         location: data.location,
-        phone_number: data.phone_number,
-        owner: theOwner.owner._id,
+        branch: data.branch,
+        owner: theOwner._id,
       });
     } else if (modalMode == ModalMode.Update) {
       console.debug("Data to be updated", data);
-      const theOwner = shops.find(
-        (o) => o.owner.first_name == owner
+      const theOwner = owners.find(
+        (o) => o._id == data.owner._id
       );
       console.assert(theOwner != undefined); // Since the data is from the same list
       console.debug("---", theOwner, data.owner);
 
       updateMutation.mutate({
         ...data,
-        owner: theOwner.owner._id,
+        owner: theOwner._id,
       });
     }
   };
@@ -219,7 +219,7 @@ function IndexPage() {
   };
 
   const handleOpenUpdate = (shop) => {
-    console.debug("updateShop", shop, shop.owner.first_name);
+    console.debug("updateShop", shop.owner._id, shop.owner.first_name);
     setModalMode(ModalMode.Update);
     reset(shop);
     // setFirstName(shop.owner.first_name)
@@ -235,7 +235,7 @@ function IndexPage() {
         `Are you sure to delete [${shop.registered_name}] by [${shop.owner.first_name}]?`
       )
     ) {
-      
+
       deleteMutation.mutate(shop._id);
       router.reload();
     }
@@ -274,7 +274,7 @@ function IndexPage() {
     <div className="bg-[#F9F5EC] w-full h-screen">
       <AdminAppBar />
       <div className="flex flex-row my-5 mx-5 justify-between">
-        <div className="text-lg flex font-sans">
+        <div className="text-lg flex font-prompt">
           Shops
           <div className="ml-2">
             <button onClick={handleOpen}>
@@ -293,11 +293,11 @@ function IndexPage() {
             >
               <Box sx={{ ...style, width: 500 }}>
                 {modalMode == ModalMode.Add ? (
-                  <h1 className="text-2xl font-bold font-sans my-5">
+                  <h1 className="text-2xl font-bold font-prompt my-5">
                     Create Shop
                   </h1>
                 ) : (
-                  <h1 className="text-2xl font-bold font-sans my-5">
+                  <h1 className="text-2xl font-bold font-prompt my-5">
                     Update Shop
                   </h1>
                 )}
@@ -306,7 +306,7 @@ function IndexPage() {
                   <TextField
                     label="Shop Name"
                     variant="outlined"
-                    className="w-full my-2"
+                    className="w-full my-2 font-prompt"
                     type="text"
                     placeholder="Shop Name"
                     {...register("name", {
@@ -317,7 +317,7 @@ function IndexPage() {
                   <TextField
                     label="Shop Registered Name"
                     variant="outlined"
-                    className="w-full my-2"
+                    className="w-full my-2 font-prompt"
                     type="text"
                     placeholder="Shop Registered Name"
                     {...register("registered_name", {
@@ -340,43 +340,41 @@ function IndexPage() {
                         required: true,
                         maxLength: 80,
                       })}
-                      className="w-full my-2"
+                      className="w-full my-2 font-prompt"
                       onChange={handleChange}
                     >
-                      {owners?.map((owner) => {
-                        if (owner.owner_id === null || shownOwnerIds.includes(owner.owner_id)) {
+                      {owners?.map((owner, key) => {
+                        if (owner.user_type == "owner") {
                           // skip rendering MenuItem for this owner
-                          return null;
-                        } else {
-                          // add owner_id to the array of shownOwnerIds
-                          shownOwnerIds.push(owner.owner_id);
-                          // render MenuItem for this owner
                           return (
-                            <MenuItem key={owner.owner_id} value={owner.first_name}>
+                            <MenuItem key={key} value={owner.first_name}>
                               {owner.first_name} {owner.last_name}
                             </MenuItem>
                           );
+                          
+                        } else {
+                          return null;
                         }
                       })}
                     </Select>
                   </FormControl>
 
-                  
+
 
                   <TextField
                     id="outlined-basic"
                     label="Location"
                     variant="outlined"
-                    className="w-full my-2"
+                    className="w-full my-2 font-prompt"
                     {...register("location", { required: true, maxLength: 80 })}
                   />
 
                   <TextField
                     id="outlined-basic"
-                    label="Phone Number"
+                    label="Branch"
                     variant="outlined"
-                    className="w-full my-2"
-                    {...register("phone_number", {
+                    className="w-full my-2 font-prompt"
+                    {...register("branch", {
                       required: true,
                       maxLength: 80,
                     })}
@@ -384,7 +382,7 @@ function IndexPage() {
 
                   <div className="flex justify-end mt-2">
                     <Button
-                      className="text-[#FA8F54] font-bold text-right"
+                      className="text-[#FA8F54] font-bold font-prompt text-right"
                       style={{ textTransform: "none" }}
                       size="large"
                       onClick={handleClose}
@@ -393,7 +391,7 @@ function IndexPage() {
                     </Button>
                     {modalMode == ModalMode.Add ? (
                       <Button
-                        className="text-white font-bold text-right"
+                        className="text-white font-bold font-prompt text-right"
                         type="submit"
                         size="large"
                         style={{
@@ -405,7 +403,7 @@ function IndexPage() {
                       </Button>
                     ) : (
                       <Button
-                        className="text-white font-bold text-right"
+                        className="text-white font-bold font-prompt text-right"
                         type="submit"
                         style={{
                           textTransform: "none",
@@ -449,31 +447,31 @@ function IndexPage() {
 
               <StyledTableCell
                 align="left"
-                sx={{ fontSize: 16, fontWeight: 700 }}
+                sx={{ fontSize: 16, fontWeight: 700, fontFamily: 'Prompt, sans-serif' }}
               >
                 Shop
               </StyledTableCell>
               <StyledTableCell
                 align="left"
-                sx={{ fontSize: 16, fontWeight: 700 }}
+                sx={{ fontSize: 16, fontWeight: 700, fontFamily: 'Prompt, sans-serif' }}
               >
                 Owner
               </StyledTableCell>
               <StyledTableCell
                 align="left"
-                sx={{ fontSize: 16, fontWeight: 700 }}
+                sx={{ fontSize: 16, fontWeight: 700, fontFamily: 'Prompt, sans-serif' }}
               >
                 Location
               </StyledTableCell>
               <StyledTableCell
                 align="left"
-                sx={{ fontSize: 16, fontWeight: 700 }}
+                sx={{ fontSize: 16, fontWeight: 700, fontFamily: 'Prompt, sans-serif' }}
               >
-                Phone Number
+                Branch
               </StyledTableCell>
               <StyledTableCell
                 align="left"
-                sx={{ fontSize: 16, fontWeight: 700 }}
+                sx={{ fontSize: 16, fontWeight: 700, fontFamily: 'Prompt, sans-serif' }}
               ></StyledTableCell>
             </TableRow>
           </TableHead>
@@ -487,20 +485,20 @@ function IndexPage() {
               .map((shop) => (
                 <StyledTableRow key={shop._id}>
 
-                  <StyledTableCell align="left">
+                  <StyledTableCell align="left" sx={{ fontSize: 16, fontFamily: 'Prompt, sans-serif' }}>
                     <div>{shop.name} </div>
                     {shop.registered_name}
                   </StyledTableCell>
-                  <StyledTableCell align="left">
+                  <StyledTableCell align="left" sx={{ fontSize: 16, fontFamily: 'Prompt, sans-serif' }}>
                     {shop.owner.first_name} {shop.owner.last_name}
                   </StyledTableCell>
-                  <StyledTableCell align="left">
+                  <StyledTableCell align="left" sx={{ fontSize: 16, fontFamily: 'Prompt, sans-serif' }}>
                     {shop.location}
                   </StyledTableCell>
-                  <StyledTableCell align="left">
-                    {shop.phone_number}
+                  <StyledTableCell align="left" sx={{ fontSize: 16, fontFamily: 'Prompt, sans-serif' }}>
+                    {shop.branch}
                   </StyledTableCell>
-                  <StyledTableCell align="left">
+                  <StyledTableCell align="left" sx={{ fontSize: 16, fontFamily: 'Prompt, sans-serif' }}>
                     <div className="flex">
                       <div className="px-2">
                         <EditIcon

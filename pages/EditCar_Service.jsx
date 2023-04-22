@@ -3,6 +3,7 @@ import BottomNav from "./BottomNav";
 import { useRouter } from "next/router";
 import { MdOutlineArrowBack } from "react-icons/md";
 import { useState, useEffect } from "react";
+import { useMutation, useQuery } from "@tanstack/react-query";
 
 //accordian
 import Accordion from "@mui/material/Accordion";
@@ -23,6 +24,9 @@ import AdjustIcon from "@mui/icons-material/Adjust";
 import StepConnector, {
   stepConnectorClasses,
 } from "@mui/material/StepConnector";
+import { getServices } from "../lib/helper";
+import { updateCar } from "../lib/cartransaction_helper"
+
 
 const steps = ["1", "2", "3"];
 
@@ -31,20 +35,58 @@ export default function EditCar_Service() {
   const [doneStep, setDoneStep] = React.useState(0);
   const router = useRouter();
   const [personName, setPersonName] = React.useState([]);
-  const [services, setServices] = useState([]);
+  const [car, setCar] = useState([]);
+  const [servicesList, setServicesList] = useState([]);
+  const [totalPrice, setTotalPrice] = React.useState(0);
+
+
+
   useEffect(() => {
-    setServices(router.query.services);
+    setCar(router.query.car ? JSON.parse(router.query.car) : "");
   }, [router.query]);
 
-  // const handleChange = (event) => {
-  //   const {
-  //     target: { value },
-  //   } = event;
-  //   setPersonName(
-  //     // On autofill we get a stringified value.
-  //     typeof value === "string" ? value.split(",") : value
-  //   );
-  // };
+  const updateMutation = useMutation(updateCar, {
+    onSuccess: () => {
+      console.log("Data Updated");
+      alert("Your new feature has been successfully updated into the database");
+      router.push("/Home");
+      queryClient.invalidateQueries({ queryKey: ["cartransactions"] });
+    },
+  });
+
+  const {
+    isLoading,
+    isError,
+    error,
+    data: services,
+  } = useQuery({
+    queryKey: ["services"],
+    queryFn: getServices,
+    refetchOnWindowFocus: false,
+    select: (data) => {
+      // console.log("data received: ", data);
+      if (data.length === 0) {
+        return []; // return an empty array instead of undefined
+      }
+      if (data.length > 0) {
+        const modifiedData = data.map((service) => {
+          if (service.shop != null) {
+            return {
+              ...service,
+            };
+          }
+        });
+        const filteredData = modifiedData.filter((item) => item);
+        return filteredData;
+      }
+    },
+  });
+
+  if (isLoading) return "Loading";
+  if (isError) {
+    console.error(error);
+    return "Error";
+  }
 
   //New Stepper
   const QontoConnector = styled(StepConnector)(({ theme }) => ({
@@ -119,6 +161,61 @@ export default function EditCar_Service() {
     completed: PropTypes.bool,
   };
 
+  // filter services based on shop id
+  const filteredServices = services.filter(
+    (service) => service.shop._id === car.shop_id
+  );
+
+  // group services by category and include service price
+  const groupedServices = filteredServices.reduce((accumulator, service) => {
+    if (!accumulator[service.category]) {
+      accumulator[service.category] = [];
+    }
+    accumulator[service.category].push({
+      _id: service._id,
+      name: service.name,
+      price: service.price,
+    });
+    return accumulator;
+  }, {});
+
+  // create an array of unique categories
+  const uniqueCategories = Object.keys(groupedServices);
+
+ 
+
+  const handleSubmit = () => {
+    // e.preventDefault();
+    // const formData = {
+    //   fullname: fullName,
+    //   position: position,
+    //   shop: shop,
+    // };
+    // const [firstName, lastName] = formData.fullname.split(" ");
+   
+    console.log("form data car", car);
+    console.log("form data servicesList", servicesList);
+    console.log("form data servicesList", totalPrice);
+
+    const newArray = car.services
+    servicesList.forEach(value => {
+      if (!car.services.includes(value)) {
+        newArray.push(value);
+      }
+    });
+
+    console.log("new array it is", newArray)
+
+    updateMutation.mutate({
+      ...car,
+      car_id: car.car_id._id,
+      services: newArray,
+      total_price: totalPrice,
+      status: "in-process"
+      
+    });
+  };
+
   return (
     <div className="bg-[#F9F5EC]">
       <div className="flex flex-row p-5">
@@ -158,55 +255,57 @@ export default function EditCar_Service() {
           </p>
         </div>
 
-        {Services.services.map((ser) => {
-          return (
-            <>
-              {ser.category.map((cat, i) => {
-                return (
-                  <div key={i} className="px-5 py-2 w-full">
-                    <Accordion>
-                      <AccordionSummary
-                        expandIcon={<ExpandMoreIcon />}
-                        aria-controls="panel1a-content"
-                        id="panel1a-header"
-                      >
-                        <Typography className="font-semibold text-lg text-[#484542]">
-                          {cat} Service
-                        </Typography>
-                      </AccordionSummary>
-
-                      <AccordionDetails>
-                        {ser.services.map((service, i) => {
-                          return (
-                            <div
-                              key={i}
-                              className="flex flex-row items-center justify-between mb-4 bg-[#F9F5EC] p-3 rounded-[10px] font-semibold"
-                            >
-                              <div className="flex flex-row items-center">
-                                <input
-                                  type="checkbox"
-                                  className="w-7 h-7 bg-red-100 border-red-300 text-red-500 focus:ring-red-200"
-                                />
-                                <label className="ml-2 text-lg text-[#484542]">
-                                  {service}
-                                </label>
-                              </div>
-                              <div className="relative text-lg flex flex-row items-center">
-                                <p>
-                                  {new Intl.NumberFormat().format(900)} Baht
-                                </p>
-                              </div>
-                            </div>
-                          );
-                        })}
-                      </AccordionDetails>
-                    </Accordion>
+        {uniqueCategories.map((category, key) => (
+          <div key={key} className="px-5 py-2 w-full">
+            <Accordion>
+              <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls="panel1a-content"
+                id="panel1a-header"
+              >
+                <Typography className="font-semibold text-lg text-[#484542]">
+                  {category} Service
+                </Typography>
+              </AccordionSummary>
+              <AccordionDetails>
+                {groupedServices[category].map((service, key) => (
+                  <div
+                    key={key}
+                    className="flex flex-row items-center justify-between mb-4 bg-[#F9F5EC] p-3 rounded-[10px] font-semibold"
+                  >
+                    <div className="flex flex-row items-center">
+                      <input
+                        type="checkbox"
+                        className="w-7 h-7 bg-red-100 border-red-300 text-red-500 focus:ring-red-200"
+                        defaultChecked={car.services.includes(service._id)}
+                        onChange={(e) => {
+                          let isChecked = e.target.checked;
+                          if (isChecked) {
+                            servicesList.push(service._id);
+                            setTotalPrice(totalPrice + Number(service.price));
+                          } else {
+                            setServicesList(
+                              servicesList.filter((x) => x !== service._id)
+                            );
+                            setTotalPrice(totalPrice - Number(service.price));
+                          }
+                        }}
+                      />
+                      <label className="ml-2 text-lg text-[#484542]">
+                        {service.name}
+                      </label>
+                    </div>
+                    <div className="relative text-lg flex flex-row items-center">
+                     <p>
+                        {new Intl.NumberFormat().format(service.price)} Baht
+                      </p>
+                    </div>
                   </div>
-                );
-              })}
-            </>
-          );
-        })}
+                ))}
+              </AccordionDetails>
+            </Accordion>
+          </div>
+        ))}
         <div className="flex items-center justify-center pt-20">
           <button
             className="bg-[#789BF3] text-[#789BF3] text-slate-400 hover:bg-[#789BF3] bg-opacity-10 font-bold text-blue  rounded items-center py-4 px-8"
@@ -216,7 +315,7 @@ export default function EditCar_Service() {
           </button>
           <button
             className="bg-[#789BF3] hover:bg-[#789BF3] text-white font-bold py-4 px-8 rounded items-center"
-            onClick={() => router.push("/Home")}
+            onClick={handleSubmit}
           >
             ยืนยัน
           </button>

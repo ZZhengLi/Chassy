@@ -28,8 +28,10 @@ export async function getCarServices(): Promise<Array<typeof Service>> {
   return services;
 }
 
-export async function createCar(car: typeof Car): Promise<Array<typeof Car>> {
-  const apiUri = `${BASE_URL}api/cars/hello`;
+export async function createCarTransactions(
+  car: typeof Car
+): Promise<Array<typeof Car>> {
+  const apiUri = `${BASE_URL}api/cartransactions/hello`;
   const res = await axios.post(apiUri, car);
   return res.data;
 }
@@ -43,6 +45,6 @@ export async function updateCar(car: typeof Car): Promise<Array<typeof Car>> {
 
 export function deleteCarById(carId: string): any {
   console.debug("deleteCarById", carId);
-  const apiUri = `${BASE_URL}api/cars/${carId}`;
+  const apiUri = `${BASE_URL}api/cartransactions/${carId}`;
   return axios.delete(apiUri);
 }

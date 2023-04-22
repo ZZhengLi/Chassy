@@ -30,6 +30,9 @@ import { Model } from "mongoose";
 
 const Shop = () => {
   const [images, setImages] = useState([]);
+  const [search, setSearch] = useState("");
+  console.log("search it is", search);
+
   useEffect(() => {
     getBlobsInContainer().then((list) => {
       setImages(list.filter((file) => file.name.includes("shop")));
@@ -86,8 +89,8 @@ const Shop = () => {
   console.log("show me shop info", shops);
   return (
     <div className="bg-[#F9F5EC]">
-      <div className="flex flex-row p-5">
-        <h1 className="text-3xl font-bold text-[#484542] mx-5 pt-10 pb-2">
+      <div className="flex flex-row p-2">
+        <h1 className="text-3xl font-prompt font-bold text-[#484542] ml-5 mt-8">
           ร้าน
         </h1>
       </div>
@@ -97,7 +100,7 @@ const Shop = () => {
           <div className="py-5 w-full">
             <div className="flex-row flex justify-between px-6">
               <div className="flex-row flex items-center text-dark">
-                <p className="font-sans text-lg text-gray-900 text-center">
+                <p className="font-sans font-prompt text-lg text-gray-900 text-center">
                   เพิ่มร้าน
                 </p>
                 <button className="px-2">
@@ -116,6 +119,7 @@ const Shop = () => {
                     <input
                       type="search"
                       className="peer cursor-pointer relative h-12 w-12 rounded-full bg-transparent pl-12 outline-none focus:w-full focus:cursor-text focus:border focus:border-dark focus:pl-16 focus:pr-4"
+                      onChange={(e) => setSearch(e.target.value)}
                     />
                   </div>
                 </form>
@@ -124,7 +128,14 @@ const Shop = () => {
           </div>
 
           <div className="overflow-y-auto h-screen">
-            {shops.map((shop) => {
+            {shops.filter((shop) =>
+                Object.values(shop).some((field) => {
+                  if (field !== null && field !== undefined) {
+                    return field.toString().toLowerCase().includes(search.toLowerCase());
+                  }
+                  return false;
+                })
+              ).map((shop) => {
               return (
                 <>
                   <div className="pb-[10px] items-center justify-center flex flex-col ">
@@ -133,25 +144,25 @@ const Shop = () => {
                         <div className="flex flex-row w-full items-center">
                           <div className="flex px-5 py-3 rounded-[10px] bg-[#F9F5EC] items-center w-full">
                             <div className="px-4">
-                              {/* <img
+                              <img className="w-14 h-12 text-dark"
                                 src={
                                   images.filter((file) =>
-                                    file.name.includes("")
+                                    file.name.includes(shop.imgId)
                                   )[0] !== undefined
                                     ? images.filter((file) =>
-                                        file.name.includes("")
+                                        file.name.includes(shop.imgId)
                                       )[0].url
                                     : null
                                 }
-                              ></img> */}
-                              <FaUserCircle className="w-10 h-10 text-dark" />
+                              ></img>
+                              {/* <FaUserCircle className="w-10 h-10 text-dark" /> */}
                             </div>
 
                             <div className="px-4 w-full text-dark">
                               <p className="font-medium text-lg">{shop.name}</p>
                               <div className="flex flex-row justify-between font-normal text-base">
-                                <p className="w-full">
-                                  การใช้งานคงเหลือ: {shop.remaining_car} คัน
+                                <p className="w-full font-prompt">
+                                  การใช้งานคงเหลือ: {shop.remaining_cars} คัน
                                 </p>
                               </div>
                             </div>

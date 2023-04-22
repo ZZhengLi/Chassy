@@ -84,23 +84,29 @@ const BottomNav = (props: { name: any }) => {
           )}
         </button>
       </div>
-      <div className="bnTab">
+      <div className="bnTab items-center justify-center">
         {activeTabs === "Employee" ? (
-          <div onClick={() => router.push("/Employee")}>
-            <RiUser2Line
-              size="35"
-              color="#F9F5EC"
-              onClick={() => setActiveTabs("Employee")}
-            />
-            <p>Employee</p>
+          <div className=" " onClick={() => router.push("/Employee")}>
+            <div className=" flex items-center justify-center ">
+              <RiUser2Line
+                size="35"
+                color="#F9F5EC"
+                className="flex justify-center -pr-2"
+                onClick={() => setActiveTabs("Employee")}
+              />
+            </div>
+            <p className="flex self-center">Employee</p>
           </div>
         ) : (
           <div onClick={() => router.push("/Employee")}>
-            <RiUser2Line
-              size="35"
-              color="#484542"
-              onClick={() => setActiveTabs("Employee")}
-            />
+            <div className=" flex items-center justify-center ">
+              <RiUser2Line
+                size="35"
+                color="#484542"
+                className="justify-center"
+                onClick={() => setActiveTabs("Employee")}
+              />
+            </div>
             <p>Employee</p>
           </div>
         )}

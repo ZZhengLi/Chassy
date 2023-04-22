@@ -37,12 +37,12 @@ export default function SignUp_OTP() {
           className="h-9 w-10 mt-8"
           onClick={() => router.back()}
         />
-        <h1 className="text-3xl font-bold text-[#484542] ml-5 mt-8">
+        <h1 className="text-3xl font-bold text-[#484542] ml-5 mt-8 font-prompt">
           ลงทะเบียน
         </h1>
       </div>
 
-      <div className="pt-4 flex justify-center">
+      <div className="pt-4 flex justify-center font-prompt">
         ส่ง OTP ไปยังเบอร์: xxxxxx2589
       </div>
       <div className="pt-4 pb-2 flex justify-center">
@@ -95,10 +95,12 @@ export default function SignUp_OTP() {
           onChange={handleChange}
         />
       </div>
-      <div className=" pb-4 flex justify-center">OTP หมดอายุภายใน 120 วิ</div>
+      <div className=" pb-4 flex justify-center font-prompt">
+        OTP หมดอายุภายใน 120 วิ
+      </div>
       <div className="pt-4 pb-4 flex justify-center">
         <button
-          className="bg-[#789BF3] h-12 hover:bg-[#789BF3] text-white font-bold py-2 px-4 rounded items-center"
+          className="bg-[#789BF3] h-12 hover:bg-[#789BF3] text-white font-bold font-prompt py-2 px-4 rounded items-center"
           onClick={() => {
             router.push("AddShop");
           }}

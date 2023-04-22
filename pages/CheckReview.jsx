@@ -4,8 +4,7 @@ import { useRouter } from "next/router";
 import { MdOutlineArrowBack } from "react-icons/md";
 import { FaRegEdit } from "react-icons/fa";
 import { FaRegTrashAlt } from "react-icons/fa";
-import shopPic from "../img/car.png";
-import Image from "next/image";
+import Rating from "@mui/material/Rating";
 import { Carousel } from "antd";
 import { getBlobsInContainer, deleteBlob } from "../ts/azure-storage-blob";
 
@@ -33,7 +32,7 @@ import {
 } from "../lib/cartransaction_helper";
 console.log("get services thingy", getCarServices());
 
-export default function ReviewCustomer_CarDetail() {
+export default function CheckReview() {
   const router = useRouter();
 
   const [regNum, setRegNum] = useState("ณ5289");
@@ -80,10 +79,7 @@ export default function ReviewCustomer_CarDetail() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    router.push({
-      pathname: "/ReviewCustomer",
-      query: { carId: carId },
-    });
+    router.push("/Home");
   };
 
   const handleChange = (event) => {
@@ -163,8 +159,22 @@ export default function ReviewCustomer_CarDetail() {
       confirm(`Are you sure to delete this car?`))
     ) {
       deleteMutation.mutate(car._id);
-      router.push("Home");
     }
+  };
+
+  const handleCardClick = (car) => {
+    console.log(
+      services.filter((service) => car.services.includes(service._id))
+    );
+    router.push({
+      pathname: "/EditCar_Img",
+      query: {
+        car: JSON.stringify(car),
+        services: JSON.stringify(
+          services.filter((service) => car.services.includes(service._id))
+        ),
+      },
+    });
   };
 
   return (
@@ -181,40 +191,18 @@ export default function ReviewCustomer_CarDetail() {
 
       <div className="bg-white h-screen rounded-t-[20px]">
         <div className="flex flex-row absolute right-0 p-4 pb-24">
-          <div>
-            <button
-              className="flex flex-row items-right pb-4  p-2"
-              onClick={handleClickOpen}
-            >
-              <p className="flex font-prompt text-[18px] font-bold text-[#FA8F54] font-prompt">
-                ลบ
-                <FaRegTrashAlt className="w-6 h-6 ml-2" color="#FA8F54" />
-              </p>
-            </button>
-            <Dialog
-              open={open}
-              onClose={handleClose}
-              aria-labelledby="alert-dialog-title"
-              aria-describedby="alert-dialog-description"
-            >
-              <DialogTitle id="alert-dialog-title">{"Alert"}</DialogTitle>
-              <DialogContent>
-                <DialogContentText id="alert-dialog-description">
-                  Are you sure
-                </DialogContentText>
-              </DialogContent>
-              <DialogActions>
-                <Button onClick={handleClose}>Cancel</Button>
-                <Button onClick={handleConfirm} autoFocus>
-                  Confirm
-                </Button>
-              </DialogActions>
-            </Dialog>
-          </div>
-
           <button
-            className="flex flex-row items-right p-2"
-            onClick={() => setEdit(false)}
+            className="flex flex-row items-right pb-4  p-2"
+            onClick={handleClickOpen}
+          >
+            <p className="flex font-prompt text-[18px] font-bold text-[#FA8F54]">
+              ลบ
+              <FaRegTrashAlt className="w-6 h-6 ml-2" color="#FA8F54" />
+            </p>
+          </button>
+          <button
+            className="flex flex-row items-right pb-4 p-2"
+            onClick={() => handleCardClick(cars[0])}
           >
             <p className=" flex font-prompt text-[18px] font-bold text-[#FA8F54]">
               แก้ไข
@@ -222,9 +210,8 @@ export default function ReviewCustomer_CarDetail() {
             </p>
           </button>
         </div>
-        <div className="pt-16"></div>
         <div>
-          <div>
+          <div className="pt-16">
             <Carousel autoplay>
               {images.map((image, key) => {
                 return (
@@ -248,99 +235,95 @@ export default function ReviewCustomer_CarDetail() {
                   type="text"
                   id="regNum"
                   name="regNum"
-                  value={cars[0].car_id ? cars[0].car_id.license_plate : ""}
-                  disabled={edit}
+                  value={cars[0].car_id.license_plate}
+                  disabled
                   required
                   className="font-prompt text-[18px] font-bold pb-1 bg-white"
-                  onChange={(e) => setRegNum(e.target.value)}
                 ></input>
               </div>
               <div>
                 <div className="flex flex-nowrap">
-                  <p className="text-left font-prompt text-[18px] pb-1">
-                    ชื่อร้าน ไทย:
+                  <p className="text-left font-prompt text-[18px] pb-1 pr-2">
+                    ยี่ห้อ:
                   </p>
                   <input
                     type="text"
                     id="brand"
                     name="brand"
-                    value={cars[0].car_id ? cars[0].car_id.brand : ""}
-                    disabled={edit}
+                    value={cars[0].car_id.brand}
+                    disabled
                     required
                     className="font-prompt text-[18px] font-bold pb-1 bg-white"
-                    onChange={(e) => setBrand(e.target.value)}
                   ></input>
                 </div>
               </div>
               <div>
                 <div className="flex flex-nowrap">
-                  <p className="text-left font-prompt text-[18px] pb-1">
-                    สาขา:
+                  <p className="text-left font-prompt text-[18px] pb-1 pr-2">
+                    รุ่น:
                   </p>
                   <input
                     type="text"
                     id="model"
                     name="model"
-                    value={cars[0].car_id ? cars[0].car_id.model : ""}
-                    disabled={edit}
+                    value={cars[0].car_id.model}
+                    disabled
                     required
                     className="font-prompt text-[18px] font-bold pb-1 bg-white"
-                    onChange={(e) => setModel(e.target.value)}
                   ></input>
                 </div>
               </div>
               <div>
                 <div className="flex flex-nowrap">
-                  <p className="text-left font-prompt text-[18px] pb-1">สี:</p>
+                  <p className="text-left font-prompt text-[18px] pb-1 pr-2">
+                    สี:
+                  </p>
                   <input
                     type="text"
                     id="color"
                     name="color"
-                    value={cars[0].car_id ? cars[0].car_id.color : ""}
-                    disabled={edit}
+                    value={cars[0].car_id.color}
+                    disabled
                     required
                     className="font-prompt text-[18px] font-bold pb-1 bg-white"
-                    onChange={(e) => setColor(e.target.value)}
                   ></input>
                 </div>
               </div>
               <div>
                 <div className="flex flex-nowrap">
-                  <p className="text-left font-prompt text-[18px] pb-1">
-                    จวันที่เข้ารับบริการ:
+                  <p className="text-left font-prompt text-[18px] pb-1 pr-2">
+                    วันที่เข้ารับบริการ:
                   </p>
                   <input
                     type="text"
                     id="date"
                     name="date"
-                    value={
-                      cars[0]
-                        ? new Date(cars[0].start_date).toLocaleDateString(
-                            "en-GB"
-                          )
-                        : ""
-                    }
-                    disabled={edit}
+                    value={new Date(cars[0].start_date).toLocaleDateString(
+                      "en-GB"
+                    )}
+                    disabled
                     required
                     className="font-prompt text-[18px] font-bold pb-1 bg-white"
-                    onChange={(e) => setDate(e.target.value)}
                   ></input>
                 </div>
               </div>
               <div>
                 <div className="flex flex-nowrap">
-                  <p className="text-left font-prompt text-[18px] pb-1">
+                  <p className="text-left font-prompt text-[18px] pb-1 pr-2">
                     สถานะ:
                   </p>
                   <input
                     type="text"
                     id="status"
                     name="status"
-                    value={cars[0] ? cars[0].status : ""}
-                    disabled={edit}
+                    value={cars[0].status}
+                    disabled
                     required
-                    className="font-prompt text-[18px] font-bold pb-1 bg-white text-[#FA8F54]"
-                    onChange={(e) => setStatus(e.target.value)}
+                    className={
+                      cars[0].status === "in-process"
+                        ? "font-prompt text-[18px] font-bold pb-1 bg-white text-[#FA8F54]"
+                        : "font-prompt text-[18px] font-bold pb-1 bg-white text-[#7FD1AE]"
+                    }
                   ></input>
                 </div>
               </div>
@@ -366,6 +349,34 @@ export default function ReviewCustomer_CarDetail() {
                 </div>
               </div>
             </div>
+            <div className="flex justify-center">
+              <div className="mt-5 bg-white px-6 shadow-2xl rounded-lg w-96">
+                <div className="font-prompt text-[18px] font-bold pb-1 bg-white">
+                  {" "}
+                  รีวิวลูกค้า{" "}
+                </div>
+                <div className="flex flex-nowrap">
+                  <p className="text-left font-prompt text-[18px] pb-1 pr-2">
+                    ให้คะแนน:
+                  </p>
+                  <Rating
+                    name="read-only"
+                    value={Number(cars[0].rating_from_shop)}
+                    size="large"
+                    readOnly
+                  />
+                </div>
+                <input
+                  type="review_from_shop"
+                  id="review_from_shop"
+                  name="review_from_shop"
+                  value={cars[0].review_from_shop}
+                  disabled
+                  required
+                  className="font-prompt text-[16px] pb-1 bg-white"
+                ></input>
+              </div>
+            </div>
             <div className="p-6 flex items-center justify-center">
               <button
                 type="submit"
@@ -383,6 +394,25 @@ export default function ReviewCustomer_CarDetail() {
         <br />
         <br />
       </div>
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">{"Alert"}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Are you sure
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Cancel</Button>
+          <Button onClick={handleConfirm} autoFocus>
+            Confirm
+          </Button>
+        </DialogActions>
+      </Dialog>
       <BottomNav name="Home" />
     </div>
   );

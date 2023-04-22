@@ -3,7 +3,6 @@ import BottomNav from "./BottomNav";
 import { MdOutlineArrowBack } from "react-icons/md";
 import { BiX } from "react-icons/bi";
 import { useRouter } from "next/router";
-import { useForm, SubmitHandler, FieldValues } from "react-hook-form";
 
 //New Stepper
 import Stepper from "@mui/material/Stepper";
@@ -18,56 +17,45 @@ import StepConnector, {
 } from "@mui/material/StepConnector";
 
 //API
-import {
-  getShops,
-  getShopOwners,
-  createShop,
-  updateShop,
-  deleteShopById,
-} from "../lib/shop_helper";
-import {
-  getServices,
-  createService,
-  updateService,
-  deleteServiceById,
-} from "../lib/helper";
-import {
-  dehydrate,
-  QueryClient,
-  useMutation,
-  useQueryClient,
-  useQuery,
-} from "@tanstack/react-query";
-import { GetServerSideProps } from "next";
+import { createShop } from "../lib/shop_helper";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-import { Model } from "mongoose";
+import uploadFileToBlob from "../ts/azure-storage-blob";
 
 const steps = ["1", "2"];
-
-let nextId = 0;
-
-// const ServicesArray = [
-//   {
-//     id: 0,
-//     service: "service",
-//     price: "price",
-//     category: "category",
-//   },
-// ];
 
 export default function AddShop_AddMenu() {
   const [activeStep, setActiveStep] = React.useState(0);
 
   const [service_name, setService_name] = useState("");
   const [price, setPrice] = useState("");
+  const [name, setName] = useState("");
+  const [registered_name, setRegistered_name] = useState("");
+  const [location, setLocation] = useState("");
+  const [branch, setBranch] = useState("");
+  const [owner, setOwner] = useState("");
   const [category, setCategory] = useState("");
   const [services, setServices] = useState([]);
+  const [uploading, setUploading] = useState(false);
   const router = useRouter();
 
   const [image, setImage] = useState("");
   useEffect(() => {
+    setName(router.query.name);
+    setRegistered_name(router.query.registered_name);
+    setLocation(router.query.location);
+    setBranch(router.query.branch);
+    setOwner(router.query.owner);
     setImage(router.query.image);
   }, [router.query]);
+
+  //Mutation
+  const addMutation = useMutation(createShop, {
+    onSuccess: () => {
+      console.log("Data Inserted");
+      queryClient.invalidateQueries({ queryKey: ["shops"] });
+    },
+  });
 
   //New Stepper
   const QontoConnector = styled(StepConnector)(({ theme }) => ({
@@ -142,79 +130,58 @@ export default function AddShop_AddMenu() {
     completed: PropTypes.bool,
   };
 
-  // const handleSubmit = (e) => {
-  //   e.preventDefault();
-  //   setServices((prevServices) => [
-  //     ...prevServices,
-  //     {
-  //       id: nextId++,
-  //       service: service_name,
-  //       price: price,
-  //       category: category == "" ? "Default Category" : category,
-  //     },
-  //   ]);
-  //   setService_name("");
-  //   setPrice("");
-  //   setCategory("");
-  // };
-
-  const handleClose = (e) => {
+  const handleServiceSubmit = (e) => {
     e.preventDefault();
+    setServices((prevServices) => [
+      ...prevServices,
+      {
+        service: service_name,
+        price: price,
+        category: category == "" ? "Default Category" : category,
+      },
+    ]);
+    setService_name("");
+    setPrice("");
+    setCategory("");
   };
 
-  const { registered_name, owner } = router.query;
-  console.log("shop name testing printing", registered_name, owner);
+  const time = Date().toLocaleString();
+  const imgId = time;
+  const queryClient = useQueryClient();
 
-  //Mutation
-  const addMutation = useMutation(createService, {
-    onSuccess: () => {
-      console.log("Data Inserted");
-      alert("Your new feature has been successfully added into the database");
-      router.push({
-        pathname: "/Subscription",
-      });
-      // Invalidate and refetch
-      QueryClient.invalidateQueries({ queryKey: ["services"] });
-    },
-  });
+  async function pushToNextPage() {
+    if (services.length != 0) {
+      try {
+        //Rename file
+        let myRenamedFile = await fetch(image)
+          .then((r) => r.blob())
+          .then((blobFile) => new File([blobFile], "shop" + imgId));
 
-  const { data: shops } = useQuery({
-    queryKey: ["shops"],
-    queryFn: getShops,
-    refetchOnWindowFocus: false,
-  });
+        // *** UPLOAD TO AZURE STORAGE ***
+        await uploadFileToBlob(myRenamedFile);
 
-  //Hook Form
-  const {
-    register,
-    handleSubmit,
-    watch,
-    formState: { errors },
-    reset,
-  } = useForm();
-  const onSubmit = (data) => {
-    console.log("onSubmit checking", data, registered_name);
+        setUploading(false);
 
-    const theShop = shops.find((s) => s.registered_name == registered_name);
-    console.assert(theShop != undefined);
-
-    addMutation.mutate({
-      ...data,
-      shop: theShop._id,
-    });
-  };
-
-  function pushToNextPage() {
-    services.length == 0
-      ? alert("You didn't add any services yet")
-      : router.push({
+        addMutation.mutate({
+          name: name,
+          registered_name: registered_name,
+          location: location,
+          branch: branch,
+          owner: owner,
+          imgId: imgId,
+        });
+        router.push({
           pathname: "/Subscription",
           query: {
-            // other datas
-            image: image,
-            services: services,
+            services: JSON.stringify(services),
           },
         });
+      } catch (error) {
+        alert(error);
+      }
+    } else {
+      alert("You didn't add any services yet");
+    }
   }
 
   return (
@@ -224,7 +191,7 @@ export default function AddShop_AddMenu() {
           className="h-9 w-10 mt-8"
           onClick={() => router.back()}
         />
-        <h1 className="text-3xl font-bold text-[#484542] ml-5 mt-8">
+        <h1 className="text-3xl font-bold text-[#484542] ml-5 mt-8 font-prompt">
           เพิ่มร้าน
         </h1>
       </div>
@@ -244,65 +211,52 @@ export default function AddShop_AddMenu() {
         </Stepper>
       </div>
 
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="bg-white rounded-t-[20px] rounded-b-[20px] my-2 pb-8 md:pb-0 md:min-w-[840px] min-w-full">
-          <div className="p-4 px-6 ">บริการ*</div>
+      <form onSubmit={handleServiceSubmit}>
+        <div className="bg-white rounded-t-[20px] font-prompt rounded-b-[20px] my-2 pb-8 md:pb-0 md:min-w-[840px] min-w-full">
+          <div className="p-4 px-6 font-prompt">บริการ*</div>
           <div className="pb-6 px-4 flex items-center justify-center">
             <input
               type="text"
               id="service"
               name="service"
               placeholder="กรอกบริการ"
-              //value={service_name}
+              value={service_name}
               required
               className="w-full h-12 pl-4 border-2 rounded-lg border-[#D9D9D9] font-prompt text-[18px] font-bold"
               onChange={(e) => setService_name(e.target.value)}
-              {...register("service_name")}
             ></input>
           </div>
 
-          <div className="p-2 px-6 break-words">ราคา*</div>
-          <div className="pb-6 px-4  flex items-center justify-center">
+          <div className="p-2 px-6 break-words font-prompt">ราคา*</div>
+          <div className="pb-6 px-4  flex items-center justify-center font-prompt">
             <input
               type="number"
               id="price"
               name="price"
               placeholder="กรอกราคา"
-              //value={price}
+              value={price}
               required
               className="w-full h-12 pl-4 border-2 rounded-lg border-[#D9D9D9] font-prompt text-[18px] font-bold"
               onChange={(e) => setPrice(e.target.value)}
-              {...register("price")}
             ></input>
           </div>
 
-          <div className="p-2 px-6 break-words">หมวดหมู่</div>
-          <div className="pb-6 px-4 flex flex-row w-full">
+          <div className="p-2 px-6 break-words font-prompt">หมวดหมู่</div>
+          <div className="pb-6 px-4 flex flex-row w-full font-prompt">
             <input
               type="text"
               id="category"
               name="category"
               placeholder="กรอกหมวดหมู่"
-              //value={category}
+              value={category}
               className="w-full h-12 pl-4 border-2 rounded-lg border-[#D9D9D9] font-prompt text-[18px] font-bold"
               onChange={(e) => setCategory(e.target.value)}
-              {...register("category")}
             ></input>
           </div>
         </div>
-        <div className="pt-6 flex items-center justify-center">
+        <div className="pt-6 flex items-center justify-center ">
           <button
-            onClick={() =>
-              setServices((prevServices) => [
-                ...prevServices,
-                {
-                  id: nextId++,
-                  service: service_name,
-                  price: price,
-                  category: category == "" ? "Default Category" : category,
-                },
-              ])
-            }
+            type="submit"
             className="bg-[#FA8F54] rounded-lg hover:bg-[#FA8F54] text-white font-bold py-4 px-8 rounded items-center text-[18px]"
           >
             ยืนยัน
@@ -315,10 +269,12 @@ export default function AddShop_AddMenu() {
           <div className="px-6 p-4">
             <div
               key={index}
-              className="flex p-4 px-4m-4 rounded-[10px] bg-white items-center"
+              className="flex p-4 px-4m-4 rounded-[10px] bg-white items-center font-prompt"
             >
               <div>{service.service}</div>
-              <div className="absolute right-10 pr-10">{service.price} บาท</div>
+              <div className="absolute right-10 pr-10 font-prompt">
+                {service.price} บาท
+              </div>
               <button
                 className="absolute right-0 pr-10"
                 onClick={() => {
@@ -329,14 +285,13 @@ export default function AddShop_AddMenu() {
               </button>
             </div>
           </div>
-          <br />
         </div>
       ))}
 
-      <div className="p-8 flex items-center justify-center">
+      <div className="p-8 flex items-center justify-center flex space-x-2">
         <div>
           <button
-            className="bg-[#789BF3] text-[#789BF3] text-slate-400 hover:bg-[#789BF3] bg-opacity-10 text-opacity-100 font-bold text-blue  rounded items-center py-4 px-8"
+            className="bg-[#789BF3] text-[#789BF3] text-slate-400 hover:bg-[#789BF3] font-prompt bg-opacity-10 text-opacity-100 font-bold text-blue  rounded items-center py-4 px-8"
             onClick={() => router.back()}
           >
             ก่อนหน้า
@@ -344,14 +299,8 @@ export default function AddShop_AddMenu() {
         </div>
         <div>
           <button
-            type="submit"
-            className="bg-[#789BF3] hover:bg-[#789BF3] text-white font-bold py-4 px-8 rounded items-center text-[18px]"
-            // onClick={() =>
-            //   services1.length == 0
-            //     ? alert("You didn't add any services yet")
-            //     : router.push("/Subscription")
-            // }
-            // onClick={pushToNextPage}
+            className="bg-[#789BF3] hover:bg-[#789BF3] text-white font-bold py-4 px-8 font-prompt rounded items-center text-[18px]"
+            onClick={pushToNextPage}
           >
             ยืนยัน
           </button>

@@ -14,12 +14,12 @@ import {
   useQuery,
 } from "@tanstack/react-query";
 import {
-  getUsers,
+  getEmployees,
   getShops,
-  createUser,
-  updateUser,
-  deleteUserById,
-} from "../lib/user_helper";
+  createEmployee,
+  updateEmployee,
+  deleteEmployeeById,
+} from "../lib/employee_helper";
 import uploadFileToBlob from "../ts/azure-storage-blob";
 
 export default function AddEmployee() {
@@ -29,9 +29,11 @@ export default function AddEmployee() {
   const [num, setNum] = useState("");
   const [shop, setShop] = React.useState("");
   const [uploading, setUploading] = useState(false);
+  
 
   //Upload image
   const [selectedImage, setSelectedImage] = useState(null);
+  const queryClient = useQueryClient();
 
   // const handleSubmit = (e) => {
   //   e.preventDefault();
@@ -46,13 +48,13 @@ export default function AddEmployee() {
   };
 
   //Mutation
-  const addMutation = useMutation(createUser, {
+  const addMutation = useMutation(createEmployee, {
     onSuccess: () => {
       console.log("Data Inserted");
       alert("Your new feature has been successfully added into the database");
-      router.reload();
+      router.push("/Employee");
       // Invalidate and refetch
-      queryClient.invalidateQueries({ queryKey: ["users"] });
+      queryClient.invalidateQueries({ queryKey: ["employees"] });
     },
   });
 
@@ -69,7 +71,7 @@ export default function AddEmployee() {
     console.log("onSubmit", data);
 
     // if (modalMode == ModalMode.Add) {
-    //   const theOwner = users.find(
+    //   const theOwner = employees.find(
     //     (o) => o.owner.first_name == data.owner
     //   );
     //   console.assert(theOwner != undefined);
@@ -85,16 +87,11 @@ export default function AddEmployee() {
       shop: theShop._id,
       first_name: data.first_name,
       last_name: data.last_name,
-      user_type: data.user_type,
+      position: data.position,
       phone_number: data.phone_number,
-      owener_id: theShop.owener_id,
-      username: "",
-      password: "",
-      email: "",
-      __v: 0,
-      picture_url: "",
+      picture_url: imgId
     });
-    // }
+    
 
     if (selectedImage != null) {
       setUploading(true);
@@ -122,13 +119,13 @@ export default function AddEmployee() {
   });
 
   return (
-    <div className="bg-[#F9F5EC]">
-      <div className="flex flex-row p-5">
+    <div className="bg-[#F9F5EC] w-full">
+      <div className="flex flex-row py-5 px-2">
         <MdOutlineArrowBack
           className="h-9 w-10 mt-8"
           onClick={() => router.back()}
         />
-        <h1 className="text-3xl font-bold text-[#484542] ml-5 mt-8">
+        <h1 className="text-3xl font-prompt font-bold text-[#484542] ml-5 mt-8">
           เพิ่มพนักงาน
         </h1>
       </div>
@@ -162,9 +159,9 @@ export default function AddEmployee() {
                   src={
                     selectedImage
                       ? URL.createObjectURL(selectedImage)
-                      : "https://creazilla-store.fra1.digitaloceanspaces.com/icons/3233252/camera-icon-md.png"
+                      : "https://www.freeiconspng.com/thumbs/camera-icon/camera-icon-21.png"
                   }
-                  alt="user image"
+                  alt="employee image"
                   onChange={(event) => {
                     console.log(event.target.files[0]);
                     setSelectedImage(event.target.files[0]);
@@ -195,7 +192,8 @@ export default function AddEmployee() {
         </button>
       </div>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="p-2 px-6 ">ชื่อจริง*</div>
+        
+        <div className="p-2 px-6 font-prompt">ชื่อจริง*</div>
         <div className="pb-6 px-4 flex items-center justify-center">
           <input
             //type="text"
@@ -212,7 +210,7 @@ export default function AddEmployee() {
         </div>
 
         <div className="p-2 px-6 break-words">นามสกุล*</div>
-        <div className="pb-6 px-4  flex items-center justify-center">
+        <div className="pb-6 px-4 font-prompt flex items-center justify-center">
           <input
             type="text"
             id="lastName"
@@ -226,7 +224,7 @@ export default function AddEmployee() {
           ></input>
         </div>
 
-        <div className="p-2 px-6 break-words">ตำแหน่ง*</div>
+        <div className="p-2 px-6 break-words font-prompt">ตำแหน่ง*</div>
         <div className="pb-6 px-4 flex flex-row w-full">
           <input
             type="text"
@@ -237,11 +235,11 @@ export default function AddEmployee() {
             required
             className=" pl-2 w-full h-12 border-2 rounded-lg border-[#D9D9D9] font-prompt text-[18px] font-bold"
             onChange={(e) => setPosition(e.target.value)}
-            {...register("user_type")}
+            {...register("position")}
           ></input>
         </div>
 
-        <div className="p-2 px-6 break-words">เบอร์*</div>
+        <div className="p-2 px-6 break-words font-prompt">เบอร์*</div>
         <div className="px-4 flex flex-row  w-full">
           <input
             type="tel"
@@ -257,7 +255,7 @@ export default function AddEmployee() {
           ></input>
         </div>
 
-        <div className="p-8 flex items-center justify-center">
+        <div className="p-8 flex items-center justify-center font-prompt">
           <button
             type="submit"
             className="bg-[#789BF3] hover:bg-[#789BF3] text-white font-bold py-4 px-8 rounded items-center text-[18px]"
@@ -265,6 +263,7 @@ export default function AddEmployee() {
             ยืนยัน
           </button>
         </div>
+      
       </form>
 
       <div className="h-40"></div>

@@ -18,7 +18,7 @@ export async function getShops(): Promise<Array<typeof Shop>> {
   }
 }
 
-export async function getShopOwners(): Promise<Array<typeof User>>{
+export async function getShopOwners(): Promise<Array<typeof User>> {
   // Test API http://localhost:3000/api/shops
   // console.debug("getShops() is called")
   const apiUri = `${BASE_URL}api/users/hello`;
@@ -32,7 +32,6 @@ export async function createShop(
   shop: typeof Shop
 ): Promise<Array<typeof Shop>> {
   const apiUri = `${BASE_URL}api/shops/hello`;
-  console.log("shop ma leaw", shop);
   const res = await axios.post(apiUri, shop);
   return res.data;
 }

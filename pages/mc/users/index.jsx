@@ -146,14 +146,14 @@ function IndexPage() {
       const ifShop = data.user_type === "owner" ? null : shops.find((s) => s.registered_name == data.shop);
       console.assert(theShop != undefined);
 
-      console.log("chalo shop", ifShop._id);
+      // console.log("chalo shop", ifShop._id);
 
       const theOwner = data.user_type === "owner" ? null : ifShop.owner_id;
       const theShop = ifShop == null ? null : ifShop._id
       const password = data.password
       const salt = bcrypt.genSaltSync(10);
       const hash = bcrypt.hashSync(password, salt);
-      console.log("hash it is",hash);
+      console.log("hash it is", hash);
 
       addMutation.mutate({
         shop: theShop,
@@ -163,22 +163,22 @@ function IndexPage() {
         phone_number: data.phone_number,
         password: hash,
         owner_id: theOwner,
-        username: data.username,  
+        username: data.username,
         email: data.email,
         __v: 0,
         picture_url: "",
       });
     } else if (modalMode == ModalMode.Update) {
       console.debug("Data to be updated", data);
-      const theOwner = users.find(
-        (o) => o.owner.first_name == owner
-      );
-      console.assert(theOwner != undefined); // Since the data is from the same list
-      console.debug("---", theOwner, data.owner);
+      // const theOwner = users.find(
+      //   (o) => o._id == data._id
+      // );
+      // console.assert(theOwner != undefined); // Since the data is from the same list
+      // console.debug("---", theOwner, data.owner);
 
       updateMutation.mutate({
         ...data,
-        owner: theOwner.owner._id,
+
       });
     }
   };
@@ -200,7 +200,7 @@ function IndexPage() {
       console.log("insider user", data.length);
       if (data.length > 0) {
         const modifiedData = data.map((user) => {
-          if (user.first_name != null) {
+          if (user.user_type == "owner") {
             console.log("user hu", user)
             return {
               ...user,
@@ -232,12 +232,13 @@ function IndexPage() {
   };
 
   const handleOpenUpdate = (user) => {
-    console.debug("updateUser", user, user.owner.first_name);
+    console.debug("updateUser", user);
     setModalMode(ModalMode.Update);
     reset(user);
     // setFirstName(user.owner.first_name)
     // setLastName(user.owner.last_name)
-    setShop(user.owner.first_name);
+    // setShop(user.owner.first_name);
+    setUserType(user.user_type)
     setOpen(true);
   };
 
@@ -287,7 +288,7 @@ function IndexPage() {
     <div className="bg-[#F9F5EC] w-full h-screen">
       <AdminAppBar />
       <div className="flex flex-row my-5 mx-5 justify-between">
-        <div className="text-lg flex font-sans">
+        <div className="text-lg flex font-prompt">
           Users
           <div className="ml-2">
             <button onClick={handleOpen}>
@@ -306,11 +307,11 @@ function IndexPage() {
             >
               <Box sx={{ ...style, width: 500 }}>
                 {modalMode == ModalMode.Add ? (
-                  <h1 className="text-2xl font-bold font-sans my-5">
+                  <h1 className="text-2xl font-bold font-prompt my-5">
                     Create User
                   </h1>
                 ) : (
-                  <h1 className="text-2xl font-bold font-sans my-5">
+                  <h1 className="text-2xl font-bold font-prompt my-5">
                     Update User
                   </h1>
                 )}
@@ -330,7 +331,7 @@ function IndexPage() {
                   <TextField
                     label="Last Name"
                     variant="outlined"
-                    className="w-full my-2"
+                    className="w-full my-2 font-prompt"
                     type="text"
 
                     {...register("last_name", {
@@ -343,7 +344,7 @@ function IndexPage() {
                     id="outlined-basic"
                     label="Username"
                     variant="outlined"
-                    className="w-full my-2"
+                    className="w-full my-2 font-prompt"
                     {...register("username", { required: true, maxLength: 80 })}
                   />
 
@@ -352,26 +353,26 @@ function IndexPage() {
                     id="outlined-basic"
                     label="Email"
                     variant="outlined"
-                    className="w-full my-2"
+                    className="w-full my-2 font-prompt"
                     {...register("email", {
                       required: true,
                       maxLength: 80,
                     })}
                   />
 
-                  <TextField
+                  {/* <TextField
                     id="outlined-basic"
                     label="Password"
                     variant="outlined"
-                    className="w-full my-2"
+                    className="w-full my-2 font-prompt"
                     {...register("password", { required: true, maxLength: 80 })}
-                  />
+                  /> */}
 
                   <TextField
                     id="outlined-basic"
                     label="Phone Number"
                     variant="outlined"
-                    className="w-full my-2"
+                    className="w-full my-2 font-prompt"
                     {...register("phone_number", {
                       required: true,
                       maxLength: 80,
@@ -392,7 +393,7 @@ function IndexPage() {
                         required: true,
                         maxLength: 80,
                       })}
-                      className="w-full my-2"
+                      className="w-full my-2 font-prompt"
                       onChange={handleChange}
                     >
 
@@ -405,7 +406,7 @@ function IndexPage() {
                     </Select>
                   </FormControl>
 
-                  <FormControl fullWidth>
+                  {/* <FormControl fullWidth>
                     <InputLabel id="demo-simple-select-label">
                       Assigned Shop
                     </InputLabel>
@@ -419,7 +420,7 @@ function IndexPage() {
                         required: true,
                         maxLength: 80,
                       })}
-                      className="w-full my-2"
+                      className="w-full my-2 font-prompt"
                       onChange={handleChange}
                     >
                       {shops?.map((shop) => (
@@ -428,13 +429,13 @@ function IndexPage() {
                         </MenuItem>
                       ))}
                     </Select>
-                  </FormControl>
+                  </FormControl> */}
 
 
 
                   <div className="flex justify-end mt-2">
                     <Button
-                      className="text-[#FA8F54] font-bold text-right"
+                      className="text-[#FA8F54] font-bold text-right font-prompt"
                       style={{ textTransform: "none" }}
                       size="large"
                       onClick={handleClose}
@@ -443,7 +444,7 @@ function IndexPage() {
                     </Button>
                     {modalMode == ModalMode.Add ? (
                       <Button
-                        className="text-white font-bold text-right"
+                        className="text-white font-bold text-right font-prompt"
                         type="submit"
                         size="large"
                         style={{
@@ -455,7 +456,7 @@ function IndexPage() {
                       </Button>
                     ) : (
                       <Button
-                        className="text-white font-bold text-right"
+                        className="text-white font-bold text-right font-prompt"
                         type="submit"
                         style={{
                           textTransform: "none",
@@ -499,51 +500,51 @@ function IndexPage() {
 
               <StyledTableCell
                 align="left"
-                sx={{ fontSize: 16, fontWeight: 700 }}
+                sx={{ fontSize: 16, fontWeight: 700, fontFamily: 'Prompt, sans-serif' }}
               >
                 Firstname
               </StyledTableCell>
               <StyledTableCell
                 align="left"
-                sx={{ fontSize: 16, fontWeight: 700 }}
+                sx={{ fontSize: 16, fontWeight: 700, fontFamily: 'Prompt, sans-serif' }}
               >
                 Lastname
               </StyledTableCell>
               <StyledTableCell
                 align="left"
-                sx={{ fontSize: 16, fontWeight: 700 }}
+                sx={{ fontSize: 16, fontWeight: 700, fontFamily: 'Prompt, sans-serif' }}
               >
                 Username
               </StyledTableCell>
 
               <StyledTableCell
                 align="left"
-                sx={{ fontSize: 16, fontWeight: 700 }}
+                sx={{ fontSize: 16, fontWeight: 700, fontFamily: 'Prompt, sans-serif' }}
               >
                 Email
               </StyledTableCell>
               <StyledTableCell
                 align="left"
-                sx={{ fontSize: 16, fontWeight: 700 }}
+                sx={{ fontSize: 16, fontWeight: 700, fontFamily: 'Prompt, sans-serif' }}
               >
                 Phone Number
               </StyledTableCell>
 
               <StyledTableCell
                 align="left"
-                sx={{ fontSize: 16, fontWeight: 700 }}
+                sx={{ fontSize: 16, fontWeight: 700, fontFamily: 'Prompt, sans-serif' }}
               >
                 User Type
               </StyledTableCell>
-              <StyledTableCell
+              {/* <StyledTableCell
                 align="left"
-                sx={{ fontSize: 16, fontWeight: 700 }}
+                sx={{ fontSize: 16, fontWeight: 700, fontFamily: 'Prompt, sans-serif' }}
               >
                 Assigned Shop
-              </StyledTableCell>
+              </StyledTableCell> */}
               <StyledTableCell
                 align="left"
-                sx={{ fontSize: 16, fontWeight: 700 }}
+                sx={{ fontSize: 16, fontWeight: 700, fontFamily: 'Prompt, sans-serif' }}
               ></StyledTableCell>
             </TableRow>
           </TableHead>
@@ -551,37 +552,37 @@ function IndexPage() {
             {users
               .filter((user) =>
                 Object.values(user).some((field) =>
-                  field.toString().toLowerCase().includes(search.toLowerCase())
+                  field && field.toString().toLowerCase().includes(search?.toLowerCase() || '')
                 )
               )
               .map((user) => (
                 <StyledTableRow key={user._id}>
 
-                  <StyledTableCell align="left">
+                  <StyledTableCell align="left" sx={{ fontSize: 16, fontFamily: 'Prompt, sans-serif' }}>
                     {user.first_name}
                   </StyledTableCell>
-                  <StyledTableCell align="left">
+                  <StyledTableCell align="left" sx={{ fontSize: 16, fontFamily: 'Prompt, sans-serif' }}>
                     {user.last_name}
                   </StyledTableCell>
-                  <StyledTableCell align="left">
+                  <StyledTableCell align="left" sx={{ fontSize: 16, fontFamily: 'Prompt, sans-serif' }}>
                     {user.username}
                   </StyledTableCell>
 
-                  <StyledTableCell align="left">
+                  <StyledTableCell align="left" sx={{ fontSize: 16, fontFamily: 'Prompt, sans-serif' }}>
                     {user.email}
                   </StyledTableCell>
-                  <StyledTableCell align="left">
+                  <StyledTableCell align="left" sx={{ fontSize: 16, fontFamily: 'Prompt, sans-serif' }}>
                     {user.phone_number}
                   </StyledTableCell>
 
-                  <StyledTableCell align="left">
+                  <StyledTableCell align="left" sx={{ fontSize: 16, fontFamily: 'Prompt, sans-serif' }}>
                     {user.user_type}
                   </StyledTableCell>
-                  {user.shop == null ? (
+                  {/* {user.shop == null ? (
                     <StyledTableCell align="left">-</StyledTableCell>
                   ) : (<StyledTableCell align="left">
                     {user.shop.registered_name}
-                  </StyledTableCell>)}
+                  </StyledTableCell>)} */}
 
                   <StyledTableCell align="left">
                     <div className="flex">

@@ -79,9 +79,9 @@ const ModalMode = {
   None: "",
   Add: "New",
   Update: "Update",
-}
+};
 
-function IndexPage()  {
+function IndexPage() {
   const [modalMode, setModalMode] = React.useState(ModalMode.None);
   const [open, setOpen] = React.useState(false);
   const [owner, setOwner] = React.useState("");
@@ -128,27 +128,28 @@ function IndexPage()  {
     reset,
   } = useForm();
   const onSubmit = (data) => {
-    console.debug("onSubmit",  owners);
+    console.debug("onSubmit", owners);
 
     if (modalMode == ModalMode.Add) {
-      const theOwner = owners.find(
-        (o) => o.first_name == data.owner 
-      );
-      console.log("theOwner", theOwner)
+      const theOwner = owners.find((o) => o.first_name == data.owner);
       console.assert(theOwner != undefined);
-
-      addMutation.mutate({
-        license_plate: data.license_plate,
-        brand: data.brand,
-        color: data.color,
-        model: data.model,
-        car_owner_id: theOwner._id,
-      });
+      if (
+        cars.filter((car) => car.license_plate == data.license_plate).length ==
+        0
+      ) {
+        addMutation.mutate({
+          license_plate: data.license_plate,
+          brand: data.brand,
+          color: data.color,
+          model: data.model,
+          car_owner_id: theOwner._id,
+        });
+      } else {
+        alert("Car existed");
+      }
     } else if (modalMode == ModalMode.Update) {
       console.debug("Data to be updated", data);
-      const theOwner = owners.find(
-        (o) => o.first_name == owner
-      );
+      const theOwner = owners.find((o) => o.first_name == owner);
       console.assert(theOwner != undefined); // Since the data is from the same list
       console.debug("---", theOwner, data.owner);
 
@@ -196,8 +197,6 @@ function IndexPage()  {
     },
   });
 
-  console.log("show me cars", cars);
-
   if (isLoading) return "Loading";
   if (isError) {
     console.error(error);
@@ -211,7 +210,7 @@ function IndexPage()  {
     setOwner(undefined); // UNSURE is this the right approach to un-select any option
     setOpen(true);
   };
-  
+
   const handleOpenUpdate = (car) => {
     console.debug("updateCar", car);
     setModalMode(ModalMode.Update);
@@ -221,12 +220,11 @@ function IndexPage()  {
   };
 
   const confirmDeleteCar = (car) => {
-    
     if (
-      console.log("delete shop", car),
+      (console.log("delete shop", car),
       confirm(
         `Are you sure to delete [${car.license_plate}] by [${car.car_owner_id.first_name}]?`
-      )
+      ))
     ) {
       deleteMutation.mutate(car._id);
       router.reload();
@@ -245,7 +243,7 @@ function IndexPage()  {
     setOwner(event.target.value);
     register("owner");
   };
-  
+
   const style = {
     position: "absolute",
     top: "50%",
@@ -263,7 +261,7 @@ function IndexPage()  {
     <div className="bg-[#F9F5EC] w-full h-screen">
       <AdminAppBar />
       <div className="flex flex-row my-5 mx-5 justify-between">
-        <div className="text-lg flex font-sans">
+        <div className="text-lg flex font-prompt">
           Cars
           <div className="ml-2">
             <button onClick={handleOpen}>
@@ -282,11 +280,11 @@ function IndexPage()  {
             >
               <Box sx={{ ...style, width: 500 }}>
                 {modalMode == ModalMode.Add ? (
-                  <h1 className="text-2xl font-bold font-sans my-5">
+                  <h1 className="text-2xl font-bold font-prompt my-5">
                     Create Car
                   </h1>
                 ) : (
-                  <h1 className="text-2xl font-bold font-sans my-5">
+                  <h1 className="text-2xl font-bold font-prompt my-5">
                     Update Car
                   </h1>
                 )}
@@ -295,7 +293,7 @@ function IndexPage()  {
                   <TextField
                     label="License Plate"
                     variant="outlined"
-                    className="w-full my-2"
+                    className="w-full my-2 font-prompt"
                     type="text"
                     placeholder="License Plate"
                     {...register("license_plate", {
@@ -306,17 +304,9 @@ function IndexPage()  {
 
                   <TextField
                     id="outlined-basic"
-                    label="Model"
-                    variant="outlined"
-                    className="w-full my-2"
-                    {...register("model", { required: true, maxLength: 80 })}
-                  />
-
-                  <TextField
-                    id="outlined-basic"
                     label="Brand"
                     variant="outlined"
-                    className="w-full my-2"
+                    className="w-full my-2 font-prompt"
                     {...register("brand", {
                       required: true,
                       maxLength: 100,
@@ -326,9 +316,17 @@ function IndexPage()  {
 
                   <TextField
                     id="outlined-basic"
+                    label="Model"
+                    variant="outlined"
+                    className="w-full my-2 font-prompt"
+                    {...register("model", { required: true, maxLength: 80 })}
+                  />
+
+                  <TextField
+                    id="outlined-basic"
                     label="Color"
                     variant="outlined"
-                    className="w-full my-2"
+                    className="w-full my-2 font-prompt"
                     {...register("color", {
                       required: true,
                       maxLength: 100,
@@ -349,7 +347,7 @@ function IndexPage()  {
                         required: true,
                         maxLength: 80,
                       })}
-                      className="w-full my-2"
+                      className="w-full my-2 font-prompt"
                       onChange={handleChange}
                     >
                       {owners?.map((owner) => (
@@ -386,7 +384,7 @@ function IndexPage()  {
 
                   <div className="flex justify-end mt-2">
                     <Button
-                      className="text-[#FA8F54] font-bold text-right"
+                      className="text-[#FA8F54] font-bold font-prompt text-right"
                       style={{ textTransform: "none" }}
                       size="large"
                       onClick={handleClose}
@@ -395,7 +393,7 @@ function IndexPage()  {
                     </Button>
                     {modalMode == ModalMode.Add ? (
                       <Button
-                        className="text-white font-bold text-right"
+                        className="text-white font-bold font-prompt text-right"
                         type="submit"
                         size="large"
                         style={{
@@ -407,7 +405,7 @@ function IndexPage()  {
                       </Button>
                     ) : (
                       <Button
-                        className="text-white font-bold text-right"
+                        className="text-white font-bold font-prompt text-right"
                         type="submit"
                         style={{
                           textTransform: "none",
@@ -450,37 +448,61 @@ function IndexPage()  {
             <TableRow>
               <StyledTableCell
                 align="center"
-                sx={{ fontSize: 16, fontWeight: 700 }}
+                sx={{
+                  fontSize: 16,
+                  fontFamily: "Prompt, sans-serif",
+                  fontWeight: 700,
+                }}
               >
                 License Plate
               </StyledTableCell>
               <StyledTableCell
                 align="left"
-                sx={{ fontSize: 16, fontWeight: 700 }}
+                sx={{
+                  fontSize: 16,
+                  fontFamily: "Prompt, sans-serif",
+                  fontWeight: 700,
+                }}
               >
                 Brand
               </StyledTableCell>
               <StyledTableCell
                 align="left"
-                sx={{ fontSize: 16, fontWeight: 700 }}
+                sx={{
+                  fontSize: 16,
+                  fontFamily: "Prompt, sans-serif",
+                  fontWeight: 700,
+                }}
               >
                 Model
               </StyledTableCell>
               <StyledTableCell
                 align="left"
-                sx={{ fontSize: 16, fontWeight: 700 }}
+                sx={{
+                  fontSize: 16,
+                  fontFamily: "Prompt, sans-serif",
+                  fontWeight: 700,
+                }}
               >
                 Color
               </StyledTableCell>
               <StyledTableCell
                 align="left"
-                sx={{ fontSize: 16, fontWeight: 700 }}
+                sx={{
+                  fontSize: 16,
+                  fontFamily: "Prompt, sans-serif",
+                  fontWeight: 700,
+                }}
               >
                 Car Owner
               </StyledTableCell>
               <StyledTableCell
                 align="left"
-                sx={{ fontSize: 16, fontWeight: 700 }}
+                sx={{
+                  fontSize: 16,
+                  fontFamily: "Prompt, sans-serif",
+                  fontWeight: 700,
+                }}
               ></StyledTableCell>
             </TableRow>
           </TableHead>
@@ -496,10 +518,28 @@ function IndexPage()  {
                   <StyledTableCell align="center">
                     {car.license_plate}
                   </StyledTableCell>
-                  <StyledTableCell align="left">{car.brand}</StyledTableCell>
-                  <StyledTableCell align="left">{car.model}</StyledTableCell>
-                  <StyledTableCell align="left">{car.color}</StyledTableCell>
-                  <StyledTableCell align="left">
+                  <StyledTableCell
+                    align="left"
+                    sx={{ fontSize: 16, fontFamily: "Prompt, sans-serif" }}
+                  >
+                    {car.brand}
+                  </StyledTableCell>
+                  <StyledTableCell
+                    align="left"
+                    sx={{ fontSize: 16, fontFamily: "Prompt, sans-serif" }}
+                  >
+                    {car.model}
+                  </StyledTableCell>
+                  <StyledTableCell
+                    align="left"
+                    sx={{ fontSize: 16, fontFamily: "Prompt, sans-serif" }}
+                  >
+                    {car.color}
+                  </StyledTableCell>
+                  <StyledTableCell
+                    align="left"
+                    sx={{ fontSize: 16, fontFamily: "Prompt, sans-serif" }}
+                  >
                     {car.car_owner_id.first_name} {car.car_owner_id.last_name}
                   </StyledTableCell>
                   <StyledTableCell align="left">
@@ -531,7 +571,7 @@ function IndexPage()  {
       </TableContainer>
     </div>
   );
-};
+}
 
 // export async function getServerSideProps(context) {
 //   // TODO no Product API

@@ -23,13 +23,7 @@ import {
   updateShop,
   deleteShopById,
 } from "../lib/shop_helper";
-import {
-  dehydrate,
-  QueryClient,
-  useMutation,
-  useQueryClient,
-  useQuery,
-} from "@tanstack/react-query";
+
 import { GetServerSideProps } from "next";
 import { useForm, SubmitHandler, FieldValues } from "react-hook-form";
 import { useRouter } from "next/router";
@@ -41,16 +35,22 @@ import {
   updateService,
   deleteServiceById,
 } from "../lib/helper";
+import {
+  dehydrate,
+  QueryClient,
+  useMutation,
+  useQueryClient,
+  useQuery,
+} from "@tanstack/react-query";
 
 export default function ShopInfo() {
-  const [enShopName, setEnShopName] = useState("Washever");
-  const [thShopName, setThShopName] = useState("ว้อชเอฟเวอร์");
-  const [branch, setBranch] = useState("ห้วยกะปิ");
-  const [address, setAddress] = useState(
-    "2/22 หมู่ 1 ต.ห้วยกะปิ อ.เมือง จ.ชลบุรี 20000"
-  );
-  const [numOfCar, setNumOfCar] = useState("100 คัน");
+  const [branch, setBranch] = useState("");
   const [edit, setEdit] = useState(true);
+  const [thShopName, setThShopName] = useState("")
+  const [enShopName, setEnShopName] = useState("")
+  const [address, setAddress] = useState("")
+  const [numOfCar, setNumOfCar] = useState("")
+  const queryClient = useQueryClient();
 
   const router = useRouter();
   const { shopId } = router.query;
@@ -58,11 +58,7 @@ export default function ShopInfo() {
 
   //get img form azure blob storage
   const [images, setImages] = useState([]);
-  useEffect(() => {
-    getBlobsInContainer().then((list) => {
-      setImages(list.filter((file) => file.name.includes("shop")));
-    });
-  }, []);
+  const [imgId, setImgId] = useState("");
 
   const [open, setOpen] = React.useState(false);
   const handleClickOpen = () => {
@@ -75,18 +71,96 @@ export default function ShopInfo() {
 
   const handleConfirm = async () => {
     setOpen(false);
-    await deleteBlob(images.filter((file) => file.name.includes(""))[0].name); //add imgId here
+    await deleteBlob(
+      images.filter((file) => file.name.includes(services[0].shop.imgId))[0]
+        .name
+    );
     router.push("Shop");
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    router.push("Shop");
-  };
+  const deleteMutation = useMutation(deleteShopById, {
+    onSuccess: () => {
+      console.log("Data Deleted");
+    },
+  });
 
-  const routerToAddShop = (e) => {
+  const updateMutation = useMutation(updateShop, {
+    onSuccess: () => {
+      console.log("Data Updated");
+      alert("Your new feature has been successfully updated into the database");
+      router.push("/Shop");
+      queryClient.invalidateQueries({ queryKey: ["shops"] });
+    },
+  });
+
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    const formData = {
+      remaining_cars: numOfCar,
+      branch: branch,
+      name: thShopName,
+      registered_name: enShopName,
+      location: address
+    }
+    console.log("form data", services[0].shop.owner);
+    updateMutation.mutate({
+      _id: services[0].shop._id,
+      name: String(formData.name),
+      registered_name: String(formData.registered_name),
+      location: String(formData.location),
+      phone_number: services[0].shop.phone_number,
+      owner: services[0].shop.owner,
+      branch: formData.branch,
+      remaining_cars: formData.remaining_cars
+    })
+    // Do something with the form data
+
+  }
+
+
+
+  // const [formData, setFormData] = useState({
+  //   numOfCar: "",
+  //   branch: "",
+  //   //branch:  services[0].branch,
+  //   thShopName: "",
+  //   enShopName: "",
+  //   address: ""
+  //   // add other input values here
+  // });
+  //Hook Form
+  // const {
+  //   register,
+  //   handleSubmit,
+  //   watch,
+  //   formState: { errors },
+  //   reset,
+  // } = useForm();
+  // const onSubmit = (data) => {
+  //   console.log("onSubmit", data.owner, data);
+  //   console.log("Data to be updated", data);
+  // const theOwner = shops.find(
+  //   (o) => o.owner.first_name == owner
+  // );
+  // console.assert(theOwner != undefined); // Since the data is from the same list
+  // console.debug("---", theOwner, data.owner);
+
+  // updateMutation.mutate({
+  //   ...data,
+  //   owner: theOwner.owner._id,
+  // });
+
+  // };
+
+  const routerToEditServices = (e) => {
     e.preventDefault();
-    router.push("AddShop");
+    router.push({
+      pathname: "/Edit_Services",
+      query: {
+        shopId: shopId,
+      },
+    });
   };
 
   const pushToNextPage = (e) => {
@@ -98,6 +172,18 @@ export default function ShopInfo() {
       },
     });
   };
+
+  // const pushToNextPage = (e) => {
+  //   e.preventDefault();
+  //   router.push({
+  //     pathname: "/Dashboard",
+  //     query: {
+  //       //
+  //     },
+  //   });
+  // };
+
+
 
   // const {
   //   isLoading,
@@ -164,21 +250,52 @@ export default function ShopInfo() {
 
   console.log("show me services", services);
 
+  useEffect(() => {
+    getBlobsInContainer().then((list) => {
+      setImages(
+        list.filter((file) =>
+          file.name.includes(services ? services[0].shop.imgId : "shop")
+        )
+      );
+    });
+    services ? setEnShopName(services[0].shop.registered_name) : ""
+    services ? setThShopName(services[0].shop.name) : ""
+    services ? setNumOfCar(services[0].shop.remaining_cars) : ""
+    services ? setAddress(services[0].shop.location) : ""
+    services ? setBranch(services[0].shop.branch) : ""
+
+  }, [services]);
+
   if (isLoading) return "Loading";
   if (isError) {
     console.error(error);
     return "Error";
   }
 
+
+
+  const confirmDeleteShop = (shop) => {
+    if (
+      console.log("delete shop", shop),
+      confirm(
+        `Are you sure to delete [${shop.shop.registered_name}]?`
+      )
+    ) {
+
+      deleteMutation.mutate(shop.shop._id);
+      router.push("Shop");
+    }
+  };
+
   return (
     <div className="bg-[#F9F5EC]">
-      <div className="flex flex-row p-5">
+      <div className="flex flex-row py-5 px-2">
         <MdOutlineArrowBack
           className="h-9 w-10 mt-8"
           onClick={() => router.back()}
         />
-        <h1 className="text-3xl font-bold text-[#484542] ml-5 mt-8">
-          รายละเอียดพนักงาน
+        <h1 className="text-3xl font-bold font-prompt text-[#484542] ml-5 mt-8">
+          รายละเอียดร้าน
         </h1>
       </div>
       <div className="bg-white h-screen rounded-t-[20px]">
@@ -190,7 +307,7 @@ export default function ShopInfo() {
             >
               <p className="flex font-prompt text-[18px] font-bold text-[#FA8F54]">
                 ลบ
-                <FaRegTrashAlt className="w-6 h-6 ml-2" color="#FA8F54" />
+                <FaRegTrashAlt onClick={() => confirmDeleteShop(services[0])} className="w-6 h-6 ml-2" color="#FA8F54" />
               </p>
             </button>
             <Dialog
@@ -232,7 +349,7 @@ export default function ShopInfo() {
                 className="max-w-lg max-h-lg rounded-lg ml-6 object-scale-down h-10 ..."
                 src={
                   images.filter((file) => file.name.includes(""))[0] !==
-                  undefined
+                    undefined
                     ? images.filter((file) => file.name.includes(""))[0].url
                     : null
                 }
@@ -240,55 +357,68 @@ export default function ShopInfo() {
               ></img>
             </div>
             <div className="pl-4">
-              <div className="flex flex-nowrap">
-                <p className="text-left font-prompt text-[18px] pr-2">
-                  ชื่อร้าน อังกฤษ:
-                </p>
+              <div className="">
+                <div className="text-left font-prompt  text-[18px] pr-2">
+                  ชื่อร้าน (อังกฤษ):
+                </div>
                 <input
                   type="text"
                   id="enShopName"
                   name="enShopName"
-                  value={services[0].shop.registered_name}
+                  defaultValue={services[0].shop.registered_name}
                   disabled={edit}
                   required
                   className="font-prompt text-[18px] font-bold bg-white"
+                  //onChange={(e) => setFormData({ ...formData, enShopName: e.target.value })}
                   onChange={(e) => setEnShopName(e.target.value)}
+                // {...register("name", {
+                //   required: true,
+                //   maxLength: 80,
+                // })}
                 ></input>
               </div>
               <div>
-                <div className="flex flex-nowrap">
-                  <p className="text-left font-prompt text-[18px]">
-                    ชื่อร้าน ไทย:
-                  </p>
+                <div className="">
+                  <p className="text-left font-prompt text-[18px]">ชื่อร้าน (ไทย):</p>
                   <input
                     type="text"
                     id="thShopName"
                     name="thShopName"
-                    value={services[0].shop.name}
+                    defaultValue={services[0].shop.name}
                     disabled={edit}
                     required
                     className="font-prompt text-[18px] font-bold bg-white"
+                    //onChange={(e) => setFormData({ ...formData, thShopName: e.target.value })}
                     onChange={(e) => setThShopName(e.target.value)}
+                  // {...register("registered_name", {
+                  //   required: true,
+                  //   maxLength: 80,
+                  // })}
                   ></input>
                 </div>
               </div>
               <div>
-                <div className="flex flex-nowrap">
+                <div className="">
                   <p className="text-left font-prompt text-[18px]">สาขา:</p>
                   <input
                     type="text"
                     id="branch"
                     name="branch"
-                    value={branch}
+                    defaultValue={services[0].shop.branch}
                     disabled={edit}
                     required
                     className="font-prompt text-[18px] font-bold bg-white"
+                    //onChange={(e) => setFormData({ ...formData, branch: e.target.value })}
                     onChange={(e) => setBranch(e.target.value)}
+                  // {...register("branch", {
+                  //   required: true,
+                  //   maxLength: 80,
+                  // })}
                   ></input>
                 </div>
               </div>
               <div>
-                <div className="flex flex-nowrap">
+                <div className="">
                   <p className="text-left font-prompt text-[18px]">
                     ที่อยู่ร้าน:
                   </p>
@@ -296,16 +426,21 @@ export default function ShopInfo() {
                     type="text"
                     id="address"
                     name="address"
-                    value={services[0].shop.location}
+                    defaultValue={services[0].shop.location}
                     disabled={edit}
                     required
                     className="font-prompt text-[18px] font-bold bg-white"
                     onChange={(e) => setAddress(e.target.value)}
+                  //onChange={(e) => setFormData({ ...formData, address: e.target.value })}
+                  // {...register("location", {
+                  //   required: true,
+                  //   maxLength: 80,
+                  // })}
                   ></input>
                 </div>
               </div>
               <div>
-                <div className="flex flex-nowrap">
+                <div className="">
                   <p className="text-left font-prompt text-[18px]">
                     จำนวนรถที่ใช้ได้:
                   </p>
@@ -313,39 +448,53 @@ export default function ShopInfo() {
                     type="text"
                     id="numOfCar"
                     name="numOfCar"
-                    value={services[0].shop.remaining_cars}
+                    defaultValue={services[0].shop.remaining_cars}
                     disabled={edit}
                     required
                     className="font-prompt text-[18px] font-bold bg-white"
+                    //onChange={(e) => setFormData({ ...formData, numOfCar: e.target.value })}
                     onChange={(e) => setNumOfCar(e.target.value)}
+                  // {...register("remaining_cars", {
+                  //   required: true,
+                  //   maxLength: 80,
+                  // })}
                   ></input>
                 </div>
+              </div>
+              <div className="p-6 flex items-center justify-center">
+                <button
+                  type="submit"
+                  className="bg-[#789BF3] hover:bg-[#789BF3] text-white font-prompt font-bold py-4 px-8 rounded items-center text-[18px]"
+                >
+                  ยืนยัน
+                </button>
               </div>
             </div>
             <div></div>
           </div>
-          <div className="flex flex-row justify-between w-full px-12 pt-6 py-5">
-            <div className="h-32 items-center justify-center flex-col flex bg-[#7FD1AE1A] min-w-[160px] md:h-[160px] rounded-[10px] text-[#7FD1AE]">
+          <div className="flex flex-row justify-between w-full px-4 pt-6 py-5">
+            <div className="h-32 items-center justify-center flex-col flex bg-[#7FD1AE1A] min-w-[160px] md:h-[160px] rounded-[10px] text-[#7FD1AE] mr-2">
               <div>
                 <HiOutlineCreditCard
                   className="w-12 h-12 ml-2"
                   color="#7FD1AE"
                 />
               </div>
-              <div className="p-2">เพิ่มจำนวนรถ</div>
+              <div className="p-2 font-prompt">เพิ่มจำนวนรถ</div>
             </div>
+
             <button
-              className="h-32 items-center justify-center flex-col flex bg-[#789BF31A] min-w-[160px] md:h-[160px] rounded-[10px] text-[#789BF3]"
+              className="h-32 items-center justify-center flex-col flex bg-[#789BF31A] min-w-[160px] md:h-[160px] font-prompt rounded-[10px] text-[#789BF3]"
               onClick={pushToNextPage}
             >
               <div>
                 <TiChartBar className="w-12 h-12 ml-2" color="#789BF3" />
               </div>
-              <div>รายงานแดชบอร์ด</div>
+              <div className="font-prompt">รายงานแดชบอร์ด</div>
             </button>
           </div>
           <br />
-          <button onClick={routerToAddShop}>
+          <button onClick={routerToEditServices}>
             <div className="flex flex-nowrap">
               <p className="pl-4 pr-4 ">รายการที่ให้บริการ </p>
               <p className=" flex font-prompt text-[18px] font-bold text-right text-[#FA8F54] absolute right-0 pr-6">
@@ -358,9 +507,9 @@ export default function ShopInfo() {
           <div className="px-6 p-4">
             {services.map((service) => (
               <>
-                <div className="flex p-4 px-4m-4 rounded-[10px] bg-[#F9F5EC] items-center">
-                  <div>{service.service_name}</div>
-                  <div className="absolute right-0 pr-10">
+                <div className="flex font-prompt p-4 px-4m-4 rounded-[10px] bg-[#F9F5EC] items-center">
+                  <div>{service.name}</div>
+                  <div className="absolute right-0 pr-10 font-prompt">
                     {service.price} บาท
                   </div>
                 </div>
@@ -368,14 +517,7 @@ export default function ShopInfo() {
               </>
             ))}
           </div>
-          <div className="p-6 flex items-center justify-center">
-            <button
-              type="submit"
-              className="bg-[#789BF3] hover:bg-[#789BF3] text-white font-bold py-4 px-8 rounded items-center text-[18px]"
-            >
-              ยืนยัน
-            </button>
-          </div>
+
         </form>
       </div>
       <BottomNav name="Shop" />

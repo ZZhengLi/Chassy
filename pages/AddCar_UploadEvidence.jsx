@@ -16,6 +16,9 @@ import StepConnector, {
   stepConnectorClasses,
 } from "@mui/material/StepConnector";
 import { TbCamera } from "react-icons/tb";
+import { createCar, getCars } from "../lib/car_helper";
+import { getCars as getCarsTransaction } from "../lib/cartransaction_helper";
+import { useMutation, useQuery } from "@tanstack/react-query";
 
 const steps = ["1", "2", "3", "4"];
 
@@ -31,6 +34,8 @@ export default function AddCar_UploadEvidence_Before() {
   const [brand, setBrand] = useState("");
   const [model, setModel] = useState("");
   const [color, setColor] = useState("");
+  const [car_owner_id, setCar_owner_id] = useState("");
+  const [car_id, setCar_id] = useState("");
   const [images, setImages] = useState([]);
   useEffect(() => {
     setPlate(router.query.plate);
@@ -38,6 +43,7 @@ export default function AddCar_UploadEvidence_Before() {
     setBrand(router.query.brand);
     setModel(router.query.model);
     setColor(router.query.color);
+    setCar_owner_id(router.query.car_owner_id);
   }, [router.query]);
 
   const handleFile = (e) => {
@@ -50,6 +56,85 @@ export default function AddCar_UploadEvidence_Before() {
   const removeImage = (i) => {
     setFile(files.filter((x) => x.name !== i));
   };
+
+  const {
+    isLoading,
+    isError,
+    error,
+    data: cars,
+  } = useQuery({
+    queryKey: ["cars"],
+    queryFn: getCars,
+    refetchOnWindowFocus: false,
+    select: (data) => {
+      if (data.length === 0) {
+        return []; // return an empty array instead of undefined
+      }
+      if (data.length > 0) {
+        const modifiedData = data.map((car) => {
+          if (car.car_owner_id != null) {
+            return {
+              ...car,
+            };
+          }
+        });
+        const filteredData = modifiedData.filter((item) => item);
+        return filteredData;
+      }
+    },
+  });
+
+  const { data: carTransactions } = useQuery({
+    queryKey: ["carTransactions"],
+    queryFn: getCarsTransaction,
+    refetchOnWindowFocus: false,
+    select: (data) => {
+      if (data.length === 0) {
+        return []; // return an empty array instead of undefined
+      }
+      if (data.length > 0) {
+        const modifiedData = data.map((car) => {
+          if (car._id != null) {
+            return {
+              ...car,
+            };
+          }
+        });
+        const filteredData = modifiedData.filter((item) => item);
+        return filteredData;
+      }
+    },
+  });
+
+  const alertAboutCustomer = () => {
+    const car = cars.find((car) => car.license_plate.includes(regNum));
+    if (car) {
+      const transactions = carTransactions.filter(
+        (carTransaction) => carTransaction.car_id._id == car._id
+      );
+
+      if (transactions.length > 0) {
+        const message = "";
+        transactions.map((carTransaction, i) =>
+          carTransaction.rating_from_shop
+            ? (message +=
+                "\n" +
+                (i + 1) +
+                ". Rating: " +
+                carTransaction.rating_from_shop +
+                "\n\tReview: " +
+                carTransaction.review_from_shop)
+            : null
+        );
+        message != "" ? alert(message) : null;
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (!(carTransactions && cars && regNum != "")) return;
+    alertAboutCustomer();
+  }, [carTransactions, cars, regNum]);
 
   //New Stepper
   const QontoConnector = styled(StepConnector)(({ theme }) => ({
@@ -124,10 +209,30 @@ export default function AddCar_UploadEvidence_Before() {
     completed: PropTypes.bool,
   };
 
+  const addMutation = useMutation(createCar, {
+    onSuccess: () => {
+      console.log("Car Inserted");
+    },
+  });
+
   function pushToNextPage() {
-    files.map((file, key) => {
+    files.map((file) => {
       images.push(URL.createObjectURL(file));
     });
+
+    try {
+      if (!cars.find((car) => car.license_plate.includes(regNum))) {
+        addMutation.mutate({
+          license_plate: regNum,
+          brand: brand,
+          color: color,
+          model: model,
+          car_owner_id: car_owner_id,
+        });
+      }
+    } catch (error) {
+      alert(error);
+    }
 
     images.length == 0
       ? alert("You didn't upload any picture")
@@ -140,18 +245,21 @@ export default function AddCar_UploadEvidence_Before() {
             model: model,
             color: color,
             images: images,
+            car_owner_id: car_owner_id,
           },
         });
   }
 
   return (
     <div className="bg-[#F9F5EC]">
-      <div className="flex flex-row p-5">
+      <div className="flex flex-row p-2">
         <MdOutlineArrowBack
           className="h-9 w-10 mt-8"
           onClick={() => router.back()}
         />
-        <h1 className="text-3xl font-bold text-[#484542] ml-5 mt-8">เพิ่มรถ</h1>
+        <h1 className="text-3xl font-prompt font-bold text-[#484542] ml-5 mt-8">
+          เพิ่มรถ
+        </h1>
       </div>
       {/* <AppBar /> */}
       <div className="bg-white rounded-t-[20px] my-2 pb-28 md:pb-0 md:h-screen md:min-w-[840px] min-w-full">
@@ -170,14 +278,14 @@ export default function AddCar_UploadEvidence_Before() {
             ))}
           </Stepper>
         </div>
-        <div className=" px-16 text-center flex items-center justify-center">
+        <div className=" px-16 font-prompt text-center flex items-center justify-center">
           ถ่ายรูปรถเพื่อเก็บเป็นหลักฐาน เผื่อเกิดปัญหาไหม ?
         </div>
 
         {/* <div className="h-screen flex justify-center items-center bg-gray-300 px-2"> */}
         <div className="flex items-center justify-center">
           <div className="p-3 md:w-1/2 w-[400px] bg-white rounded-md align-content: center">
-            <span className="flex justify-center items-center text-[18px] mb-1 text-red-500">
+            <span className="flex justify-center items-center font-prompt text-[18px] mb-1 text-red-500">
               {message}
             </span>
             <div className="h-40 w-full relative items-center rounded-md cursor-pointer bg-[#F9F5EC]">
@@ -190,13 +298,13 @@ export default function AddCar_UploadEvidence_Before() {
                 name="files[]"
               />
               <div className="h-full w-full bg-[#FA8F54] bg-opacity-10 absolute z-1 flex justify-center items-center top-0">
-                <div className="flex flex-col">
-                  <i className="mdi mdi-folder-open text-[30px] text-gray-400 text-center"></i>
+                <div className="flex flex-col items-center">
+                  <i className="mdi mdi-folder-open text-[30px]  text-gray-400 text-center"></i>
                   <TbCamera
                     className="flex justify-center w-24 h-24"
                     color="#FA8F54"
                   />
-                  <span className="text-[18px] text-[#FA8F54]">{`Drag and Drop a file`}</span>
+                  <span className="text-[18px] font-prompt text-[#FA8F54]">{`Drag and Drop a file`}</span>
                 </div>
               </div>
             </div>
@@ -224,15 +332,15 @@ export default function AddCar_UploadEvidence_Before() {
           </div>
         </div>
         {/* </div> */}
-        <div className="flex items-center justify-center">
+        <div className="flex items-center justify-center  flex space-x-2">
           <button
-            className="bg-[#789BF3] text-[#789BF3] text-slate-400 hover:bg-[#789BF3] bg-opacity-10 font-bold text-blue  rounded items-center py-4 px-8"
+            className="bg-[#789BF3] text-[#789BF3] font-prompt text-slate-400 hover:bg-[#789BF3] bg-opacity-10 font-bold text-blue  rounded items-center py-4 px-8"
             onClick={() => router.back()}
           >
             ก่อนหน้า
           </button>
           <button
-            className="bg-[#789BF3] hover:bg-[#789BF3] text-white font-bold py-4 px-8 rounded items-center"
+            className="bg-[#789BF3] hover:bg-[#789BF3] font-prompt text-white font-bold py-4 px-8 rounded items-center"
             onClick={pushToNextPage}
           >
             ถัดไป

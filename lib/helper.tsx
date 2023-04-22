@@ -28,14 +28,6 @@ export async function getShops(): Promise<Array<typeof Shop>> {
   return shops;
 }
 
-// export async function createService(service: Service): Array<Service> {
-//   console.debug("createService() is called")
-//   const apiUri = `${BASE_URL}api/services/hello`;
-//   const res = await axios.post(apiUri, service);
-//   console.debug("bole toh", res);
-//   return res.data;
-// }
-
 export async function createService(
   service: typeof Service
 ): Promise<Array<typeof Service>> {

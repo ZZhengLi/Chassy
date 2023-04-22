@@ -13,11 +13,6 @@ export default async function handler(
         if (req.method == "GET") {
             // Get all cars transactions
             const cartransactions = await CarTransaction.find().populate("car_id")
-
-            
-            
-
-
             res.status(200).json(cartransactions);
         } else if (req.method == "POST") {
             // Create
@@ -36,7 +31,8 @@ export default async function handler(
             theCarTransaction._id = cartransaction._id
             theCarTransaction.car_id = cartransaction.car_id
             theCarTransaction.shop_id = cartransaction.shop_id
-            theCarTransaction.user_id = cartransaction.user_id
+            theCarTransaction.imgId = cartransaction.imgId
+            
             theCarTransaction.start_date = cartransaction.start_date
             theCarTransaction.finish_date = cartransaction.finish_date
             theCarTransaction.services = cartransaction.services

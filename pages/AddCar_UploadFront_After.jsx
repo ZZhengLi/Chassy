@@ -6,15 +6,12 @@ import { useRouter } from "next/router";
 import { MdOutlineArrowBack } from "react-icons/md";
 import { FaRegEdit } from "react-icons/fa";
 import { useState, useEffect } from "react";
-// import { FiEdit } from "react-icons/ri";
 import { useForm, SubmitHandler } from "react-hook-form";
 
-// import Box from "@mui/material/Box";
 //New Stepper
 import Stepper from "@mui/material/Stepper";
 import PropTypes from "prop-types";
 import { styled } from "@mui/material/styles";
-import Stack from "@mui/material/Stack";
 import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
@@ -24,13 +21,7 @@ import StepConnector, {
 } from "@mui/material/StepConnector";
 
 //API
-import {
-  getCarOwners,
-  getCars,
-  createCar,
-  updateCar,
-  deleteCarById,
-} from "../lib/car_helper";
+import { getCarOwners } from "../lib/car_helper";
 import {
   dehydrate,
   QueryClient,
@@ -55,8 +46,6 @@ export default function AddCar_UploadFront_After() {
   useEffect(() => {
     setPlate(router.query.plate);
   }, [router.query]);
-
-  
 
   //New Stepper
   const QontoConnector = styled(StepConnector)(({ theme }) => ({
@@ -109,40 +98,11 @@ export default function AddCar_UploadFront_After() {
     refetchOnWindowFocus: false,
   });
 
-  const addMutation = useMutation(createCar, {
-    onSuccess: () => {
-      console.log("Data Inserted");
-      alert("Your new feature has been successfully added into the database");
-      //router.reload();
-      // Invalidate and refetch
-      router.push({
-            pathname: "/AddCar_UploadEvidence",
-          
-          });
-      QueryClient.invalidateQueries({ queryKey: ["cars"] });
-    },
-  });
-
   //Hook Form
   const {
     register,
-    handleSubmit,
-    watch,
     formState: { errors },
-    reset,
   } = useForm();
-  const onSubmit = (data) => {
-    console.log("onSubmit about car",  data, owners[0]);
-
-      addMutation.mutate({
-        license_plate: data.license_plate,
-        brand: data.brand,
-        color: data.color,
-        model: data.model,
-        car_owner_id: owners[0]._id,
-      });
-    
-  };
 
   function QontoStepIcon(props) {
     const { active, completed, className } = props;
@@ -172,28 +132,31 @@ export default function AddCar_UploadFront_After() {
     completed: PropTypes.bool,
   };
 
-  // const handleSubmit = (e) => {
-  //   e.preventDefault();
-  //   router.push({
-  //     pathname: "/AddCar_UploadEvidence",
-  //     query: {
-  //       plate: plate,
-  //       regNum: regNum,
-  //       brand: brand,
-  //       model: model,
-  //       color: color,
-  //     },
-  //   });
-  // };
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    router.push({
+      pathname: "/AddCar_UploadEvidence",
+      query: {
+        plate: plate,
+        regNum: regNum,
+        brand: brand,
+        model: model,
+        color: color,
+        car_owner_id: owners[0]._id,
+      },
+    });
+  };
 
   return (
     <div className="bg-[#F9F5EC]">
-      <div className="flex flex-row p-5">
+      <div className="flex flex-row p-2">
         <MdOutlineArrowBack
           className="h-9 w-10 mt-8"
           onClick={() => router.back()}
         />
-        <h1 className="text-3xl font-bold text-[#484542] ml-5 mt-8">เพิ่มรถ</h1>
+        <h1 className="text-3xl font-prompt font-bold text-[#484542] ml-5 mt-8">
+          เพิ่มรถ
+        </h1>
       </div>
 
       <div className="bg-white rounded-t-[20px] my-2 pb-28 md:pb-0 md:h-screen md:min-w-[840px] min-w-full">
@@ -228,15 +191,15 @@ export default function AddCar_UploadFront_After() {
           </div>
           <div>
             <button
-              className="flex flex-row items-center absolute right-0"
+              className="flex flex-row items-center absolute right-0 pr-4"
               onClick={() => setEdit(false)}
             >
               <p className="flex text-right font-prompt text-[18px] font-bold text-[#FA8F54]">
                 แก้ไข
               </p>
-              <FaRegEdit className="w-6 h-6 ml-2" color="#FA8F54" />
+              <FaRegEdit className="w-6 h-6 ml-2 " color="#FA8F54" />
             </button>
-            <form onSubmit={handleSubmit(onSubmit)}>
+            <form onSubmit={handleSubmit}>
               <div>
                 <div className="flex flex-row p-1">
                   <p className="text-left font-prompt text-[18px] pl-6 mr-2">
@@ -247,12 +210,11 @@ export default function AddCar_UploadFront_After() {
                     type="text"
                     id="regNum"
                     name="regNum"
-                    //value={regNum}
+                    value={regNum}
                     //disabled={edit}
                     required
                     className="font-prompt text-[18px] font-bold bg-white"
                     onChange={(e) => setRegNum(e.target.value)}
-                    {...register("license_plate")}
                   ></input>
                 </div>
 
@@ -264,12 +226,11 @@ export default function AddCar_UploadFront_After() {
                     type="text"
                     id="brand"
                     name="brand"
-                    //value={brand}
+                    value={brand}
                     //disabled={edit}
                     required
                     className="font-prompt text-[18px] font-bold bg-white pl-2"
                     onChange={(e) => setBrand(e.target.value)}
-                    {...register("brand", )}
                   ></input>
                 </div>
                 <div className="flex flex-nowrap p-1">
@@ -281,12 +242,11 @@ export default function AddCar_UploadFront_After() {
                     type="text"
                     id="model"
                     name="model"
-                    //value={model}
+                    value={model}
                     //disabled={edit}
                     required
                     className="font-prompt text-[18px] font-bold bg-white"
                     onChange={(e) => setModel(e.target.value)}
-                    {...register("model", )}
                   ></input>
                 </div>
                 <div className="flex flex-nowrap p-1">
@@ -297,26 +257,25 @@ export default function AddCar_UploadFront_After() {
                     type="text"
                     id="color"
                     name="color"
-                    //value={color}
+                    value={color}
                     //disabled={edit}
                     required
                     className="font-prompt text-[18px] font-bold bg-white pl-2"
                     onChange={(e) => setColor(e.target.value)}
-                    {...register("color", )}
                   ></input>
                 </div>
               </div>
 
               <div className="text-center font-prompt text-[18px] p-6">
-                <div className="px-6 flex items-center">
+                <div className="px-6 flex items-center font-prompt">
                   *ตรวจสอบป้ายทะเบียนและรายละเอียด หากไม่ถูกต้องกรุณาถ่ายใหม่
                   หรือ
-                  <p>แก้ไข</p>
+                  <p className="font-prompt">แก้ไข</p>
                 </div>
               </div>
-              <div className="flex items-center justify-center">
+              <div className="flex items-center justify-center flex space-x-2">
                 <button
-                  className="bg-[#789BF3] text-[#789BF3] text-slate-400 hover:bg-[#789BF3] bg-opacity-10 font-bold text-blue  rounded items-center py-4 px-8"
+                  className="bg-[#789BF3] text-[#789BF3] text-slate-400 font-prompt hover:bg-[#789BF3] bg-opacity-10 font-bold text-blue  rounded items-center py-4 px-8"
                   onClick={() => router.back()}
                 >
                   ก่อนหน้า

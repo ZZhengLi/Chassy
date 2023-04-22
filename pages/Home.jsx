@@ -18,8 +18,10 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import React from "react";
+import { useEffect } from "react";
 
-import dayjs, { Dayjs } from "dayjs";
+import dayjs from "dayjs";
+import "dayjs/locale/en";
 import TextField from "@mui/material/TextField";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -33,11 +35,7 @@ import {
   useQueryClient,
   useQuery,
 } from "@tanstack/react-query";
-import {
-  
-  getShops,
-  
-} from "../lib/user_helper";
+import { getShops } from "../lib/user_helper";
 import {
   getCarServices,
   getCars,
@@ -46,15 +44,17 @@ import {
   deleteCarById,
 } from "../lib/cartransaction_helper";
 
-
 const Home = () => {
   const [open, setOpen] = React.useState(false);
   const [date, setDate] = React.useState(new Date());
   const [shop, setShop] = React.useState("");
+  const [carId, setCarId] = React.useState("");
+  const [search, setSearch] = React.useState("");
+  console.log("search it is", search);
 
-  const handleClickOpen = () => {
+  const handleClickOpen = (id) => {
     setOpen(true);
-  
+    setCarId(id);
   };
 
   const handleClose = () => {
@@ -64,33 +64,30 @@ const Home = () => {
   const handleConfirm = () => {
     setOpen(false);
     router.push({
-      pathname: "/EditCar_Img",
-      query: {
-        // imgId: imgId,
-      },
+      pathname: "/ReviewCustomer_CarDetail",
+      query: { carId: carId },
     });
   };
 
-  // function pushToNextPage(carId) {
-  //   router.push({
-  //     pathname: "/ReviewCustomer_CarDetail", //ReviewCustomer_CarDetail
-  //     query: {
-  //       // regNum: regNum,
-  //       // brand: brand,
-  //       // model: model,
-  //       // color: color,
-  //       // imgId: imgId,
-  //       // services: services
-  //       carId: carId ,
-
-  //     },
-  //   });
-  // }
-
-  const handleCardClick = (carId) => {
+  const checkReview = (carId) => {
     router.push({
-      pathname: "/ReviewCustomer_CarDetail",
+      pathname: "/CheckReview",
       query: { carId: carId },
+    });
+  };
+
+  const handleCardClick = (car) => {
+    console.log(
+      services.filter((service) => car.services.includes(service._id))
+    );
+    router.push({
+      pathname: "/EditCar_Img",
+      query: {
+        car: JSON.stringify(car),
+        services: JSON.stringify(
+          services.filter((service) => car.services.includes(service._id))
+        ),
+      },
     });
   };
 
@@ -100,20 +97,25 @@ const Home = () => {
     refetchOnWindowFocus: false,
   });
   const handleChange = (event) => {
+    console.log("SHOP ID", event.target.value);
+    window.shopId = event.target.value;
     setShop(event.target.value);
-    {
-      register("shop");
-    }
   };
+
+  const initializeShopId = () => (window.shopId = shops[0]._id);
+
+  useEffect(() => {
+    if (!shops) return;
+    initializeShopId();
+  }, [shops]);
 
   const { data: services } = useQuery({
     queryKey: ["services"],
     queryFn: getCarServices,
     refetchOnWindowFocus: false,
-
   });
-  console.log("services it is", services)
-  const service_array = []
+  console.log("services it is", services);
+  const service_array = [];
 
   const {
     isLoading,
@@ -132,18 +134,6 @@ const Home = () => {
       if (data.length > 0) {
         const modifiedData = data.map((car) => {
           if (car._id != null) {
-
-            if (car.services )
-            car.services.map((service) => {
-              services.map((s) =>  { 
-                //console.log('moment of truth', s._id, service)
-                if (service == s._id) {
-                  console.log('moment of truth', s._id)
-                  service_array.push([s.service_name, s.price, s._id])
-                  
-                  }}
-              )}
-              )
             return {
               ...car,
             };
@@ -163,9 +153,14 @@ const Home = () => {
     return "Error";
   }
 
+  let totalPrice = 0;
+  cars.forEach((car) => {
+    totalPrice += car.total_price;
+  });
+
   return (
     <div className="bg-[#F9F5EC]">
-      <h1 className="text-3xl font-bold text-[#484542] px-6 pt-10 pb-2">
+      <h1 className="text-3xl font-bold text-[#484542] px-6 pt-10 pb-2 font-prompt">
         หน้าแรก
       </h1>
       <div className="flex ... pt-3">
@@ -177,12 +172,12 @@ const Home = () => {
         <select
           className=" font-prompt bg-transparent text-lg font-medium ml-2 text-dark bg-[#F9F5EC]"
           value={shop}
-          defaultValue={shop}
+          // defaultValue={"Cargo Limited"}
           label="Shop Name"
           onChange={handleChange}
         >
-          {shops?.map((shop) => (
-            <option key={shop._id} value={shop.registered_name}>
+          {shops?.map((shop, key) => (
+            <option key={key} value={shop._id}>
               {" "}
               {shop.registered_name}
             </option>
@@ -197,7 +192,19 @@ const Home = () => {
             onChange={(newValue) => {
               setDate(newValue);
             }}
-            renderInput={(params) => <TextField {...params} />}
+            inputFormat="DD/MM/YYYY"
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                value={dayjs(params.value).format("DD/MM/YYYY")}
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                inputFormat="DD/MM/YYYY"
+              />
+            )}
+            locale="en"
+            day={dayjs}
           />
         </LocalizationProvider>
       </div>
@@ -205,11 +212,31 @@ const Home = () => {
       <div className="flex flex-row justify-between w-full px-6 py-5">
         <div className="h-20 items-center justify-center flex-col flex bg-white min-w-[160px] md:min-w-[410px] md:h-[92px] rounded-[10px] text-primary">
           <FaCar className="w-9 h-9" color="#FA8F54" />
-          <p className="text-lg">{new Intl.NumberFormat().format(1000)} คัน</p>
+          <p className="text-lg">
+            {new Intl.NumberFormat().format(
+              cars
+                .filter((car) =>
+                  Object.values(car).some((field) => {
+                    if (field !== null && field !== undefined) {
+                      return field
+                        .toString()
+                        .toLowerCase()
+                        .includes(search.toLowerCase());
+                    }
+                    return false;
+                  })
+                )
+                .filter((car) => car.shop_id == window.shopId).length
+            )}{" "}
+            คัน
+          </p>
         </div>
         <div className="h-20 items-center justify-center flex-col flex bg-white min-w-[160px] md:min-w-[410px] md:h-[92px] rounded-[10px] text-green">
           <FaMoneyBill className="w-9 h-9" color="#7FD1AE" />
-          <p className="text-lg">{new Intl.NumberFormat().format(50000)} บาท</p>
+          <p className="text-lg">
+            {" "}
+            {new Intl.NumberFormat().format(totalPrice)} บาท
+          </p>
         </div>
       </div>
 
@@ -218,7 +245,7 @@ const Home = () => {
           <div className="py-5 w-full">
             <div className="flex-row flex justify-between px-6">
               <div className="flex-row flex items-center text-dark">
-                <p className="font-sans text-lg text-gray-900 text-center">
+                <p className="font-sans text-lg text-gray-900 text-center font-prompt">
                   เพิ่มรถ
                 </p>
                 <button
@@ -237,6 +264,7 @@ const Home = () => {
                     <input
                       type="search"
                       className="peer cursor-pointer relative h-12 w-12 rounded-full bg-transparent pl-12 outline-none focus:w-full focus:cursor-text focus:border focus:border-dark focus:pl-16 focus:pr-4"
+                      onChange={(e) => setSearch(e.target.value)}
                     />
                   </div>
                 </form>
@@ -245,10 +273,25 @@ const Home = () => {
           </div>
 
           <div className="overflow-y-auto h-80">
-            {cars.map((car, index) => {
-              return (
-                <>
-                  <div className="pb-[10px] items-center justify-center flex flex-col ">
+            {cars
+              .filter((car) =>
+                Object.values(car).some((field) => {
+                  if (field !== null && field !== undefined) {
+                    return field
+                      .toString()
+                      .toLowerCase()
+                      .includes(search.toLowerCase());
+                  }
+                  return false;
+                })
+              )
+              .filter((car) => car.shop_id == window.shopId)
+              .map((car, index) => {
+                return (
+                  <div
+                    className="pb-[10px] items-center justify-center flex flex-col"
+                    key={index}
+                  >
                     <div className="w-full h-20 items-center rounded-lg flex justify-start">
                       <div className="px-4 flex flex-row justify-between items-center w-full">
                         <div className="flex flex-row w-full items-center">
@@ -262,7 +305,7 @@ const Home = () => {
                             {car.status === "in-process" ? (
                               <button
                                 className="bg-white shadow-lg rounded-[5px]"
-                                onClick={handleClickOpen}
+                                onClick={() => handleClickOpen(car._id)}
                               >
                                 <FiCheckSquare
                                   className="w-10 h-10"
@@ -270,35 +313,44 @@ const Home = () => {
                                 />
                               </button>
                             ) : (
-                              <FiCheckSquare
-                                className="w-10 h-10"
-                                color="#7FD1AE"
-                              />
+                              <button
+                                className="shadow-lg rounded-[5px]"
+                                disabled
+                              >
+                                <FiCheckSquare
+                                  className="w-10 h-10"
+                                  color="#7FD1AE"
+                                />
+                              </button>
                             )}
                             <div className="px-4 w-full text-dark">
                               <p className="font-medium text-lg">
-                                {car.car_id.license_plate}
+                                {car.car_id ? car.car_id.license_plate : ""}
                               </p>
                               <div className="flex flex-row justify-between font-normal text-base">
-                              
-                              <p className="truncate md:w-full w-20">
-                                
-                                {service_array.map((ser) => {
-                                  
-                                  return (
-                                    
-                                    <React.Fragment key={ser[0]}>
-                                    {ser[0]} ,
-                                    </React.Fragment>
-                                    );
-                                })}
-                              </p>
-                                
+                                <p className="truncate md:w-full w-20">
+                                  {car.status === "in-process"
+                                    ? services
+                                      ? services
+                                          .filter((service) =>
+                                            car.services.includes(service._id)
+                                          )
+                                          .map((ser, key) => {
+                                            return (
+                                              <React.Fragment key={key}>
+                                                {ser.name} ,
+                                              </React.Fragment>
+                                            );
+                                          })
+                                      : ""
+                                    : "Rating: " + car.rating_from_shop}
+                                </p>
+
                                 <p>
                                   {new Intl.NumberFormat().format(
                                     car.total_price
                                   )}
-                                  ฿
+                                  บาท
                                 </p>
                               </div>
                             </div>
@@ -309,16 +361,19 @@ const Home = () => {
                             <ArrowForwardIosOutlinedIcon
                               sx={{ color: "#484542" }}
                               className="w-6 h-6"
-                              onClick={() => handleCardClick(car._id)}
+                              onClick={() =>
+                                car.status === "in-process"
+                                  ? handleCardClick(car)
+                                  : checkReview(car._id)
+                              }
                             />
                           </div>
                         </div>
                       </div>
                     </div>
                   </div>
-                </>
-              );
-            })}
+                );
+              })}
           </div>
         </div>
       </div>
@@ -348,9 +403,8 @@ const Home = () => {
 };
 
 // export const getServerSideProps = authMiddleware(async () => {
- 
+
 //   // return { props: { data } };
 // });
 
 export default Home;
-

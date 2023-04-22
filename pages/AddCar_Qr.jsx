@@ -97,8 +97,8 @@ export default function AddCar_Qr() {
   };
   return (
     <div className="bg-[#F9F5EC]">
-      <div className="flex flex-row p-5">
-        <h1 className="text-3xl font-bold text-[#484542] ml-6 mt-8">เพิ่มรถ</h1>
+      <div className="flex flex-row p-2">
+        <h1 className="text-3xl font-prompt font-bold text-[#484542] ml-6 mt-8">เพิ่มรถ</h1>
       </div>
       <div className="bg-white rounded-t-[20px] my-2 pb-28 md:pb-0 md:h-screen md:min-w-[840px] min-w-full">
         <div className="flex flex-col space-y-4">
@@ -144,7 +144,7 @@ export default function AddCar_Qr() {
           </div>
           <div className="flex items-center justify-center">
             <button
-              className="bg-[#789BF3] hover:bg-[#789BF3] text-white font-bold py-4 px-8 rounded items-center text-[18px]"
+              className="bg-[#789BF3] hover:bg-[#789BF3] text-white font-prompt font-bold py-4 px-8 rounded items-center text-[18px]"
               onClick={() => router.push("/AddCar_UploadFront_Before")}
             >
               ถัดไป
